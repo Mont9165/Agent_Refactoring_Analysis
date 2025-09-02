@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large data directories (will be mounted as volumes)
+data/huggingface/cache/*
+data/huggingface/download/*
+
+# Temporary files
+*.tmp
+*.log
+
+# RefactoringMiner build artifacts (will be built in container)
+tools/RefactoringMiner/build/
+tools/RefactoringMiner/.gradle/
+
+# Results (will be mounted as volumes)
+results/
+outputs/
+
+# Docker
+docker-compose.override.yml

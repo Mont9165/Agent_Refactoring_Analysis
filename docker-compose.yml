@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  agent-refactoring-analysis:
+    build: .
+    container_name: agent-refactoring-analysis
+    volumes:
+      # Mount data directory for persistence
+      - ./data:/app/data
+      # Mount results directory
+      - ./results:/app/results
+      # Mount tools directory (RefactoringMiner will be cached here)
+      - ./tools:/app/tools
+      # Mount GitHub OAuth properties (create this file first)
+      - ./github-oauth.properties:/app/github-oauth.properties:ro
+    environment:
+      # HuggingFace cache directory
+      - HF_HOME=/app/data/huggingface/cache
+      # Python path
+      - PYTHONPATH=/app
+      # Default RefactoringMiner settings
+      - REFMINER_MAX_COMMITS=50
+      - USE_REFACTORINGMINER=1
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    ports:
+      - "8888:8888"  # For Jupyter if needed
+    command: bash
+
+  # Optional: Jupyter notebook service
+  jupyter:
+    build: .
+    container_name: agent-refactoring-jupyter
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./tools:/app/tools
+      - ./notebooks:/app/notebooks
+      - ./github-oauth.properties:/app/github-oauth.properties:ro
+    environment:
+      - HF_HOME=/app/data/huggingface/cache
+      - PYTHONPATH=/app
+    working_dir: /app
+    ports:
+      - "8888:8888"
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''
+    profiles:
+      - jupyter
