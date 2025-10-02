@@ -1,161 +1,213 @@
 # Agent Refactoring Analysis
 
-A comprehensive research project analyzing refactoring patterns in AI-assisted development using the AIDev dataset.
+Research infrastructure for studying how AI-assisted commits refactor Java code. The pipeline starts from the AIDev dataset, filters Java pull requests, detects refactorings (pattern-based + RefactoringMiner), and quantifies quality impacts with Designite metrics.
 
-## 🚀 Quick Start with Docker
+---
 
-### Prerequisites
-- Docker and Docker Compose installed
-- GitHub Personal Access Token (for RefactoringMiner)
+## 1. Repository Tour
 
-### Setup
+```
+config/                        Dataset paths, caching, heuristics
+scripts/                       CLI entry points (0_* → 6_*)
+src/                           Core libraries
+  data_loader/                 HuggingFace dataset accessors
+  phase1_java_extraction/      PR + commit filtering
+  phase3_refactoring_analysis/ RefactoringMiner orchestration + parsers
+  research_questions/          Analysis + metric aggregation utilities
+  utils/                       Shared helpers
 
-1. **Clone and setup:**
-```bash
-git clone <your-repo-url>
-cd Agent_Refactoring_Analysis
+data/                          Downloaded inputs and generated outputs
+  analysis/                    Phase-specific reports (refactoring, designite, quality)
+  filtered/                    Intermediate parquet/csv extracted from dataset
+  designite/                   Raw Designite CSV dumps grouped by repo/sha
+
+tools/RefactoringMiner/        Vendored RefactoringMiner source/build
 ```
 
-2. **Create GitHub OAuth file:**
+Key output folders:
+- `data/filtered/java_repositories/*` – filtered PRs and commit tables.
+- `data/analysis/refactoring_instances/*` – refactoring commits, type counts, summaries.
+- `data/analysis/designite/*` – commit-level metrics, box-plot stats, entity deltas.
+
+---
+
+## 2. Local Setup (recommended)
+
 ```bash
-# Create github-oauth.properties with your token
-echo "OAuthToken=ghp_your_token_here" > github-oauth.properties
-```
-
-3. **Run with Docker:**
-```bash
-# Start the analysis environment
-docker-compose up --build -d
-
-# Enter the container
-docker-compose exec agent-refactoring-analysis bash
-
-# Or run analysis directly
-docker-compose run agent-refactoring-analysis python scripts/1_simple_java_extraction.py
-```
-
-### Optional: Jupyter Notebook
-```bash
-# Start Jupyter Lab
-docker-compose --profile jupyter up -d
-
-# Access at http://localhost:8888
-```
-
-## 📊 Analysis Pipeline
-
-### Step 1: Extract Java PRs
-```bash
-python scripts/1_simple_java_extraction.py
-```
-- Filters 932K PRs → 1,462 Java PRs (0.16%)
-- Adds repository star/fork counts
-- Output: `data/filtered/java_repositories/simple_java_prs.parquet`
-
-### Step 2: Extract Commits
-```bash
-python scripts/2_extract_commits.py
-```
-- Extracts 1,703 unique commits from Java PRs
-- Filters out merge commits
-- Output: `data/filtered/java_repositories/java_file_commits_for_refactoring.parquet`
-
-### Step 3: Detect Refactoring (Pattern-based)
-```bash
-python scripts/3_detect_refactoring.py
-```
-- Pattern-based detection: 6.3% refactoring rate
-- 77.5% self-affirmation rate
-- Output: `data/analysis/refactoring_instances/refactoring_analysis.json`
-
-### Step 4: RefactoringMiner Analysis (AST-based)
-```bash
-# Analyze with RefactoringMiner for research-grade precision
-python scripts/4_refminer_analysis.py
-
-# Analyze more commits
-REFMINER_MAX_COMMITS=100 python scripts/4_refminer_analysis.py
-```
-
-## 🔬 Research Questions
-
-| RQ | Question | Status | Result |
-|----|----------|--------|---------|
-| RQ1 | How many refactoring instances in Agentic PRs? | ✅ Complete | 107 commits (6.3% pattern-based) |
-| RQ2 | What % are self-affirmed? | ✅ Complete | 77.5% self-affirmation rate |
-| RQ3 | Most common refactoring types? | ✅ Complete | General refactoring (35.2%), Cleanup (28.7%) |
-| RQ4 | What purposes do developers refactor with AI? | 🔄 Pending | PR description analysis needed |
-| RQ5 | Quality improvements from AI refactoring? | 🔄 Pending | Code metrics analysis needed |
-
-## 🏗️ Key Findings
-
-### **Pattern-based vs AST-based Detection:**
-- **Pattern-based**: 6.3% of commits mention refactoring keywords
-- **RefactoringMiner**: 0% actual formal refactorings detected
-- **Insight**: AI tools are transparent about refactoring but may be doing general improvements
-
-### **Agent Comparison:**
-- **Cursor**: 18.2% refactoring rate (highest)
-- **Claude_Code**: 12.8% refactoring rate  
-- **Devin**: 10.6% refactoring rate
-- **OpenAI_Codex**: 5.4% refactoring rate
-
-### **Repository Context:**
-- **67 unique repositories** analyzed
-- **Average 1,086 stars** per repository
-- **Top repository**: Stirling-Tools/Stirling-PDF (63,892 ⭐)
-
-## 🛠️ Manual Setup (without Docker)
-
-### Prerequisites
-- Python 3.11+
-- Java 17+
-- Git
-
-### Installation
-```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
-python scripts/1_simple_java_extraction.py
 ```
 
-## 📁 Project Structure
+Python 3.11+ and Java 17+ are required. The repository uses relative paths only; run scripts from the repo root.
+
+### Environment configuration
+
+Create a `.env` (optional) or export variables in your shell:
+
+| Variable | Purpose | Example |
+|----------|---------|---------|
+| `HF_TOKEN` | Needed if the HuggingFace dataset requires authentication | `hf_...` |
+| `GITHUB_TOKEN` / `OAuthToken` | Used by RefactoringMiner for GitHub API access | `ghp_...` (write to `github-oauth.properties`) |
+| `DESIGNITE_JAVA_PATH` | Absolute path to `DesigniteJava.jar` | `/path/to/DesigniteJava.jar` |
+| `REPOS_BASE` | Root directory containing `<owner>/<repo>` clones | `/work/.../DesigniteRunner/cloned_repos` |
+| `REFMINER_LOCAL_REPO` | (Optional) analyze a single local repo instead of using `REPOS_BASE` | `/path/to/repo` |
+| `READABILITY_TOOL_CMD` | Shell command template to compute readability (`{input}`, `{output}` placeholders) | `python tools/CoRed/run.py {input} --verbose --output {output}` |
+
+If you plan to re-run Designite or RefactoringMiner, make sure `java` is available on your `PATH`.
+
+---
+
+## 3. Data Pipeline Overview
+
+Each numbered script builds on the previous outputs. Run them from the repository root.
+
+| Step | Command | Description | Key Outputs |
+|------|---------|-------------|-------------|
+| 0 | `python scripts/0_download_dataset.py` | Download & cache the source dataset | `data/huggingface/...` |
+| 1 | `python scripts/1_simple_java_extraction.py` | Filter Java PRs and keep metadata | `data/filtered/java_repositories/simple_java_prs.parquet` |
+| 2 | `python scripts/2_extract_commits.py` | Expand PRs into commit-level rows; filter out merges | `data/filtered/java_repositories/java_file_commits_for_refactoring.parquet` |
+| 3 | `python scripts/3_detect_refactoring.py` | Pattern-based hints + (optional) RefactoringMiner pass | `data/analysis/refactoring_instances/commits_with_refactoring.parquet` |
+| 4 | `python scripts/4_refminer_analysis.py` | Batch run RefactoringMiner & aggregate results; saves raw JSON | `data/analysis/refactoring_instances/refminer_refactorings.parquet` + `refminer_raw/` |
+| 5 | `python scripts/5_designite_impact_analysis.py` | Aggregate Designite commit-level metrics; compare refactoring vs non-refactoring commits | `data/analysis/designite/commit_designite_metrics.*`, `designite_impact_summary.json`, `designite_boxplot_data.json` |
+| 6a | `python scripts/6a_prepare_designite_projects.py` | Generate `tools/DesigniteRunner/projects.txt` listing repos to analyse with Designite | `tools/DesigniteRunner/projects.txt` |
+| 6 | `python scripts/6_quality_analysis.py` | High-level quality deltas (Designite+readability) for sampled commits | `data/analysis/quality/quality_deltas.*`, `quality_summary.json` |
+| 6b | `python scripts/6b_compute_designite_deltas.py` | Match Designite before/after metrics for refactored entities | `data/analysis/designite/deltas/*.csv|parquet` |
+| 6c | `python scripts/6c_readability_impact.py` | Compute readability deltas for files touched by refactorings | `data/analysis/readability/readability_deltas.*`, `_summary.*` |
+
+> **Tip:** Most scripts accept environment variables (e.g., `REFMINER_MAX_COMMITS`, `REFMINER_SAVE_JSON`) to control sample size and caching. Check the script source or `--help` for details.
+
+---
+
+## 4. RefactoringMiner Integration
+
+1. Build or drop the RefactoringMiner jar inside `tools/RefactoringMiner`:
+   ```bash
+   cd tools/RefactoringMiner
+   ./gradlew shadowJar   # produces build/libs/RM-fat.jar
+   ```
+
+2. Provide GitHub credentials by writing `github-oauth.properties` with an OAuth token (see GitHub instructions below).
+
+3. Use either `scripts/3_detect_refactoring.py` (quick validation) or `scripts/4_refminer_analysis.py` (full batch with raw JSON). Useful environment knobs:
+   - `REFMINER_MAX_COMMITS=<N>` – limit the number of commits analysed.
+   - `REFMINER_SAVE_JSON=1` – persist raw responses under `data/analysis/refactoring_instances/refminer_raw/`.
+
+Outputs include:
+- `refminer_refactorings.parquet/csv` – flattened refactoring instances.
+- `refactoring_analysis.json` – commit/file-level summary (instances per agent, percentages, etc.).
+
+---
+
+## 5. Designite Quality Metrics
+
+### 5.1 Generating commit-level metrics
+
+Prerequisites:
+- Designite command-line jar (`DESIGNITE_JAVA_PATH`).
+- Designite output directories populated under `data/designite/outputs/<owner>/<repo>/<sha>/`. You can populate them by running Designite manually or by invoking the helper in `scripts/tools/`.
+
+Run:
+```bash
+python scripts/5_designite_impact_analysis.py
+```
+
+Outputs:
+- `commit_designite_metrics.parquet|csv` – aggregated metrics per commit.
+- `designite_impact_summary.json` – mean/median deltas, descriptive stats, agent breakdowns.
+- `designite_boxplot_data.json` – five-number summaries for plotting box plots.
+
+### 5.2 Before/after deltas for refactoring entities
+
+To quantify deltas for specific classes/methods touched by refactorings:
+
+```bash
+export DESIGNITE_JAVA_PATH=/absolute/path/to/DesigniteJava.jar
+export REPOS_BASE=/absolute/path/to/cloned_repos
+# optional: export HF_TOKEN, REFMINER_LOCAL_REPO, etc.
+python scripts/6b_compute_designite_deltas.py --max-commits 50  # remove flag for full run
+
+# (Optional) Run readability deltas with CoRed
+export READABILITY_TOOL_CMD="python tools/CoRed/run.py {input} --verbose --output {output}"
+python scripts/6c_readability_impact.py --max-commits 50
+
+### 5.3 Readability tooling (CoRed)
+
+[CoRed](https://github.com/grosa1/CoRed) implements the readability model from Scalabrino et al. (JSEP 2018). This repository includes a Python wrapper (`tools/CoRed/run.py`) that batches large repositories and accepts an `--output` path so the pipeline can consume its CSV results directly.
 
 ```
-├── config/dataset_config.yaml          # Dataset configuration
-├── src/
-│   ├── data_loader/                     # HuggingFace data loading
-│   ├── phase1_java_extraction/          # Java project filtering
-│   └── phase3_refactoring_analysis/     # Refactoring detection
-├── scripts/                             # Analysis scripts (1-4)
-├── data/                               # Analysis results
-└── tools/RefactoringMiner/             # RefactoringMiner integration
+python tools/CoRed/run.py path/to/project --verbose --output report.csv
 ```
 
-## 🔑 GitHub Token Setup
+To integrate with the analysis scripts, export `READABILITY_TOOL_CMD` so it points to the wrapper (placeholders `{input}` and `{output}` are substituted at runtime):
 
-For RefactoringMiner to work with private repositories:
-
-1. Go to GitHub Settings → Developer settings → Personal access tokens
-2. Generate token with `public_repo` scope
-3. Add to `github-oauth.properties`:
 ```
-OAuthToken=ghp_your_token_here
+export READABILITY_TOOL_CMD="python tools/CoRed/run.py {input} --verbose --output {output}"
 ```
 
-## 📈 Results
+The wrapper always writes `file_name,score,level` rows, which `scripts/6c_readability_impact.py` uses to measure before/after changes in files touched by each refactoring.
+```
 
-All analysis results are saved to `data/analysis/refactoring_instances/`:
-- `refactoring_analysis.json`: Complete analysis summary
-- `refactoring_commits.parquet`: Commits with detected refactoring
-- `refminer_*.json`: RefactoringMiner results (when available)
+Behaviour:
+1. Looks up each refactoring commit in `commits_with_refactoring.parquet`.
+2. Identifies the parent commit SHA using `git rev-parse` within `<REPOS_BASE>/<owner>/<repo>`.
+3. Ensures Designite outputs exist for both parent and child (re-runs Designite if missing).
+4. Matches entity keys (type or method) using file paths + qualified names from RefactoringMiner locations.
+5. Emits per-metric deltas and an aggregated summary (`delta_summary.*`).
 
-## 🎯 Research Impact
+Troubleshooting:
+- **"No deltas computed"** means a prerequisite is missing (Designite jar, repo clone, or the commit SHA is absent in the clone). Verify `JAVA_HOME`, `DESIGNITE_JAVA_PATH`, and that `git worktree add <sha>` succeeds inside the repo.
 
-This is the **first systematic study** of refactoring patterns in AI-assisted development, providing insights into:
-- AI tool transparency (77.5% self-affirmation)
-- Semantic vs syntactic refactoring gap
-- Agent-specific refactoring behaviors
+---
 
-## 🤝 Contributing
+## 6. GitHub Token Setup (for RefactoringMiner)
 
-This research infrastructure is designed for reproducibility. Use Docker for consistent environments across different machines and operating systems.
+1. Visit **Settings → Developer settings → Personal access tokens (classic)**.
+2. Generate a token with `public_repo` scope (or broader if needed).
+3. Store it in `github-oauth.properties` at the repo root:
+   ```
+   OAuthToken=ghp_your_token_here
+   ```
+4. The scripts automatically read this file when invoking RefactoringMiner.
+
+---
+
+## 7. Research Question Artifacts
+
+| RQ | Output | Location |
+|----|--------|----------|
+| RQ1 / RQ2 | Counts of refactoring commits & self-affirmation | `data/analysis/refactoring_instances/refactoring_analysis.json`, `refactoring_commits.parquet` |
+| RQ3 | Refactoring type distributions | `data/analysis/refactoring_instances/refactoring_type_counts_*.{csv,json}` |
+| RQ4 | Qualitative summaries / prompts (if generated) | `outputs/` or `notebooks/` (see repo history) |
+| RQ5 | Quality metrics before/after refactorings | `data/analysis/designite/*`, `data/analysis/quality/*` |
+
+For custom analyses, load the parquet files into notebooks under `notebooks/` or create new scripts under `scripts/`.
+
+---
+
+## 8. Troubleshooting Checklist
+
+- **Missing dataset files**: re-run `scripts/0_download_dataset.py`; ensure `HF_TOKEN` is set if the dataset is private.
+- **RefactoringMiner fails**: double-check the jar path in `tools/RefactoringMiner`, ensure the GitHub token is valid, and confirm `java` is Java 17+.
+- **Designite delta script prints "No deltas computed"**:
+  - `DESIGNITE_JAVA_PATH` must point to the jar.
+  - `REPOS_BASE` must contain `<owner>/<repo>` clones with the analysed SHAs (`git fetch origin <sha>` if missing).
+  - Existing child Designite outputs live under `data/designite/outputs/...`; the script creates parent snapshots automatically when possible.
+- **Large parquet reads fail**: install optional dependencies like `pyarrow==15.x` (already listed in `requirements.txt`).
+
+---
+
+## 9. Contributing & Workflow Tips
+
+1. Keep outputs under `data/` (already gitignored). Do not commit large binaries.
+2. Follow PEP 8 (4-space indent) and use type hints + short docstrings for new modules.
+3. When adding scripts, prefer a numbered naming scheme and document expected inputs/outputs.
+4. Always mention new environment variables in this README and in script docstrings.
+5. Before pushing analysis results, regenerate summaries with the latest scripts to ensure reproducibility.
+
+For substantial contributions, consider adding pytest cases under `tests/` (named `test_*.py`). Use temporary directories and fixtures to avoid large downloads during testing.
+
+---
+
+Happy analysing! If you uncover new refactoring insights, extend the pipeline with additional research questions under `src/research_questions/` and expose them via new scripts in `scripts/`.

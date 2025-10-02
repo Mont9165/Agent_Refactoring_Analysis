@@ -1,0 +1,42 @@
+huggingface:
+  dataset_name: "hao-li/AIDev-full"
+  cache_dir: "./data/huggingface/cache"
+  download_dir: "./data/huggingface/download"
+
+java_detection:
+  min_java_percentage: 60
+  check_build_files: true
+  build_file_patterns:
+    - "pom.xml"
+    - "build.gradle"
+    - "build.gradle.kts"
+    - "gradlew"
+  java_file_extensions:
+    - ".java"
+
+agentic_tools:
+  known_bots:
+    - "dependabot"
+    - "renovate"
+    - "github-copilot"
+    - "copilot-autofix"
+    - "coderabbitai"
+    - "sourcery-ai"
+    - "deepsource-autofix"
+    - "codacy"
+  commit_patterns:
+    - "auto-fix"
+    - "automated fix"
+    - "AI-generated"
+    - "copilot"
+    - "bot:"
+    - "[bot]"
+  pr_agent_indicators:
+    - "agent"
+    - "automated"
+    - "ai"
+
+filtering:
+  min_commits_per_repo: 10
+  exclude_forks: true
+  min_contributors: 2

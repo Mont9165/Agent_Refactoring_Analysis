@@ -58,7 +58,7 @@ def main():
                 sys.exit(1)
             unique_commits = base.drop_duplicates('sha')
 
-        max_commits = int(os.environ.get('REFMINER_MAX_COMMITS', 1000))
+        max_commits = int(os.environ.get('REFMINER_MAX_COMMITS', 100000))
         unique_commits = unique_commits.head(max_commits)
         print(f"Analyzing {len(unique_commits)} unique commits (REFMINER_MAX_COMMITS={max_commits})…")
 

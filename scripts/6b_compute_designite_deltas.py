@@ -10,7 +10,7 @@ import pandas as pd
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from src.research_questions.designite_entity_delta import (  # noqa: E402
+from src.phase3_code_quality.designite_entity_delta import (  # noqa: E402
     DesigniteDeltaCalculator,
     aggregate_deltas,
     load_tool_config,

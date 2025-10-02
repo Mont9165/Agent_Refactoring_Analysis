@@ -163,9 +163,10 @@ def process_agent(max_workers: int = 10) -> None:
         existing_ids = set(df["sha"].values)
         rows_to_process = []
         for _, row in commits_df.iterrows():
-            if (row["sha"] not in existing_ids and
-                    row["state"] == 'closed' and
-                    row["is_self_affirmed"] == True):
+            if (row["sha"] not in existing_ids):
+                    # row["state"] == 'closed' and
+                    # row["is_self_affirmed"] == True
+
                 # refactoring_types を集計
                 try:
                     # 文字列 '["type1", "type2"]' をPythonのリストに変換
