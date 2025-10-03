@@ -10,12 +10,18 @@ Outputs under data/analysis/refactoring_instances/:
 import os
 import sys
 import time
+from pathlib import Path
+
 import pandas as pd
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.phase3_refactoring_analysis.refminer_wrapper import RefactoringMinerWrapper
+
+
+REFMINER_OUTPUT_DIR = Path("data/analysis/refactoring_instances")
+REFMINER_PARQUET = REFMINER_OUTPUT_DIR / "refminer_refactorings.parquet"
 
 
 def load_java_commits() -> pd.DataFrame:
@@ -30,6 +36,25 @@ def load_java_commits() -> pd.DataFrame:
         print(f"Loaded {len(df)} Java file changes from CSV")
         return df
     raise FileNotFoundError("Missing java commits input: data/filtered/java_repositories/java_file_commits_for_refactoring.(parquet|csv)")
+
+
+def _collect_cached_shas(rm: RefactoringMinerWrapper) -> set[str]:
+    """Return set of commit SHAs that already have RefactoringMiner output."""
+    cached: set[str] = set()
+
+    raw_dir = getattr(rm, "raw_json_dir", None)
+    if raw_dir and raw_dir.exists():
+        cached.update(path.stem for path in raw_dir.glob("**/*.json"))
+
+    if REFMINER_PARQUET.exists():
+        try:
+            existing = pd.read_parquet(REFMINER_PARQUET, columns=["commit_sha"])
+            cached.update(existing["commit_sha"].astype(str))
+        except Exception:
+            # If the parquet cannot be read we ignore it and rely on raw JSON cache
+            pass
+
+    return cached
 
 
 def main():
@@ -57,6 +82,16 @@ def main():
                 print("No html_url found and no REFMINER_LOCAL_REPO set. Cannot run RM.")
                 sys.exit(1)
             unique_commits = base.drop_duplicates('sha')
+        cached_shas = _collect_cached_shas(rm)
+        if cached_shas:
+            candidate_cached = set(unique_commits['sha'].astype(str)) & cached_shas
+            if candidate_cached:
+                print(f"Skipping {len(candidate_cached)} commits already cached by RefactoringMiner")
+
+        unique_commits = unique_commits[~unique_commits['sha'].astype(str).isin(cached_shas)]
+        if unique_commits.empty:
+            print("All candidate commits already have RefactoringMiner results. Nothing to do.")
+            return
 
         max_commits = int(os.environ.get('REFMINER_MAX_COMMITS', 100000))
         unique_commits = unique_commits.head(max_commits)
@@ -64,10 +99,21 @@ def main():
 
         ref_df = rm.analyze_commits_batch(unique_commits, max_commits=max_commits)
         if ref_df.empty:
-            print("No refactorings detected by RefactoringMiner.")
-        else:
-            analysis = rm.analyze_refminer_results(ref_df, unique_commits)
-            rm.save_refminer_results(ref_df, analysis)
+            print("No new refactorings detected by RefactoringMiner.")
+            return
+
+        existing_results = pd.read_parquet(REFMINER_PARQUET) if REFMINER_PARQUET.exists() else pd.DataFrame()
+        combined_results = pd.concat([existing_results, ref_df], ignore_index=True)
+        if not combined_results.empty:
+            combined_results = combined_results.drop_duplicates(
+                subset=["commit_sha", "refactoring_type", "description"], keep="last"
+            )
+
+        metadata = commits[commits['sha'].isin(combined_results['commit_sha'].unique())]
+        metadata = metadata.drop_duplicates('sha') if not metadata.empty else metadata
+
+        analysis = rm.analyze_refminer_results(combined_results, metadata)
+        rm.save_refminer_results(combined_results, analysis)
 
         elapsed = time.time() - start
         print("\n" + "=" * 60)
@@ -91,4 +137,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
