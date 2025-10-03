@@ -229,13 +229,22 @@ class ReadabilityImpactCalculator:
         return df
 
 
-def run_readability_impact(max_commits: Optional[int] = None) -> pd.DataFrame:
+def run_readability_impact(
+    max_commits: Optional[int] = None,
+    skip_commits: Optional[Iterable[str]] = None,
+) -> pd.DataFrame:
     commits_path = Path("data/analysis/refactoring_instances/commits_with_refactoring.parquet")
     refminer_path = Path("data/analysis/refactoring_instances/refminer_refactorings.parquet")
     if not commits_path.exists() or not refminer_path.exists():
         raise FileNotFoundError("Required inputs not found. Run refactoring analysis scripts first.")
 
     commits_df = pd.read_parquet(commits_path)
+    if skip_commits:
+        skip_set = {str(sha) for sha in skip_commits}
+        commits_df = commits_df[~commits_df["sha"].astype(str).isin(skip_set)]
+    if commits_df.empty:
+        return pd.DataFrame()
+
     refminer_df = pd.read_parquet(refminer_path)
     cfg = load_tool_config()
     calculator = ReadabilityImpactCalculator(cfg, max_commits=max_commits)

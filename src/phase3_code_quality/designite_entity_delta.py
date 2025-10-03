@@ -12,13 +12,31 @@ from itertools import zip_longest
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
+import numpy as np
 import pandas as pd
 
 
 TYPE_METRIC_COLUMNS = ["LOC", "WMC", "NOM", "NOF", "DIT", "LCOM", "FANIN", "FANOUT"]
 METHOD_METRIC_COLUMNS = ["LOC", "CC", "PC"]
 
-DESIGNITE_OUTPUT_ROOT = Path("data/designite/outputs")
+def _resolve_designite_root() -> Path:
+    env_root = os.environ.get("DESIGNITE_OUTPUT_ROOT")
+    if env_root:
+        env_path = Path(env_root).expanduser().resolve()
+        if env_path.exists():
+            return env_path
+
+    candidates = [
+        Path("tools/DesigniteRunner/outputs"),
+        Path("data/designite/outputs"),
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
+DESIGNITE_OUTPUT_ROOT = _resolve_designite_root()
 DELTA_Output_DIR = Path("data/analysis/designite/deltas")
 
 
@@ -27,6 +45,10 @@ class ToolConfig:
     designite_path: Optional[str]
     repos_base: Optional[Path]
     local_repo: Optional[Path]
+    auto_generate_outputs: bool
+    auto_clone_repos: bool
+    git_remote_template: str
+    max_retries: int
 
 
 @dataclass
@@ -81,9 +103,40 @@ class DesigniteDeltaCalculator:
         if not self.config.repos_base:
             return None
         candidate = self.config.repos_base / owner / repo
-        return candidate if candidate.exists() else None
+        if candidate.exists():
+            return candidate
+        if not self.config.auto_clone_repos:
+            return None
+        return self._clone_repo(owner, repo)
+
+    def _clone_repo(self, owner: str, repo: str) -> Optional[Path]:
+        if not self.config.repos_base:
+            return None
+        destination = self.config.repos_base / owner / repo
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        remote = self.config.git_remote_template.format(owner=owner, repo=repo)
+        print(f"Cloning {remote} → {destination}")
+        code, out, err = self._run(["git", "clone", remote, str(destination)])
+        if code != 0:
+            print(f"  git clone failed: {err.strip() or out.strip()}")
+            return None
+        return destination if destination.exists() else None
+
+    def _ensure_commit_available(self, repo_path: Path, sha: str) -> bool:
+        code, _, _ = self._run(["git", "rev-parse", "--verify", f"{sha}^{{commit}}"], cwd=repo_path)
+        if code == 0:
+            return True
+        print(f"Fetching commit {sha[:10]} for {repo_path.name}…")
+        fetch_cmd = ["git", "fetch", "origin", sha]
+        code, out, err = self._run(fetch_cmd, cwd=repo_path)
+        if code != 0:
+            print(f"  git fetch failed: {err.strip() or out.strip()}")
+            return False
+        return True
 
     def _get_parent_sha(self, repo_path: Path, sha: str) -> Optional[str]:
+        if not self._ensure_commit_available(repo_path, sha):
+            return None
         code, out, _ = self._run(["git", "rev-parse", f"{sha}^"] , cwd=repo_path)
         if code == 0:
             return out.strip()
@@ -108,45 +161,97 @@ class DesigniteDeltaCalculator:
     # Designite helpers
     # ------------------------------------------------------------------
     def _run_designite(self, input_dir: Path, output_dir: Path) -> bool:
-        if not self.config.designite_path or not Path(self.config.designite_path).exists():
+        if not self.config.designite_path:
             return False
+        designite_path = Path(self.config.designite_path)
+        if not designite_path.exists():
+            print(f"Designite jar not found at {designite_path}")
+            return False
+
         output_dir.mkdir(parents=True, exist_ok=True)
-        code, _, _ = self._run(
-            ["java", "-jar", self.config.designite_path, "-i", str(input_dir), "-o", str(output_dir)]
-        )
-        return code == 0
+        cmd = ["java", "-jar", str(designite_path), "-i", str(input_dir), "-o", str(output_dir)]
+
+        for attempt in range(1, self.config.max_retries + 1):
+            code, out, err = self._run(cmd)
+            if code == 0:
+                return True
+            print(
+                f"Designite run failed (attempt {attempt}/{self.config.max_retries}) for {input_dir}:"
+                f" {err.strip() or out.strip()}"
+            )
+        return False
 
     def ensure_designite_outputs(self, repo_commit: RepoCommit) -> Tuple[Optional[Path], Optional[Path]]:
-        repo_path = self._infer_repo_path(repo_commit.owner, repo_commit.repo)
-        if not repo_path:
-            return None, None
-
         child_dir = repo_commit.child_output_dir
         parent_dir = repo_commit.parent_output_dir
 
-        if not (child_dir / "typeMetrics.csv").exists():
-            child_worktree = self._checkout_worktree(repo_path, repo_commit.sha)
-            if child_worktree:
-                try:
-                    success = self._run_designite(child_worktree, child_dir)
-                    if not success:
-                        child_dir = None
-                finally:
-                    self._cleanup_worktree(repo_path, child_worktree)
-            else:
-                child_dir = None
+        print(f"--- Checking Commit: {repo_commit.owner}/{repo_commit.repo}:{repo_commit.sha} ---")
+        print(f"Looking for CHILD data in: {child_dir}")
+        print(f"Looking for PARENT data in: {parent_dir}")
+        print(f"Child CSV exists? {(child_dir / 'typeMetrics.csv').exists()}")
+        print(f"Parent CSV exists? {(parent_dir / 'typeMetrics.csv').exists()}")
+        print("-" * 20)
 
-        if not (parent_dir / "typeMetrics.csv").exists():
-            parent_worktree = self._checkout_worktree(repo_path, repo_commit.parent_sha)
-            if parent_worktree:
-                try:
-                    success = self._run_designite(parent_worktree, parent_dir)
-                    if not success:
-                        parent_dir = None
-                finally:
-                    self._cleanup_worktree(repo_path, parent_worktree)
-            else:
-                parent_dir = None
+        child_ready = (child_dir / "typeMetrics.csv").exists()
+        parent_ready = (parent_dir / "typeMetrics.csv").exists()
+
+        repo_path = None
+        if not (child_ready and parent_ready):
+            repo_path = self._infer_repo_path(repo_commit.owner, repo_commit.repo)
+            if not repo_path:
+                return (parent_dir if parent_ready else None, child_dir if child_ready else None)
+
+            if not child_ready and not self._ensure_commit_available(repo_path, repo_commit.sha):
+                return parent_dir, child_dir
+            if not parent_ready and repo_commit.parent_sha and not self._ensure_commit_available(repo_path, repo_commit.parent_sha):
+                return parent_dir, child_dir
+
+        if self.config.auto_generate_outputs:
+            if not child_ready:
+                child_worktree = self._checkout_worktree(repo_path, repo_commit.sha)
+                if child_worktree:
+                    try:
+                        success = self._run_designite(child_worktree, child_dir)
+                        if success:
+                            child_ready = True
+                            child_dir = repo_commit.child_output_dir
+                        else:
+                            print(
+                                f"Designite failed for child commit {repo_commit.sha[:10]}"
+                                f" in {repo_commit.owner}/{repo_commit.repo}"
+                            )
+                            child_dir = None
+                    finally:
+                        self._cleanup_worktree(repo_path, child_worktree)
+                else:
+                    print(
+                        f"Could not create worktree for child commit {repo_commit.sha[:10]}"
+                        f" in {repo_commit.owner}/{repo_commit.repo}"
+                    )
+                    child_dir = None
+
+            if not parent_ready and repo_commit.parent_sha:
+                parent_worktree = self._checkout_worktree(repo_path, repo_commit.parent_sha)
+                if parent_worktree:
+                    try:
+                        success = self._run_designite(parent_worktree, parent_dir)
+                        if success:
+                            parent_ready = True
+                            parent_dir = repo_commit.parent_output_dir
+                        else:
+                            print(
+                                f"Designite failed for parent commit {repo_commit.parent_sha[:10]}"
+                                f" in {repo_commit.owner}/{repo_commit.repo}"
+                            )
+                            parent_dir = None
+                    finally:
+                        self._cleanup_worktree(repo_path, parent_worktree)
+                else:
+                    print(
+                        f"Could not create worktree for parent commit {repo_commit.parent_sha[:10]}"
+                        f" in {repo_commit.owner}/{repo_commit.repo}"
+                    )
+                    parent_dir = None
 
         return parent_dir, child_dir
 
@@ -305,9 +410,20 @@ class DesigniteDeltaCalculator:
 
     def extract_entities_for_commit(self, refs: pd.DataFrame) -> List[EntityRecord]:
         records: List[EntityRecord] = []
+        def _decode_locations(raw):
+            if isinstance(raw, str):
+                try:
+                    return json.loads(raw or "[]")
+                except json.JSONDecodeError:
+                    return []
+            if isinstance(raw, (list, tuple)):
+                return raw
+            if isinstance(raw, np.ndarray):
+                return raw.tolist()
+            return []
         for _, row in refs.iterrows():
-            left_locs = json.loads(row.get("left_side_locations", "[]") or "[]")
-            right_locs = json.loads(row.get("right_side_locations", "[]") or "[]")
+            left_locs = _decode_locations(row.get("left_side_locations", []))
+            right_locs = _decode_locations(row.get("right_side_locations", []))
             for left, right in zip_longest(left_locs, right_locs, fillvalue=None):
                 loc = right or left
                 if not loc:
@@ -353,6 +469,8 @@ class DesigniteDeltaCalculator:
         entity_kind: str,
         before_key: Optional[str],
         after_key: Optional[str],
+        parent_sha: str,
+        child_sha: str,
     ) -> List[Dict[str, object]]:
         deltas: List[Dict[str, object]] = []
         for metric in metrics:
@@ -363,6 +481,8 @@ class DesigniteDeltaCalculator:
             deltas.append(
                 {
                     "commit_sha": commit_sha,
+                    "child_sha": child_sha,
+                    "parent_sha": parent_sha,
                     "refactoring_type": ref_type,
                     "entity_kind": entity_kind,
                     "metric": metric,
@@ -415,6 +535,8 @@ class DesigniteDeltaCalculator:
                     record.entity_kind,
                     before_key,
                     after_key,
+                    repo_commit.parent_sha,
+                    repo_commit.sha,
                 )
             )
 
@@ -437,6 +559,8 @@ class DesigniteDeltaCalculator:
                     record.entity_kind,
                     before_key,
                     after_key,
+                    repo_commit.parent_sha,
+                    repo_commit.sha,
                 )
             )
 
@@ -452,6 +576,9 @@ class DesigniteDeltaCalculator:
 
         all_type_deltas: List[Dict[str, object]] = []
         all_method_deltas: List[Dict[str, object]] = []
+        missing_designite: List[str] = []
+        missing_repos: List[str] = []
+        missing_parent_git: List[str] = []
 
         for _, commit in commits.iterrows():
             html_url = commit.get("html_url")
@@ -463,14 +590,21 @@ class DesigniteDeltaCalculator:
             owner, repo = parts[3], parts[4]
             repo_path = self._infer_repo_path(owner, repo)
             if not repo_path:
+                print(
+                    f"Repository clone not found for {owner}/{repo}; "
+                    f"skipping commit {str(commit['sha'])[:10]}"
+                )
+                missing_repos.append(f"{owner}/{repo}:{commit['sha']}")
                 continue
             parent_sha = self._get_parent_sha(repo_path, commit["sha"])
             if not parent_sha:
+                missing_parent_git.append(f"{owner}/{repo}:{commit['sha']}")
                 continue
 
             repo_commit = RepoCommit(owner=owner, repo=repo, sha=commit["sha"], parent_sha=parent_sha)
             parent_dir, child_dir = self.ensure_designite_outputs(repo_commit)
             if not parent_dir or not child_dir:
+                missing_designite.append(f"{owner}/{repo}:{commit['sha']} (parent: {parent_sha})")
                 continue
 
             commit_refs = refminer_df[refminer_df["commit_sha"] == commit["sha"]]
@@ -485,6 +619,25 @@ class DesigniteDeltaCalculator:
             type_deltas, method_deltas = self.compute_commit_deltas(repo_commit, type_entities, method_entities)
             all_type_deltas.extend(type_deltas)
             all_method_deltas.extend(method_deltas)
+
+        if missing_designite:
+            print("Designite outputs missing for commits:")
+            for entry in missing_designite[:20]:
+                print(f"  - {entry}")
+            if len(missing_designite) > 20:
+                print(f"  ... and {len(missing_designite) - 20} more")
+        if missing_repos:
+            print("Repository clones not found for commits:")
+            for entry in missing_repos[:20]:
+                print(f"  - {entry}")
+            if len(missing_repos) > 20:
+                print(f"  ... and {len(missing_repos) - 20} more")
+        if missing_parent_git:
+            print("Parent commit not reachable via git for commits:")
+            for entry in missing_parent_git[:20]:
+                print(f"  - {entry}")
+            if len(missing_parent_git) > 20:
+                print(f"  ... and {len(missing_parent_git) - 20} more")
 
         type_df = pd.DataFrame(all_type_deltas)
         method_df = pd.DataFrame(all_method_deltas)
@@ -504,12 +657,27 @@ def load_tool_config() -> ToolConfig:
     designite_path = os.environ.get("DESIGNITE_JAVA_PATH")
     if not designite_path and designite_default.exists():
         designite_path = str(designite_default.resolve())
-    repos_base = Path(os.environ["REPOS_BASE"]) if os.environ.get("REPOS_BASE") else None
+    default_repos_base = Path("tools/DesigniteRunner/cloned_repos")
+    env_repos_base = os.environ.get("REPOS_BASE")
+    if env_repos_base:
+        repos_base = Path(env_repos_base).expanduser().resolve()
+    elif default_repos_base.exists():
+        repos_base = default_repos_base.resolve()
+    else:
+        repos_base = None
     local_repo = Path(os.environ["REFMINER_LOCAL_REPO"]) if os.environ.get("REFMINER_LOCAL_REPO") else None
+    auto_generate = os.environ.get("DESIGNITE_AUTO", "1") not in {"0", "false", "False"}
+    auto_clone = os.environ.get("DESIGNITE_AUTO_CLONE", "1") not in {"0", "false", "False"}
+    git_remote_template = os.environ.get("DESIGNITE_GIT_REMOTE_TMPL", "https://github.com/{owner}/{repo}.git")
+    max_retries = int(os.environ.get("DESIGNITE_MAX_RETRIES", "3"))
     return ToolConfig(
         designite_path=designite_path,
         repos_base=repos_base,
         local_repo=local_repo,
+        auto_generate_outputs=auto_generate,
+        auto_clone_repos=auto_clone,
+        git_remote_template=git_remote_template,
+        max_retries=max(1, max_retries),
     )
 
 

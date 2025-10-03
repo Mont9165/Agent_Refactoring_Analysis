@@ -1,6 +1,7 @@
 """Utilities to aggregate Designite metrics and compare refactoring vs non-refactoring commits."""
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, Optional
@@ -9,7 +10,23 @@ import numpy as np
 import pandas as pd
 
 
-DESIGNITE_OUTPUT_ROOT = Path("data/designite/outputs")
+def _resolve_designite_root() -> Path:
+    env_root = os.environ.get("DESIGNITE_OUTPUT_ROOT")
+    if env_root:
+        env_path = Path(env_root).expanduser().resolve()
+        if env_path.exists():
+            return env_path
+
+    for candidate in (
+        Path("tools/DesigniteRunner/outputs"),
+        Path("data/designite/outputs"),
+    ):
+        if candidate.exists():
+            return candidate
+    return Path("tools/DesigniteRunner/outputs")
+
+
+DESIGNITE_OUTPUT_ROOT = _resolve_designite_root()
 ANALYSIS_DIR = Path("data/analysis/designite")
 
 

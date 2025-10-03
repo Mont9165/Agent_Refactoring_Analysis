@@ -14,6 +14,7 @@ from src.research_questions.rq1_refactoring_instances import rq1_refactoring_ins
 from src.research_questions.rq2_self_affirmed import rq2_self_affirmed_percentage
 from src.research_questions.rq3_refactoring_types import rq3_top_refactoring_types
 from src.research_questions.rq4_refactoring_purpose import rq4_refactoring_purpose
+from src.research_questions.rq5_quality_impact import rq5_quality_impact
 
 
 def _plot_rq3_distribution(
@@ -242,7 +243,7 @@ def _plot_rq4_purposes(
 
 def main() -> None:
     print("=" * 60)
-    print("         RESEARCH QUESTIONS (RQ1–RQ4)")
+    print("         RESEARCH QUESTIONS (RQ1–RQ5)")
     print("=" * 60)
 
     data = load_phase3_outputs()
@@ -404,7 +405,69 @@ def main() -> None:
     if top_chart:
         print(f"  Saved RQ4 Top10 purpose chart: {top_chart}")
 
-    print("\nDone. See outputs in outputs/research_questions/.")
+    print("\nRQ5: Quality impact of refactorings (Designite & Readability)…")
+    rq5 = rq5_quality_impact()
+    quality_json = OUTPUT_DIR / "rq5_quality" / "rq5_quality_impact.json"
+    print(f"  Summary JSON: {quality_json}")
+    if rq5.get("wilcoxon_available"):
+        print("  Wilcoxon signed-rank test available (scipy installed).")
+    else:
+        print("  Wilcoxon test unavailable (scipy not installed).")
+
+    designite_summary = rq5.get("designite", {})
+    if designite_summary.get("status") == "ok":
+        metrics = designite_summary.get("metrics", {})
+        print(f"  Designite metrics analysed: {len(metrics)}")
+        sample_metrics = list(metrics.items())[:3]
+        for metric_name, metric_data in sample_metrics:
+            by_type = metric_data.get("by_refactoring_type", {})
+            if not by_type:
+                continue
+
+            def _median(entry: Dict[str, object]) -> float:
+                stats = entry.get("stats", {})
+                return float(stats.get("median", 0.0)) if isinstance(stats, dict) else 0.0
+
+            top_type, top_payload = max(
+                by_type.items(),
+                key=lambda item: abs(_median(item[1])),
+            )
+            stats = top_payload.get("stats", {})
+            median = stats.get("median")
+            count = stats.get("count")
+            if isinstance(median, (int, float)) and isinstance(count, (int, float)):
+                print(f"    {metric_name}: strongest median delta {median:.3f} from {top_type} (n={count})")
+            else:
+                print(f"    {metric_name}: analysed {len(by_type)} refactoring types")
+    elif designite_summary.get("status") == "missing":
+        print("  Designite delta files not found. Run scripts/6b_compute_designite_deltas.py first.")
+    elif designite_summary.get("status") == "empty":
+        print("  Designite delta files contained no usable rows (all NaN deltas).")
+
+    readability_summary = rq5.get("readability", {})
+    if readability_summary.get("status") == "ok":
+        ref_types = readability_summary.get("by_refactoring_type", {})
+        print(f"  Readability deltas analysed: {len(ref_types)} refactoring types")
+        if ref_types:
+            def _readability_median(entry: Dict[str, object]) -> float:
+                stats = entry.get("stats", {})
+                return float(stats.get("median", 0.0)) if isinstance(stats, dict) else 0.0
+
+            top_type, payload = max(
+                ref_types.items(),
+                key=lambda item: abs(_readability_median(item[1])),
+            )
+            stats = payload.get("stats", {})
+            median = stats.get("median")
+            count = stats.get("count")
+            if isinstance(median, (int, float)) and isinstance(count, (int, float)):
+                print(f"    Largest median readability delta {median:.3f} from {top_type} (n={count})")
+    elif readability_summary.get("status") == "missing":
+        print("  Readability delta file not found. Run scripts/6c_readability_impact.py first.")
+    elif readability_summary.get("status") == "empty":
+        print("  Readability delta file contained no usable rows.")
+
+    print("\nDone. Review generated CSV/JSON files under outputs/research_questions/ for details.")
 
 
 if __name__ == "__main__":

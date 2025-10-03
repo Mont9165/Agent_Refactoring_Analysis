@@ -11,6 +11,7 @@ import os
 import sys
 import time
 from pathlib import Path
+from typing import Set
 
 import pandas as pd
 
@@ -38,7 +39,7 @@ def load_java_commits() -> pd.DataFrame:
     raise FileNotFoundError("Missing java commits input: data/filtered/java_repositories/java_file_commits_for_refactoring.(parquet|csv)")
 
 
-def _collect_cached_shas(rm: RefactoringMinerWrapper) -> set[str]:
+def _collect_cached_shas(rm: RefactoringMinerWrapper) -> Set[str]:
     """Return set of commit SHAs that already have RefactoringMiner output."""
     cached: set[str] = set()
 

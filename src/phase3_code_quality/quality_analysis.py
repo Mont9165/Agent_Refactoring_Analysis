@@ -46,11 +46,21 @@ def load_tool_config() -> ToolConfig:
     designite_path = os.environ.get("DESIGNITE_JAVA_PATH")
     if not designite_path and designite_default.exists():
         designite_path = str(designite_default.resolve())
+
+    default_repos_base = Path("tools/DesigniteRunner/cloned_repos")
+    repos_base_env = os.environ.get("REPOS_BASE")
+    if repos_base_env:
+        repos_base = Path(repos_base_env).expanduser().resolve()
+    elif default_repos_base.exists():
+        repos_base = default_repos_base.resolve()
+    else:
+        repos_base = None
+
     return ToolConfig(
         designite_path=designite_path,
         readability_cmd=os.environ.get("READABILITY_TOOL_CMD"),
         readability_jar=os.environ.get("READABILITY_JAR"),
-        repos_base=Path(os.environ["REPOS_BASE"]) if os.environ.get("REPOS_BASE") else None,
+        repos_base=repos_base,
         local_repo=Path(os.environ["REFMINER_LOCAL_REPO"]) if os.environ.get("REFMINER_LOCAL_REPO") else None,
     )
 
