@@ -1,6 +1,7 @@
 """RQ1: Count refactoring instances and commits in agentic pull requests."""
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Dict, Optional
 
 import pandas as pd
@@ -20,13 +21,25 @@ def rq1_refactoring_instances_agentic(
     total_agentic_commits = int(agentic["sha"].nunique()) if not agentic.empty else 0
     agentic_refactor_commits = int(agentic[agentic.get("has_refactoring", False)]["sha"].nunique()) if not agentic.empty else 0
 
+    agentic_shas = set(agentic["sha"].unique()) if not agentic.empty else set()
+
     instances = 0
-    if refminer is not None and not refminer.empty and total_agentic_commits:
-        agentic_shas = set(agentic["sha"].unique())
+    if refminer is not None and not refminer.empty and agentic_shas:
         instances = int(refminer[refminer["commit_sha"].isin(agentic_shas)].shape[0])
 
+    total_agentic_file_changes = len(agentic_shas)
+    details_path = Path("data/filtered/java_repositories/java_pr_commits_no_merges.parquet")
+    if details_path.exists() and agentic_shas:
+        try:
+            details = pd.read_parquet(details_path, columns=["sha"])
+            total_agentic_file_changes = int(details[details["sha"].isin(agentic_shas)].shape[0])
+        except Exception:
+            total_agentic_file_changes = len(agentic)
+    else:
+        total_agentic_file_changes = len(agentic)
+
     result: Dict[str, int | bool] = {
-        "total_agentic_file_changes": int(len(agentic)),
+        "total_agentic_file_changes": total_agentic_file_changes,
         "total_agentic_commits": total_agentic_commits,
         "agentic_refactoring_commits": agentic_refactor_commits,
         "agentic_refactoring_instances": instances,

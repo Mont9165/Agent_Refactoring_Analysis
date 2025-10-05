@@ -16,10 +16,12 @@ Writes unique owner/repo lines in tools/DesigniteRunner/projects.txt
 import os
 import sys
 from pathlib import Path
+from typing import Optional
+
 import pandas as pd
 
 
-def extract_owner_repo(url: str) -> str | None:
+def extract_owner_repo(url: str) -> Optional[str]:
     try:
         # Accept PR URLs or repo URLs
         # Example PR: https://github.com/owner/repo/pull/123
@@ -84,4 +86,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
