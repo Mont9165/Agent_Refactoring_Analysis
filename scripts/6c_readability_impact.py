@@ -29,8 +29,11 @@ def main() -> None:
     existing_df = pd.read_parquet(READABILITY_PARQUET) if READABILITY_PARQUET.exists() else pd.DataFrame()
     skip_commits = set(existing_df["commit_sha"].astype(str)) if not existing_df.empty else set()
 
+    workers_env = os.environ.get("READABILITY_WORKERS")
+    workers = int(workers_env) if workers_env else None
+
     try:
-        df = run_readability_impact(max_commits=max_commits, skip_commits=skip_commits)
+        df = run_readability_impact(max_commits=max_commits, skip_commits=skip_commits, workers=workers)
     except Exception as exc:  # noqa: BLE001
         print(f"ERROR: {exc}")
         sys.exit(1)

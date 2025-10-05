@@ -79,10 +79,16 @@ class EntityRecord:
 
 
 class DesigniteDeltaCalculator:
-    def __init__(self, config: ToolConfig, max_commits: Optional[int] = None) -> None:
+    def __init__(
+        self,
+        config: ToolConfig,
+        max_commits: Optional[int] = None,
+        persist_outputs: bool = True,
+    ) -> None:
         self.config = config
         self.max_commits = max_commits
         DELTA_Output_DIR.mkdir(parents=True, exist_ok=True)
+        self.persist_outputs = persist_outputs
 
     # ------------------------------------------------------------------
     # Git helpers
@@ -642,12 +648,13 @@ class DesigniteDeltaCalculator:
         type_df = pd.DataFrame(all_type_deltas)
         method_df = pd.DataFrame(all_method_deltas)
 
-        if not type_df.empty:
-            type_df.to_parquet(DELTA_Output_DIR / "type_metric_deltas.parquet", index=False)
-            type_df.to_csv(DELTA_Output_DIR / "type_metric_deltas.csv", index=False)
-        if not method_df.empty:
-            method_df.to_parquet(DELTA_Output_DIR / "method_metric_deltas.parquet", index=False)
-            method_df.to_csv(DELTA_Output_DIR / "method_metric_deltas.csv", index=False)
+        if self.persist_outputs:
+            if not type_df.empty:
+                type_df.to_parquet(DELTA_Output_DIR / "type_metric_deltas.parquet", index=False)
+                type_df.to_csv(DELTA_Output_DIR / "type_metric_deltas.csv", index=False)
+            if not method_df.empty:
+                method_df.to_parquet(DELTA_Output_DIR / "method_metric_deltas.parquet", index=False)
+                method_df.to_csv(DELTA_Output_DIR / "method_metric_deltas.csv", index=False)
 
         return type_df, method_df
 

@@ -6,6 +6,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from itertools import zip_longest
 from pathlib import Path
@@ -37,11 +38,17 @@ class RefactoringFile:
 
 
 class ReadabilityImpactCalculator:
-    def __init__(self, cfg: ToolConfig, max_commits: Optional[int] = None) -> None:
+    def __init__(
+        self,
+        cfg: ToolConfig,
+        max_commits: Optional[int] = None,
+        persist_outputs: bool = True,
+    ) -> None:
         self.cfg = cfg
         self.max_commits = max_commits
         self.tmp_root = READABILITY_DIR / "tmp"
         self.tmp_root.mkdir(parents=True, exist_ok=True)
+        self.persist_outputs = persist_outputs
 
     # ------------------------------------------------------------------
     # git helpers
@@ -56,11 +63,46 @@ class ReadabilityImpactCalculator:
         if not self.cfg.repos_base:
             return None
         candidate = self.cfg.repos_base / owner / repo
-        return candidate if candidate.exists() else None
+        if candidate.exists():
+            return candidate
+        if not self.cfg.auto_clone_repos:
+            return None
+        return self._clone_repo(owner, repo)
+
+    def _clone_repo(self, owner: str, repo: str) -> Optional[Path]:
+        if not self.cfg.repos_base:
+            return None
+        destination = self.cfg.repos_base / owner / repo
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        remote = self.cfg.git_remote_template.format(owner=owner, repo=repo)
+        print(f"Cloning {remote} → {destination}")
+        code, out, err = self._run(["git", "clone", remote, str(destination)])
+        if code != 0:
+            print(f"  git clone failed: {err.strip() or out.strip()}")
+            return None
+        return destination if destination.exists() else None
+
+    def _ensure_commit_available(self, repo_path: Path, sha: str) -> bool:
+        code, _, _ = self._run(["git", "rev-parse", "--verify", f"{sha}^{{commit}}"], cwd=repo_path)
+        if code == 0:
+            return True
+        print(f"Fetching commit {sha[:10]} for {repo_path.name}…")
+        code, out, err = self._run(["git", "fetch", "origin", sha], cwd=repo_path)
+        if code != 0:
+            print(f"  git fetch failed: {err.strip() or out.strip()}")
+            return False
+        return True
 
     def _get_parent_sha(self, repo_path: Path, sha: str) -> Optional[str]:
+        if not self._ensure_commit_available(repo_path, sha):
+            return None
         code, out, _ = self._run(["git", "rev-parse", f"{sha}^"], cwd=repo_path)
-        return out.strip() if code == 0 else None
+        if code != 0:
+            return None
+        parent_sha = out.strip()
+        if parent_sha and not self._ensure_commit_available(repo_path, parent_sha):
+            return None
+        return parent_sha
 
     def _checkout_worktree(self, repo_path: Path, sha: str) -> Optional[Path]:
         tmp_dir = Path(tempfile.mkdtemp(prefix="readability_wt_"))
@@ -219,7 +261,7 @@ class ReadabilityImpactCalculator:
                 self._cleanup_worktree(repo_path, parent_worktree)
 
         df = pd.DataFrame(results)
-        if not df.empty:
+        if not df.empty and self.persist_outputs:
             out_file = READABILITY_DIR / "readability_deltas.parquet"
             df.to_parquet(out_file, index=False)
             df.to_csv(READABILITY_DIR / "readability_deltas.csv", index=False)
@@ -229,9 +271,39 @@ class ReadabilityImpactCalculator:
         return df
 
 
+def _group_commits_by_repo(commits_df: pd.DataFrame) -> Dict[Tuple[str, str], List[dict]]:
+    groups: Dict[Tuple[str, str], List[dict]] = {}
+    for _, row in commits_df.iterrows():
+        html_url = row.get("html_url")
+        if not isinstance(html_url, str):
+            continue
+        parts = html_url.split("/")
+        if len(parts) < 5:
+            continue
+        owner, repo = parts[3], parts[4]
+        groups.setdefault((owner, repo), []).append(row.to_dict())
+    return groups
+
+
+def _process_readability_repo(
+    owner: str,
+    repo: str,
+    rows: List[dict],
+    refminer_df: pd.DataFrame,
+    cfg: ToolConfig,
+) -> pd.DataFrame:
+    subset = pd.DataFrame(rows)
+    if subset.empty:
+        return pd.DataFrame()
+    subset_refminer = refminer_df[refminer_df["commit_sha"].isin(subset["sha"])]
+    calculator = ReadabilityImpactCalculator(cfg, persist_outputs=False)
+    return calculator.process(subset, subset_refminer)
+
+
 def run_readability_impact(
     max_commits: Optional[int] = None,
     skip_commits: Optional[Iterable[str]] = None,
+    workers: Optional[int] = None,
 ) -> pd.DataFrame:
     commits_path = Path("data/analysis/refactoring_instances/commits_with_refactoring.parquet")
     refminer_path = Path("data/analysis/refactoring_instances/refminer_refactorings.parquet")
@@ -239,13 +311,55 @@ def run_readability_impact(
         raise FileNotFoundError("Required inputs not found. Run refactoring analysis scripts first.")
 
     commits_df = pd.read_parquet(commits_path)
+    commits_df = commits_df[commits_df.get("has_refactoring", False) == True]
     if skip_commits:
         skip_set = {str(sha) for sha in skip_commits}
         commits_df = commits_df[~commits_df["sha"].astype(str).isin(skip_set)]
+
+    if max_commits is not None:
+        commits_df = commits_df.head(max_commits)
+
     if commits_df.empty:
+        return pd.DataFrame()
+
+    repo_groups = _group_commits_by_repo(commits_df)
+    if not repo_groups:
         return pd.DataFrame()
 
     refminer_df = pd.read_parquet(refminer_path)
     cfg = load_tool_config()
-    calculator = ReadabilityImpactCalculator(cfg, max_commits=max_commits)
-    return calculator.process(commits_df, refminer_df)
+
+    workers_env = os.environ.get("READABILITY_WORKERS")
+    workers = workers or (int(workers_env) if workers_env else 1)
+    workers = max(1, min(workers, len(repo_groups)))
+
+    print(f"Processing readability for {len(repo_groups)} repositories with {workers} worker(s)...")
+
+    frames: List[pd.DataFrame] = []
+    errors: List[Tuple[str, str, Exception]] = []
+
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        future_to_repo = {
+            executor.submit(_process_readability_repo, owner, repo, rows, refminer_df, cfg): (owner, repo)
+            for (owner, repo), rows in repo_groups.items()
+        }
+        for future in as_completed(future_to_repo):
+            owner, repo = future_to_repo[future]
+            try:
+                df = future.result()
+                if not df.empty:
+                    frames.append(df)
+                print(f"  ✓ {owner}/{repo}: readability rows={len(df)}")
+            except Exception as exc:  # noqa: BLE001
+                errors.append((owner, repo, exc))
+                print(f"  ✗ {owner}/{repo}: {exc}")
+
+    if errors:
+        print("Readability errors encountered:")
+        for owner, repo, exc in errors:
+            print(f"  - {owner}/{repo}: {exc}")
+
+    if not frames:
+        return pd.DataFrame()
+
+    return pd.concat(frames, ignore_index=True)

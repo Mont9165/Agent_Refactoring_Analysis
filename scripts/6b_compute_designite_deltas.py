@@ -3,16 +3,17 @@
 from __future__ import annotations
 
 import argparse
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 import sys
-from typing import Optional
+from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from src.phase3_code_quality.designite_entity_delta import (  # noqa: E402
-    DESIGNITE_OUTPUT_ROOT,
     DELTA_Output_DIR,
     DesigniteDeltaCalculator,
     aggregate_deltas,
@@ -42,7 +43,38 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional limit on number of refactoring commits to process (useful for smoke tests).",
     )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=None,
+        help="Number of repositories to process in parallel (defaults to DESIGNITE_WORKERS or 1).",
+    )
     return parser.parse_args()
+
+
+def _group_commits_by_repo(commits_df: pd.DataFrame) -> Dict[Tuple[str, str], List[dict]]:
+    groups: Dict[Tuple[str, str], List[dict]] = {}
+    for _, row in commits_df.iterrows():
+        owner_repo = _parse_owner_repo(row.get("html_url"))
+        if not owner_repo:
+            continue
+        groups.setdefault(owner_repo, []).append(row.to_dict())
+    return groups
+
+
+def _process_repo_commits(
+    owner: str,
+    repo: str,
+    rows: List[dict],
+    refminer_df: pd.DataFrame,
+    cfg,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    subset = pd.DataFrame(rows)
+    if subset.empty:
+        return pd.DataFrame(), pd.DataFrame()
+    subset_refminer = refminer_df[refminer_df["commit_sha"].isin(subset["sha"])]
+    calculator = DesigniteDeltaCalculator(cfg, max_commits=None, persist_outputs=False)
+    return calculator.process(subset, subset_refminer)
 
 
 def main() -> None:
@@ -59,7 +91,7 @@ def main() -> None:
     existing_type = pd.read_parquet(TYPE_DELTA_PATH) if TYPE_DELTA_PATH.exists() else pd.DataFrame()
     existing_method = pd.read_parquet(METHOD_DELTA_PATH) if METHOD_DELTA_PATH.exists() else pd.DataFrame()
 
-    processed_shas: set[str] = set()
+    processed_shas: Set[str] = set()
     if not existing_type.empty:
         processed_shas.update(existing_type["commit_sha"].astype(str))
     if not existing_method.empty:
@@ -78,9 +110,52 @@ def main() -> None:
     if args.max_commits is not None:
         commits_df = commits_df.head(args.max_commits)
 
+    repo_groups = _group_commits_by_repo(commits_df)
+    if not repo_groups:
+        print("No commits with GitHub repository information to process.")
+        existing_frames = [df for df in (existing_type, existing_method) if not df.empty]
+        if existing_frames:
+            aggregate_deltas(pd.concat(existing_frames, ignore_index=True))
+        return
+
     cfg = load_tool_config()
-    calculator = DesigniteDeltaCalculator(cfg, max_commits=None)
-    type_df, method_df = calculator.process(commits_df, refminer_df)
+    workers_env = os.environ.get("DESIGNITE_WORKERS")
+    workers = args.workers or (int(workers_env) if workers_env else 1)
+    workers = max(1, min(workers, len(repo_groups)))
+
+    print(f"Processing {len(repo_groups)} repositories with {workers} worker(s)...")
+
+    type_frames: List[pd.DataFrame] = []
+    method_frames: List[pd.DataFrame] = []
+    errors: List[Tuple[str, str, Exception]] = []
+
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        future_to_repo = {
+            executor.submit(_process_repo_commits, owner, repo, rows, refminer_df, cfg): (owner, repo)
+            for (owner, repo), rows in repo_groups.items()
+        }
+        for future in as_completed(future_to_repo):
+            owner, repo = future_to_repo[future]
+            try:
+                repo_type_df, repo_method_df = future.result()
+                if not repo_type_df.empty:
+                    type_frames.append(repo_type_df)
+                if not repo_method_df.empty:
+                    method_frames.append(repo_method_df)
+                print(
+                    f"  ✓ {owner}/{repo}: type_rows={len(repo_type_df)}, method_rows={len(repo_method_df)}"
+                )
+            except Exception as exc:  # noqa: BLE001
+                errors.append((owner, repo, exc))
+                print(f"  ✗ {owner}/{repo}: {exc}")
+
+    if errors:
+        print("Encountered errors for the following repositories:")
+        for owner, repo, exc in errors:
+            print(f"  - {owner}/{repo}: {exc}")
+
+    type_df = pd.concat(type_frames, ignore_index=True) if type_frames else pd.DataFrame()
+    method_df = pd.concat(method_frames, ignore_index=True) if method_frames else pd.DataFrame()
 
     final_frames = []
     if not type_df.empty:

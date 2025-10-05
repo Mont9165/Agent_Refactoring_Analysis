@@ -38,6 +38,8 @@ class ToolConfig:
     readability_jar: Optional[str]
     repos_base: Optional[Path]
     local_repo: Optional[Path]
+    auto_clone_repos: bool
+    git_remote_template: str
 
 
 def load_tool_config() -> ToolConfig:
@@ -56,12 +58,23 @@ def load_tool_config() -> ToolConfig:
     else:
         repos_base = None
 
+    auto_clone = os.environ.get("READABILITY_AUTO_CLONE")
+    if auto_clone is None:
+        auto_clone = os.environ.get("DESIGNITE_AUTO_CLONE", "1")
+    auto_clone_flag = auto_clone not in {"0", "false", "False"}
+
+    git_template = os.environ.get("READABILITY_GIT_REMOTE_TMPL")
+    if git_template is None:
+        git_template = os.environ.get("DESIGNITE_GIT_REMOTE_TMPL", "https://github.com/{owner}/{repo}.git")
+
     return ToolConfig(
         designite_path=designite_path,
         readability_cmd=os.environ.get("READABILITY_TOOL_CMD"),
         readability_jar=os.environ.get("READABILITY_JAR"),
         repos_base=repos_base,
         local_repo=Path(os.environ["REFMINER_LOCAL_REPO"]) if os.environ.get("REFMINER_LOCAL_REPO") else None,
+        auto_clone_repos=auto_clone_flag,
+        git_remote_template=git_template,
     )
 
 
