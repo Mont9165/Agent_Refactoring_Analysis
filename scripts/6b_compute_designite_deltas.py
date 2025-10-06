@@ -26,6 +26,17 @@ TYPE_DELTA_PATH = DELTA_Output_DIR / "type_metric_deltas.parquet"
 METHOD_DELTA_PATH = DELTA_Output_DIR / "method_metric_deltas.parquet"
 
 
+def _safe_read_parquet(path: Path) -> pd.DataFrame:
+    """Return existing deltas if readable, otherwise fall back to an empty frame."""
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        return pd.read_parquet(path)
+    except Exception as exc:  # noqa: BLE001 - log and continue without cached data
+        print(f"Warning: failed to read {path}: {exc}. Ignoring existing cached deltas.")
+        return pd.DataFrame()
+
+
 def _parse_owner_repo(url: str) -> Optional[tuple[str, str]]:
     if not isinstance(url, str):
         return None
@@ -88,10 +99,10 @@ def main() -> None:
     commits_df = pd.read_parquet(COMMITS_PATH)
     refminer_df = pd.read_parquet(REFMINER_PATH)
 
-    existing_type = pd.read_parquet(TYPE_DELTA_PATH) if TYPE_DELTA_PATH.exists() else pd.DataFrame()
-    existing_method = pd.read_parquet(METHOD_DELTA_PATH) if METHOD_DELTA_PATH.exists() else pd.DataFrame()
+    existing_type = _safe_read_parquet(TYPE_DELTA_PATH)
+    existing_method = _safe_read_parquet(METHOD_DELTA_PATH)
 
-    processed_shas: Set[str] = set()
+    processed_shas: set[str] = set()
     if not existing_type.empty:
         processed_shas.update(existing_type["commit_sha"].astype(str))
     if not existing_method.empty:

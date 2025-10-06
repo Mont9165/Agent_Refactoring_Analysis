@@ -58,8 +58,10 @@ Create a `.env` (optional) or export variables in your shell:
 | `DESIGNITE_AUTO_CLONE` | Automatically clone repos missing under `REPOS_BASE` | `0` to disable (default `1`) |
 | `DESIGNITE_GIT_REMOTE_TMPL` | Template for cloning repos when auto-clone is enabled | `https://github.com/{owner}/{repo}.git` |
 | `DESIGNITE_MAX_RETRIES` | Retry count when DesigniteJava fails transiently | `3` |
+| `DESIGNITE_TIMEOUT` | Seconds before a Designite run aborts | `600` |
 | `DESIGNITE_WORKERS` | Repository workers for Designite delta generation | `4` |
 | `READABILITY_WORKERS` | Repository workers for readability delta generation | `4` |
+| `READABILITY_TIMEOUT` | Seconds before the readability command aborts | `600` |
 
 If you plan to re-run Designite or RefactoringMiner, make sure `java` is available on your `PATH`.
 
@@ -80,7 +82,7 @@ Each numbered script builds on the previous outputs. Run them from the repositor
 | 6a | `python scripts/6a_prepare_designite_projects.py` | Generate `tools/DesigniteRunner/projects.txt` listing repos to analyse with Designite | `tools/DesigniteRunner/projects.txt` |
 | 6 | `python scripts/6_quality_analysis.py` | High-level quality deltas (Designite+readability) for sampled commits | `data/analysis/quality/quality_deltas.*`, `quality_summary.json` |
 | 6b | `python scripts/6b_compute_designite_deltas.py [--workers N]` | Auto-fetch repos/commits, run Designite for missing snapshots in parallel, and emit per-entity deltas | `data/analysis/designite/deltas/*.csv|parquet` |
-| 6c | `python scripts/6c_readability_impact.py [--workers N]` | Compute readability deltas (per repo worker pool) for files touched by refactorings | `data/analysis/readability/readability_deltas.*`, `_summary.*` |
+| 6c | `python scripts/6c_readability_impact.py [--workers N] [--timeout S]` | Compute readability deltas (per repo worker pool) for files touched by refactorings | `data/analysis/readability/readability_deltas.*`, `_summary.*` |
 
 > **Tip:** Most scripts accept environment variables (e.g., `REFMINER_MAX_COMMITS`, `REFMINER_SAVE_JSON`) to control sample size and caching. Check the script source or `--help` for details.
 
@@ -139,6 +141,7 @@ export READABILITY_TOOL_CMD="python tools/CoRed/run.py {input} --verbose --outpu
 python scripts/6c_readability_impact.py --max-commits 50
 
 > **Parallelism:** Add `--workers N` or export `DESIGNITE_WORKERS` / `READABILITY_WORKERS` to process repositories concurrently. On an M1 Pro (8 cores), `N=4`–`6` keeps the JVM busy without overwhelming the system.
+> **Timeouts:** Use `--timeout` (or export `DESIGNITE_TIMEOUT` / `READABILITY_TIMEOUT`) to relax the default 600s limit when running expensive snapshots.
 
 ### 5.3 Readability tooling (CoRed)
 

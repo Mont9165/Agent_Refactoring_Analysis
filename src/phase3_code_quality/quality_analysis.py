@@ -40,6 +40,7 @@ class ToolConfig:
     local_repo: Optional[Path]
     auto_clone_repos: bool
     git_remote_template: str
+    readability_timeout: int
 
 
 def load_tool_config() -> ToolConfig:
@@ -75,6 +76,7 @@ def load_tool_config() -> ToolConfig:
         local_repo=Path(os.environ["REFMINER_LOCAL_REPO"]) if os.environ.get("REFMINER_LOCAL_REPO") else None,
         auto_clone_repos=auto_clone_flag,
         git_remote_template=git_template,
+        readability_timeout=max(60, int(os.environ.get("READABILITY_TIMEOUT", os.environ.get("DESIGNITE_TIMEOUT", "600")))),
     )
 
 
@@ -146,11 +148,14 @@ def parse_designite(out_dir: Path) -> Dict[str, float]:
 def run_readability(input_dir: Path, out_file: Path, cfg: ToolConfig) -> Optional[Path]:
     if cfg.readability_cmd:
         cmd = cfg.readability_cmd.format(input=str(input_dir), output=str(out_file))
-        code, out, err = _run(["bash", "-lc", cmd])
+        code, out, err = _run(["bash", "-lc", cmd], timeout=cfg.readability_timeout)
         return out_file if code == 0 and out_file.exists() else None
     if cfg.readability_jar and Path(cfg.readability_jar).exists():
         out_file.parent.mkdir(parents=True, exist_ok=True)
-        code, out, err = _run(["java", "-jar", cfg.readability_jar, "-i", str(input_dir), "-o", str(out_file)])
+        code, out, err = _run(
+            ["java", "-jar", cfg.readability_jar, "-i", str(input_dir), "-o", str(out_file)],
+            timeout=cfg.readability_timeout,
+        )
         return out_file if code == 0 and out_file.exists() else None
     return None
 

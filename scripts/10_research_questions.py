@@ -50,14 +50,20 @@ def _plot_rq3_distribution(
         return None
 
     df = pd.read_csv(csv_path)
-    filtered = df[df["refactoring_type"].isin(top_types)].copy()
-    filtered = filtered[filtered["instance_count"] > 0]
+    filtered = df[df["instance_count"] > 0].copy()
     if filtered.empty:
+        return None
+
+    grouped = filtered.groupby("refactoring_type")["instance_count"]
+    medians = grouped.median()
+    means = grouped.mean()
+    order = [t for t in medians.sort_values(ascending=False).index if t in top_types]
+    if not order:
         return None
 
     data_by_type = []
     labels: list[str] = []
-    for ref_type in top_types:
+    for ref_type in order:
         series = filtered.loc[filtered["refactoring_type"] == ref_type, "instance_count"]
         if series.empty:
             continue
@@ -79,28 +85,39 @@ def _plot_rq3_distribution(
         positions=positions,
         showmeans=False,
         showmedians=False,
-        widths=0.9,
+        showextrema=False,
+        widths=0.8,
     )
+    edge_rgba = mcolors.to_rgba(color, alpha=0.85)
     for body in parts["bodies"]:
-        rgba = mcolors.to_rgba(color, alpha=0.6)
-        edge_rgba = mcolors.to_rgba(color, alpha=0.9)
-        body.set_facecolor(rgba)
+        body.set_facecolor(mcolors.to_rgba(color, alpha=0.35))
         body.set_edgecolor(edge_rgba)
         body.set_alpha(0.6)
 
-    medianprops = dict(color=mcolors.to_rgba(color, alpha=0.9), linewidth=2.5)
     ax.boxplot(
         data_by_type,
         positions=positions,
-        widths=0.15,
+        widths=0.2,
         patch_artist=True,
-        medianprops=medianprops,
-        showcaps=True,
-        whiskerprops={"linewidth": 1.5, "color": edge_rgba},
-        capprops={"linewidth": 1.3, "color": edge_rgba},
-        boxprops={"facecolor": "white", "alpha": 0.9, "linewidth": 1.2, "edgecolor": edge_rgba},
         showfliers=False,
+        boxprops=dict(facecolor="none", edgecolor=edge_rgba, linewidth=1.4),
+        whiskerprops=dict(color=edge_rgba, linewidth=1.2),
+        capprops=dict(color=edge_rgba, linewidth=1.2),
+        medianprops=dict(color="white", linewidth=2.3),
     )
+
+    for pos, series in zip(positions, data_by_type):
+        mean = pd.Series(series).mean()
+        ax.scatter(
+            pos,
+            mean,
+            marker="^",
+            color=edge_rgba,
+            s=40,
+            zorder=3,
+            edgecolors="white",
+            linewidths=1.0,
+        )
 
     ax.set_xticks(positions)
     ax.set_xticklabels(labels, rotation=30, ha="right")
@@ -378,7 +395,7 @@ def main() -> None:
     else:
         print(f"  {rq3.get('error', 'No data')}")
 
-    print("\nRQ4: Refactoring purposes in agentic commits (heuristic)…")
+    print("\nRQ4: Refactoring purposes in agentic commits")
     rq4 = rq4_refactoring_purpose(commits, agentic_only=True)
     total_rq4 = rq4.get("total_refactoring_commits", 0)
     print(f"  Refactoring commits analysed: {total_rq4}")

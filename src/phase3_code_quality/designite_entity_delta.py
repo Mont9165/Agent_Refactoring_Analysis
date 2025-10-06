@@ -49,6 +49,7 @@ class ToolConfig:
     auto_clone_repos: bool
     git_remote_template: str
     max_retries: int
+    timeout_seconds: int
 
 
 @dataclass
@@ -178,7 +179,7 @@ class DesigniteDeltaCalculator:
         cmd = ["java", "-jar", str(designite_path), "-i", str(input_dir), "-o", str(output_dir)]
 
         for attempt in range(1, self.config.max_retries + 1):
-            code, out, err = self._run(cmd)
+            code, out, err = self._run(cmd, timeout=self.config.timeout_seconds)
             if code == 0:
                 return True
             print(
@@ -685,6 +686,7 @@ def load_tool_config() -> ToolConfig:
         auto_clone_repos=auto_clone,
         git_remote_template=git_remote_template,
         max_retries=max(1, max_retries),
+        timeout_seconds=max(60, int(os.environ.get("DESIGNITE_TIMEOUT", "600"))),
     )
 
 

@@ -23,6 +23,7 @@ TYPE_REMAP: Dict[str, str] = {
     "reuse": "reuse",
 }
 
+
 def _load_gpt_motivations(path: Path, confidence_threshold: int) -> Optional[pd.DataFrame]:
     if not path.exists():
         return None
@@ -73,7 +74,7 @@ def rq4_refactoring_purpose(commits: pd.DataFrame, agentic_only: bool = True) ->
 
     counts = motivations["normalized_type"].value_counts().to_dict()
     samples = motivations[["sha", "normalized_type", "reason", "type", "confidence"]]
-    examples_path = write_csv(samples.head(200), OUTPUT_DIR / "rq4_examples.csv")
+    examples_path = write_csv(samples.head(1000), OUTPUT_DIR / "rq4_examples.csv")
 
     result: Dict[str, object] = {
         "total_refactoring_commits": int(motivations["sha"].nunique()),

@@ -12,6 +12,8 @@ from itertools import zip_longest
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
+import numpy as np
+
 import pandas as pd
 
 from .quality_analysis import ToolConfig, load_tool_config, run_readability
@@ -164,8 +166,20 @@ class ReadabilityImpactCalculator:
         if subset.empty:
             return rows
         for _, row in subset.iterrows():
-            left_locs = json.loads(row.get("left_side_locations", "[]") or "[]")
-            right_locs = json.loads(row.get("right_side_locations", "[]") or "[]")
+            def decode(raw):
+                if isinstance(raw, str):
+                    try:
+                        return json.loads(raw or "[]")
+                    except json.JSONDecodeError:
+                        return []
+                if isinstance(raw, (list, tuple)):
+                    return raw
+                if isinstance(raw, np.ndarray):
+                    return raw.tolist()
+                return []
+
+            left_locs = decode(row.get("left_side_locations", []))
+            right_locs = decode(row.get("right_side_locations", []))
             pairs = list(zip_longest(left_locs, right_locs, fillvalue=None))
             if not pairs:
                 pairs = [(None, None)]
@@ -304,6 +318,7 @@ def run_readability_impact(
     max_commits: Optional[int] = None,
     skip_commits: Optional[Iterable[str]] = None,
     workers: Optional[int] = None,
+    timeout: Optional[int] = None,
 ) -> pd.DataFrame:
     commits_path = Path("data/analysis/refactoring_instances/commits_with_refactoring.parquet")
     refminer_path = Path("data/analysis/refactoring_instances/refminer_refactorings.parquet")
@@ -328,6 +343,8 @@ def run_readability_impact(
 
     refminer_df = pd.read_parquet(refminer_path)
     cfg = load_tool_config()
+    if timeout is not None:
+        cfg.readability_timeout = max(60, timeout)
 
     workers_env = os.environ.get("READABILITY_WORKERS")
     workers = workers or (int(workers_env) if workers_env else 1)

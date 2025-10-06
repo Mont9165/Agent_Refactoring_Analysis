@@ -161,6 +161,8 @@ def process_agent(max_workers: int = 10) -> None:
             df = pd.DataFrame(columns=["sha", "title", "reason", "type", "confidence"])
 
         existing_ids = set(df["sha"].values)
+        print(f"Loaded {len(df)} existing classifications from {out_fp}")
+
         rows_to_process = []
         for _, row in commits_df.iterrows():
             if (row["sha"] not in existing_ids):
@@ -177,17 +179,14 @@ def process_agent(max_workers: int = 10) -> None:
                     summary_str = ", ".join([f"{k} ({v} times)" for k, v in summary.items()])
                 except (ValueError, SyntaxError):
                     summary_str = "N/A"  # パース失敗時のデフォルト値
+                    print("Warning: Could not parse refactoring_types for row:", row)
 
                 rows_to_process.append(
                     (row["sha"], row["title"], row["message"], summary_str)
                 )
 
         print(f"Found {len(rows_to_process)} commits to process for '{name}'")
-
-        results = []
-
         print(f"Found {len(rows_to_process)} PRs to process for agent '{name}'")
-
         results = []
         lock = Lock()
 
