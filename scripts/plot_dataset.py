@@ -27,7 +27,7 @@ def _violin_plot(
     output: Path,
     log_scale: bool = False,
     color: str = "#4C72B0",
-    clip_pct: float | None = None,
+    clip_pct: float = 0.995,
     y_min: float | None = None,
     y_max: float | None = None,
 ) -> None:
@@ -37,17 +37,18 @@ def _violin_plot(
     if raw.empty:
         return
 
-    data = raw
     if clip_pct and 0 < clip_pct < 1:
-        upper = data.quantile(clip_pct)
-        data = data.clip(upper=upper)
-    if log_scale:
-        data = data[data > 0]
-    if data.empty:
-        return
+        upper = raw.quantile(clip_pct)
+        data = raw.clip(upper=upper)
+    else:
+        data = raw
 
-    display_mean = data.mean()
-    display_median = data.median()
+    if clip_pct and 0 < clip_pct < 1:
+        display_mean = raw.mean()
+        display_median = raw.median()
+    else:
+        display_mean = data.mean()
+        display_median = data.median()
 
     plt.figure(figsize=(8, 6))
     sns.violinplot(y=data, color=color, inner="box", cut=0)

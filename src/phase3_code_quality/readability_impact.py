@@ -55,7 +55,7 @@ class ReadabilityImpactCalculator:
     # ------------------------------------------------------------------
     # git helpers
     # ------------------------------------------------------------------
-    def _run(self, cmd: List[str], cwd: Optional[Path] = None, timeout: int = 600) -> Tuple[int, str, str]:
+    def _run(self, cmd: List[str], cwd: Optional[Path] = None, timeout: int = 600000) -> Tuple[int, str, str]:
         proc = subprocess.run(cmd, cwd=str(cwd) if cwd else None, capture_output=True, text=True, timeout=timeout)
         return proc.returncode, proc.stdout, proc.stderr
 

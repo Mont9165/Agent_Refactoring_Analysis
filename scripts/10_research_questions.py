@@ -24,6 +24,8 @@ def _plot_rq3_distribution(
     suffix: str = "",
     color: str = "#5DA5DA",
     subset_label: str = "Overall",
+    filter_non_sar: bool = False,
+    subset_folder: str = "overall",
 ) -> Optional[Path]:
     """Create violin-with-box plots for per-commit refactoring counts."""
     top_types = list(top_types)
@@ -51,6 +53,11 @@ def _plot_rq3_distribution(
 
     df = pd.read_csv(csv_path)
     filtered = df[df["instance_count"] > 0].copy()
+    label_lower = subset_label.lower()
+    if "sar" in label_lower and "non" not in label_lower:
+        filtered = filtered[filtered.get("is_self_affirmed") == True]
+    elif filter_non_sar or "non-sar" in label_lower:
+        filtered = filtered[filtered.get("is_self_affirmed") == False]
     if filtered.empty:
         return None
 
@@ -74,8 +81,18 @@ def _plot_rq3_distribution(
         return None
 
     positions = list(range(1, len(labels) + 1))
-    name_suffix = f"_{suffix}" if suffix else ""
-    output_path = csv_path.with_name(f"rq3_refactoring_type_distribution{name_suffix}.png")
+    suffix_parts = []
+    if "sar" in label_lower and "non" not in label_lower:
+        suffix_parts.append("sar")
+    elif filter_non_sar or "non-sar" in label_lower:
+        suffix_parts.append("non_sar")
+    if suffix:
+        suffix_parts.append(suffix)
+    name_suffix = "_" + "_".join(suffix_parts) if suffix_parts else ""
+
+    subset_dir = csv_path.parent / subset_folder
+    subset_dir.mkdir(parents=True, exist_ok=True)
+    output_path = subset_dir / f"rq3_refactoring_type_distribution{name_suffix}.pdf"
 
     width = max(12, len(labels) * 0.7)
     fig, ax = plt.subplots(figsize=(width, 6))
@@ -120,16 +137,17 @@ def _plot_rq3_distribution(
         )
 
     ax.set_xticks(positions)
-    ax.set_xticklabels(labels, rotation=30, ha="right")
+    ax.set_xticklabels(labels, rotation=50, ha="right", fontsize=14)
     ax.set_yscale("log")
-    ax.set_ylabel("Instances per commit (log)")
-    ax.set_xlabel("Refactoring type")
+    ax.set_ylabel("Instances per commit", fontsize=16)
+    ax.set_xlabel("Refactoring type", fontsize=16)
+    ax.tick_params(axis="y", labelsize=14)
     ax.set_title(f"Refactoring instances per commit ({subset_label})")
     ax.yaxis.grid(True, linestyle="--", alpha=0.3)
     ax.margins(x=0.01)
 
     fig.tight_layout()
-    fig.savefig(output_path, dpi=200)
+    fig.savefig(output_path, dpi=900)
     plt.close(fig)
     return output_path
 
@@ -138,10 +156,12 @@ def _plot_rq3_totals(
     csv_path: Path,
     *,
     sar_only: bool = False,
+    exclude_sar: bool = False,
     top_n: Optional[int] = None,
     suffix: str = "",
     color: str = "#4C72B0",
     title_label: str = "Overall",
+    subset_folder: str = "overall",
 ) -> Optional[Path]:
     """Render total refactoring instances per type as a bar chart."""
     try:
@@ -168,6 +188,8 @@ def _plot_rq3_totals(
     df = pd.read_csv(csv_path)
     if sar_only:
         df = df[df.get("is_self_affirmed") == True]
+    elif exclude_sar:
+        df = df[df.get("is_self_affirmed") == False]
     aggregated = df.groupby("refactoring_type")["instance_count"].sum().sort_values(ascending=False)
     if aggregated.empty:
         return None
@@ -181,10 +203,15 @@ def _plot_rq3_totals(
     suffix_parts = []
     if sar_only:
         suffix_parts.append("sar")
+    elif exclude_sar:
+        suffix_parts.append("non_sar")
     if suffix:
         suffix_parts.append(suffix)
     suffix_str = "" if not suffix_parts else "_" + "_".join(suffix_parts)
-    output_path = csv_path.with_name(f"rq3_refactoring_type_totals{suffix_str}.png")
+
+    subset_dir = csv_path.parent / subset_folder
+    subset_dir.mkdir(parents=True, exist_ok=True)
+    output_path = subset_dir / f"rq3_refactoring_type_totals{suffix_str}.pdf"
 
     height = max(6, len(labels) * 0.35)
     fig, ax = plt.subplots(figsize=(12, height))
@@ -192,9 +219,11 @@ def _plot_rq3_totals(
     edge_color = mcolors.to_rgba(color, alpha=1.0)
     ax.barh(labels[::-1], values[::-1], color=bar_color, edgecolor=edge_color)
 
-    ax.set_xlabel("Total refactoring instances")
-    ax.set_ylabel("Refactoring type")
+    ax.set_xlabel("Total refactoring instances", fontsize=16)
+    ax.set_ylabel("Refactoring type", fontsize=16)
     ax.set_title(f"Total refactoring instances per type ({title_label})")
+    ax.tick_params(axis="x", labelsize=14)
+    ax.tick_params(axis="y", labelsize=14)
     ax.xaxis.grid(True, linestyle="--", alpha=0.3)
     fig.tight_layout()
     fig.savefig(output_path, dpi=200)
@@ -209,6 +238,8 @@ def _plot_rq4_purposes(
     suffix: str = "",
     color: str = "#4C72B0",
     top_n: Optional[int] = None,
+    subset_label: str = "overall",
+    target_dir: Optional[Path] = None,
 ) -> Optional[Path]:
     """Render a bar chart for RQ4 purpose counts."""
     if not distribution or total_count <= 0:
@@ -252,7 +283,9 @@ def _plot_rq4_purposes(
     ax.xaxis.grid(True, linestyle="--", alpha=0.3)
     fig.tight_layout()
     suffix_str = f"_{suffix}" if suffix else ""
-    output_path = OUTPUT_DIR / f"rq4_purpose_distribution{suffix_str}.png"
+    target_dir = target_dir or (OUTPUT_DIR / "rq4" / (subset_label or "overall"))
+    target_dir.mkdir(parents=True, exist_ok=True)
+    output_path = target_dir / f"rq4_purpose_distribution{suffix_str}.pdf"
     fig.savefig(output_path, dpi=180)
     plt.close(fig)
     return output_path
@@ -353,11 +386,51 @@ def main() -> None:
             )
             if totals_top20:
                 print(f"  Saved totals Top20 bar chart: {totals_top20}")
+            non_sar_plot_path = _plot_rq3_distribution(
+                Path(rq3["distribution_csv"]),
+                order,
+                color="#2CA02C",
+                subset_label="Non-SAR",
+                filter_non_sar=True,
+            )
+            if non_sar_plot_path:
+                print(f"  Saved non-SAR violin/box plot: {non_sar_plot_path}")
+            non_sar_plot_top20 = None
+            if len(order) > 20:
+                non_sar_plot_top20 = _plot_rq3_distribution(
+                    Path(rq3["distribution_csv"]),
+                    order[:20],
+                    suffix="top20",
+                    color="#137B3E",
+                    subset_label="Non-SAR (Top 20)",
+                    filter_non_sar=True,
+                )
+                if non_sar_plot_top20:
+                    print(f"  Saved non-SAR Top20 violin/box plot: {non_sar_plot_top20}")
+            non_sar_totals = _plot_rq3_totals(
+                Path(rq3["distribution_csv"]),
+                sar_only=False,
+                exclude_sar=True,
+                color="#2CA02C",
+                title_label="Non-SAR",
+            )
+            if non_sar_totals:
+                print(f"  Saved non-SAR totals bar chart: {non_sar_totals}")
+            non_sar_totals_top20 = _plot_rq3_totals(
+                Path(rq3["distribution_csv"]),
+                sar_only=False,
+                exclude_sar=True,
+                top_n=20,
+                suffix="top20",
+                color="#137B3E",
+                title_label="Non-SAR (Top 20)",
+            )
+            if non_sar_totals_top20:
+                print(f"  Saved non-SAR Top20 bar chart: {non_sar_totals_top20}")
             if sar_types:
                 sar_plot_path = _plot_rq3_distribution(
                     Path(rq3["distribution_csv"]),
                     rq3.get("sar_order_median_desc") or sar_types.keys(),
-                    suffix="sar",
                     color="#F15854",
                     subset_label="SAR",
                 )
@@ -368,7 +441,7 @@ def main() -> None:
                     sar_top20_path = _plot_rq3_distribution(
                         Path(rq3["distribution_csv"]),
                         sar_order_full[:20],
-                        suffix="sar_top20",
+                        suffix="top20",
                         color="#C1392B",
                         subset_label="SAR (Top 20)",
                     )
@@ -396,31 +469,70 @@ def main() -> None:
         print(f"  {rq3.get('error', 'No data')}")
 
     print("\nRQ4: Refactoring purposes in agentic commits")
-    rq4 = rq4_refactoring_purpose(commits, agentic_only=True)
-    total_rq4 = rq4.get("total_refactoring_commits", 0)
-    print(f"  Refactoring commits analysed: {total_rq4}")
-    distribution = rq4.get("purpose_distribution", {})
-    if distribution:
-        sorted_purposes = sorted(distribution.items(), key=lambda item: item[1], reverse=True)
-        limit = min(10, len(sorted_purposes))
-        print("  Top purpose labels:")
-        for label, count in sorted_purposes[:limit]:
-            pct = (count / total_rq4 * 100.0) if total_rq4 else 0.0
-            print(f"    {label}: {count} ({pct:.1f}%)")
+    agentic_commits = commits
+    if "agent" in commits.columns:
+        agentic_commits = commits[commits["agent"].notna()]
+    if "is_self_affirmed" in agentic_commits.columns:
+        non_sar_commits = agentic_commits[agentic_commits["is_self_affirmed"] == False]
+        sar_commits = agentic_commits[agentic_commits["is_self_affirmed"] == True]
     else:
-        print("  No purpose labels identified.")
-    examples_file = rq4.get("examples_file")
-    if examples_file:
-        print(f"  Examples CSV: {examples_file}")
-    note = rq4.get("note")
-    if note:
-        print(f"  Note: {note}")
-    full_chart = _plot_rq4_purposes(distribution, total_rq4, color="#4C72B0")
-    if full_chart:
-        print(f"  Saved RQ4 purpose chart: {full_chart}")
-    top_chart = _plot_rq4_purposes(distribution, total_rq4, suffix="top10", color="#2C3E50", top_n=10)
-    if top_chart:
-        print(f"  Saved RQ4 Top10 purpose chart: {top_chart}")
+        empty_subset = agentic_commits.iloc[0:0]
+        non_sar_commits = empty_subset
+        sar_commits = empty_subset
+
+    rq4_groups = [
+        ("Overall", "overall", agentic_commits, True, "#4C72B0", "#2C3E50"),
+        ("Non-SAR", "non_sar", non_sar_commits, False, "#2CA02C", "#137B3E"),
+        ("SAR", "sar", sar_commits, False, "#E4572E", "#C13C1E"),
+    ]
+
+    for title, subset_label, subset_df, agentic_flag, color_full, color_top in rq4_groups:
+        rq4_result = rq4_refactoring_purpose(
+            subset_df,
+            agentic_only=agentic_flag,
+            subset_label=subset_label,
+        )
+        total_rq4 = int(rq4_result.get("total_refactoring_commits", 0))
+        print(f"  [{title}] Refactoring commits analysed: {total_rq4}")
+        distribution = rq4_result.get("purpose_distribution", {})
+        if distribution:
+            sorted_purposes = sorted(distribution.items(), key=lambda item: item[1], reverse=True)
+            limit = min(10, len(sorted_purposes))
+            print("    Top purpose labels:")
+            for label, count in sorted_purposes[:limit]:
+                pct = (count / total_rq4 * 100.0) if total_rq4 else 0.0
+                print(f"      {label}: {count} ({pct:.1f}%)")
+        else:
+            print("    No purpose labels identified.")
+        examples_file = rq4_result.get("examples_file")
+        if examples_file:
+            print(f"    Examples CSV: {examples_file}")
+        note = rq4_result.get("note")
+        if note and (not distribution or total_rq4 == 0):
+            print(f"    Note: {note}")
+        if distribution and total_rq4:
+            target_dir = rq4_result.get("output_dir")
+            base_dir = Path(target_dir) if target_dir else None
+            full_chart = _plot_rq4_purposes(
+                distribution,
+                total_rq4,
+                color=color_full,
+                subset_label=subset_label,
+                target_dir=base_dir,
+            )
+            if full_chart:
+                print(f"    Saved RQ4 purpose chart: {full_chart}")
+            top_chart = _plot_rq4_purposes(
+                distribution,
+                total_rq4,
+                suffix="top10",
+                color=color_top,
+                top_n=10,
+                subset_label=subset_label,
+                target_dir=base_dir,
+            )
+            if top_chart:
+                print(f"    Saved RQ4 Top10 purpose chart: {top_chart}")
 
     print("\nRQ5: Quality impact of refactorings (Designite & Readability)…")
     rq5 = rq5_quality_impact()

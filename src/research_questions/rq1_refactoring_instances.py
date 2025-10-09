@@ -12,6 +12,9 @@ from .rq_common import OUTPUT_DIR, write_json
 def rq1_refactoring_instances_agentic(
     commits: Optional[pd.DataFrame],
     refminer: Optional[pd.DataFrame],
+    *,
+    subset_label: str = "overall",
+    output_dir: Optional[Path] = None,
 ) -> Dict[str, int | bool]:
     """Return summary statistics for agentic refactoring activity."""
     if commits is None:
@@ -46,7 +49,10 @@ def rq1_refactoring_instances_agentic(
         "refminer_available": bool(refminer is not None and not refminer.empty),
     }
 
-    write_json(result, OUTPUT_DIR / "rq1_refactoring_instances.json")
+    target_dir = (output_dir or OUTPUT_DIR) / "rq1"
+    target_dir = target_dir / subset_label if subset_label else target_dir
+    target_dir.mkdir(parents=True, exist_ok=True)
+    write_json(result, target_dir / "summary.json")
     return result
 
 

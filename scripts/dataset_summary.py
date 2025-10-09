@@ -46,16 +46,16 @@ def _commit_level_stats(commit_df: pd.DataFrame) -> Dict[str, float]:
     java_commits = commit_df
     stats = {
         "total_commits": float(len(java_commits)),
-        "files_changed_mean": float(java_commits["file_changes_total"].mean()),
+        "files_changed_mean": float(java_commits[["file_changes_total"]].mean()),
         "files_changed_median": float(java_commits["file_changes_total"].median()),
         "java_files_changed_mean": float(java_commits["file_changes_java"].mean()),
         "java_files_changed_median": float(java_commits["file_changes_java"].median()),
-        "additions_mean": float(java_commits["commit_stats_additions"].mean()),
-        "additions_median": float(java_commits["commit_stats_additions"].median()),
-        "deletions_mean": float(java_commits["commit_stats_deletions"].mean()),
-        "deletions_median": float(java_commits["commit_stats_deletions"].median()),
-        "changes_mean": float(java_commits["commit_stats_total"].mean()),
-        "changes_median": float(java_commits["commit_stats_total"].median()),
+        "additions_mean": java_commits[java_commits["commit_stats_additions"] > 0]["commit_stats_additions"].mean(),
+        "additions_median": java_commits[java_commits["commit_stats_additions"] > 0]["commit_stats_additions"].median(),
+        "deletions_mean": java_commits[java_commits["commit_stats_deletions"] > 0]["commit_stats_deletions"].mean(),
+        "deletions_median": java_commits[java_commits["commit_stats_deletions"] > 0]["commit_stats_deletions"].median(),
+        "changes_mean": java_commits[java_commits["commit_stats_total"] > 0]["commit_stats_total"].mean(),
+        "changes_median": java_commits[java_commits["commit_stats_total"] > 0]["commit_stats_total"].median(),
         "agent_share_pct": float(java_commits["agent"].notna().mean() * 100.0),
     }
 

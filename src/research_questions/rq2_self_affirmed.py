@@ -1,6 +1,7 @@
 """RQ2: Measure self-affirmed refactoring rates in agentic commits."""
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Dict, Optional
 
 import pandas as pd
@@ -8,7 +9,12 @@ import pandas as pd
 from .rq_common import OUTPUT_DIR, write_json
 
 
-def rq2_self_affirmed_percentage(commits: Optional[pd.DataFrame]) -> Dict[str, float | int]:
+def rq2_self_affirmed_percentage(
+    commits: Optional[pd.DataFrame],
+    *,
+    subset_label: str = "overall",
+    output_dir: Optional[Path] = None,
+) -> Dict[str, float | int]:
     """Compute percentage of agentic refactoring commits that are self-affirmed."""
     if commits is None:
         raise FileNotFoundError("Missing commits_with_refactoring.parquet")
@@ -32,7 +38,9 @@ def rq2_self_affirmed_percentage(commits: Optional[pd.DataFrame]) -> Dict[str, f
         "self_affirmed_percentage": round(percentage, 2),
     }
 
-    write_json(result, OUTPUT_DIR / "rq2_self_affirmed_percentage.json")
+    target_dir = (output_dir or OUTPUT_DIR) / "rq2" / (subset_label or "overall")
+    target_dir.mkdir(parents=True, exist_ok=True)
+    write_json(result, target_dir / "summary.json")
     return result
 
 

@@ -39,10 +39,19 @@ def _load_gpt_motivations(path: Path, confidence_threshold: int) -> Optional[pd.
     return df
 
 
-def rq4_refactoring_purpose(commits: pd.DataFrame, agentic_only: bool = True) -> Dict[str, object]:
+def rq4_refactoring_purpose(
+    commits: pd.DataFrame,
+    agentic_only: bool = True,
+    *,
+    subset_label: str = "overall",
+    output_dir: Optional[Path] = None,
+) -> Dict[str, object]:
     """Return GPT-derived purpose labels for refactoring commits."""
     if commits is None:
         raise FileNotFoundError("Missing commits_with_refactoring.parquet")
+
+    target_dir = (output_dir or OUTPUT_DIR) / "rq4" / (subset_label or "overall")
+    target_dir.mkdir(parents=True, exist_ok=True)
 
     motivations = _load_gpt_motivations(MOTIVATION_PATH, CONFIDENCE_THRESHOLD)
     if motivations is None:
@@ -51,16 +60,17 @@ def rq4_refactoring_purpose(commits: pd.DataFrame, agentic_only: bool = True) ->
             "purpose_distribution": {},
             "examples_file": None,
             "note": "No GPT motivation data available or all confidence scores below threshold.",
+            "output_dir": str(target_dir),
         }
-        write_json(result, OUTPUT_DIR / "rq4_refactoring_purpose.json")
+        write_json(result, target_dir / "summary.json")
         return result
 
-    agentic_shas = set()
+    target_shas = set(commits["sha"].unique())
     if agentic_only and "agent" in commits.columns:
-        agentic_shas = set(commits[commits["agent"].notna()]["sha"].unique())
+        target_shas = set(commits[commits["agent"].notna()]["sha"].unique())
 
-    if agentic_only:
-        motivations = motivations[motivations["sha"].isin(agentic_shas)]
+    if target_shas:
+        motivations = motivations[motivations["sha"].isin(target_shas)]
 
     if motivations.empty:
         result = {
@@ -68,21 +78,23 @@ def rq4_refactoring_purpose(commits: pd.DataFrame, agentic_only: bool = True) ->
             "purpose_distribution": {},
             "examples_file": None,
             "note": "No GPT motivation rows match the selected commits.",
+            "output_dir": str(target_dir),
         }
-        write_json(result, OUTPUT_DIR / "rq4_refactoring_purpose.json")
+        write_json(result, target_dir / "summary.json")
         return result
 
     counts = motivations["normalized_type"].value_counts().to_dict()
     samples = motivations[["sha", "normalized_type", "reason", "type", "confidence"]]
-    examples_path = write_csv(samples.head(1000), OUTPUT_DIR / "rq4_examples.csv")
+    examples_path = write_csv(samples.head(1000), target_dir / "examples.csv")
 
     result: Dict[str, object] = {
         "total_refactoring_commits": int(motivations["sha"].nunique()),
         "purpose_distribution": counts,
         "examples_file": str(examples_path),
         "note": "Based on GPT motivations with confidence >= {threshold}.".format(threshold=CONFIDENCE_THRESHOLD),
+        "output_dir": str(target_dir),
     }
-    write_json(result, OUTPUT_DIR / "rq4_refactoring_purpose.json")
+    write_json(result, target_dir / "summary.json")
     return result
 
 

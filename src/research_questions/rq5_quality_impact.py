@@ -13,7 +13,7 @@ from .rq_common import OUTPUT_DIR, write_json
 
 DESIGNITE_DELTA_DIR = Path("data/analysis/designite/deltas")
 READABILITY_DIR = Path("data/analysis/readability")
-QUALITY_OUTPUT_DIR = OUTPUT_DIR / "rq5_quality"
+QUALITY_OUTPUT_DIR = OUTPUT_DIR / "rq5"
 
 try:  # Optional dependency for Wilcoxon signed-rank test
     from scipy.stats import wilcoxon  # type: ignore
@@ -171,10 +171,16 @@ def _summarize_readability(readability_df: pd.DataFrame) -> Dict[str, object]:
     return summary
 
 
-def rq5_quality_impact(*_: pd.DataFrame) -> Dict[str, object]:
+def rq5_quality_impact(
+    commit_shas: Optional[Iterable[str]] = None,
+    *,
+    subset_label: str = "overall",
+    output_dir: Optional[Path] = None,
+) -> Dict[str, object]:
     """Compute RQ5 quality impact summaries for Designite and readability metrics."""
 
-    QUALITY_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    target_dir = (output_dir or QUALITY_OUTPUT_DIR) / (subset_label or "overall")
+    target_dir.mkdir(parents=True, exist_ok=True)
 
     designite_frames = []
     for path in (
@@ -188,22 +194,28 @@ def rq5_quality_impact(*_: pd.DataFrame) -> Dict[str, object]:
 
     readability_df = _load_parquet(READABILITY_DIR / "readability_deltas.parquet") or pd.DataFrame()
 
+    if commit_shas is not None:
+        commit_sha_set = {str(sha) for sha in commit_shas}
+        if not designite_df.empty and "commit_sha" in designite_df.columns:
+            designite_df = designite_df[designite_df["commit_sha"].astype(str).isin(commit_sha_set)]
+        if not readability_df.empty and "commit_sha" in readability_df.columns:
+            readability_df = readability_df[readability_df["commit_sha"].astype(str).isin(commit_sha_set)]
+
     result = {
         "designite": _summarize_designite(designite_df),
         "readability": _summarize_readability(readability_df),
         "wilcoxon_available": wilcoxon is not None,
     }
 
-    write_json(result, QUALITY_OUTPUT_DIR / "rq5_quality_impact.json")
+    write_json(result, target_dir / "summary.json")
 
     # Persist human-friendly CSV snapshots for downstream plotting
     if not designite_df.empty:
-        designite_df.to_csv(QUALITY_OUTPUT_DIR / "designite_metric_deltas.csv", index=False)
+        designite_df.to_csv(target_dir / "designite_metric_deltas.csv", index=False)
     if not readability_df.empty:
-        readability_df.to_csv(QUALITY_OUTPUT_DIR / "readability_deltas.csv", index=False)
+        readability_df.to_csv(target_dir / "readability_deltas.csv", index=False)
 
     return result
 
 
 __all__ = ["rq5_quality_impact"]
-
