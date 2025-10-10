@@ -67,6 +67,38 @@ If you plan to re-run Designite or RefactoringMiner, make sure `java` is availab
 
 ---
 
+### Docker-based workflow (optional)
+
+The repository ships with a container image that bundles Python 3.11, Java 17, Git LFS, and the Python requirements. To build it:
+
+```bash
+docker build -t agent-refactoring-analysis .
+```
+
+Run an interactive shell with the data, tools, and outputs mounted so results persist on the host:
+
+```bash
+docker run --rm -it \
+  -v "$(pwd)/data:/app/data" \
+  -v "$(pwd)/outputs:/app/outputs" \
+  -v "$(pwd)/tools:/app/tools" \
+  -v "$(pwd)/github-oauth.properties:/app/github-oauth.properties:ro" \
+  agent-refactoring-analysis
+```
+
+On first start the entrypoint clones and builds RefactoringMiner under `tools/RefactoringMiner`. The container exports the same environment variables as the local setup (`HF_HOME`, `PYTHONPATH`, and `MPLCONFIGDIR=/tmp/matplotlib`), so Matplotlib caches are written to a writable location.
+
+Prefer `docker compose` if you want reusable service definitions (for example the bundled Jupyter profile):
+
+```bash
+docker compose up --build agent-refactoring-analysis
+# or `docker compose --profile jupyter up` for notebooks
+```
+
+Remember to populate `github-oauth.properties` (or provide a different path via a bind mount) so RefactoringMiner can authenticate against the GitHub API.
+
+---
+
 ## 3. Data Pipeline Overview
 
 Each numbered script builds on the previous outputs. Run them from the repository root.
