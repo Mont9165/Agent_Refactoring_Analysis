@@ -63,10 +63,16 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _group_commits_by_repo(commits_df: pd.DataFrame) -> Dict[Tuple[str, str], List[dict]]:
+def _group_commits_by_repo(
+    commits_df: pd.DataFrame,
+    *,
+    fallback_repo: Optional[Tuple[str, str]] = None,
+) -> Dict[Tuple[str, str], List[dict]]:
     groups: Dict[Tuple[str, str], List[dict]] = {}
     for _, row in commits_df.iterrows():
         owner_repo = _parse_owner_repo(row.get("html_url"))
+        if not owner_repo:
+            owner_repo = fallback_repo
         if not owner_repo:
             continue
         groups.setdefault(owner_repo, []).append(row.to_dict())
@@ -97,6 +103,7 @@ def main() -> None:
         raise FileNotFoundError(f"Missing RefactoringMiner dataset: {REFMINER_PATH}")
 
     commits_df = pd.read_parquet(COMMITS_PATH)
+    commits_df = commits_df.drop_duplicates(subset="sha").reset_index(drop=True)
     refminer_df = pd.read_parquet(REFMINER_PATH)
 
     existing_type = _safe_read_parquet(TYPE_DELTA_PATH)
@@ -110,6 +117,7 @@ def main() -> None:
 
     if processed_shas:
         commits_df = commits_df[~commits_df["sha"].astype(str).isin(processed_shas)]
+        commits_df = commits_df.drop_duplicates(subset="sha").reset_index(drop=True)
 
     if commits_df.empty:
         print("No new commits to process; existing deltas are up to date.")
@@ -121,7 +129,21 @@ def main() -> None:
     if args.max_commits is not None:
         commits_df = commits_df.head(args.max_commits)
 
-    repo_groups = _group_commits_by_repo(commits_df)
+    cfg = load_tool_config()
+    fallback_repo: Optional[Tuple[str, str]] = None
+    if cfg.local_repo:
+        fallback_repo = ("local", cfg.local_repo.name)
+        placeholder_url = f"https://github.com/{fallback_repo[0]}/{fallback_repo[1]}"
+        if "html_url" not in commits_df.columns:
+            commits_df["html_url"] = placeholder_url
+        else:
+            commits_df["html_url"] = commits_df["html_url"].apply(
+                lambda value: value
+                if isinstance(value, str) and "github.com" in value and len(value.split("/")) >= 5
+                else placeholder_url
+            )
+
+    repo_groups = _group_commits_by_repo(commits_df, fallback_repo=fallback_repo)
     if not repo_groups:
         print("No commits with GitHub repository information to process.")
         existing_frames = [df for df in (existing_type, existing_method) if not df.empty]
@@ -129,7 +151,6 @@ def main() -> None:
             aggregate_deltas(pd.concat(existing_frames, ignore_index=True))
         return
 
-    cfg = load_tool_config()
     workers_env = os.environ.get("DESIGNITE_WORKERS")
     workers = args.workers or (int(workers_env) if workers_env else 1)
     workers = max(1, min(workers, len(repo_groups)))
