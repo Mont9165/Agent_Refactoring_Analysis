@@ -31,13 +31,16 @@ if not openai.api_key:
 TYPES = {
     "readability": "Poor readability or code that is hard to understand",
     "duplication": "Duplicated code that needs to be unified",
-    "reuse": "Difficulty of repurposing or reusing existing code",
+    "repurpose_reuse": "Difficulty of repurposing or reusing existing code",
     "maintainability": "Poor maintainability or fragile code",
     "testability": "Difficulty of testing code without refactoring",
-    "performance": "Slow performance that needs optimization",
+    "slow_performance": "Slow performance that needs optimization",
     "dependency": "Unwanted dependencies to other modules",
-    "legacy_code": "Working on old legacy code that needs modernization"
+    "legacy_code": "Working on old legacy code that needs modernization",
+    "logical_mismatch": "Incorrect or inconsistent logic that leads to wrong behavior",
+    "hard_to_debug": "Structure makes troubleshooting/diagnosis difficult (e.g., poor logging, tangled flows)"
 }
+
 
 MODEL = "gpt-4.1-mini"  # needs to support json_schema response_format
 
@@ -153,7 +156,7 @@ def process_agent(max_workers: int = 10) -> None:
     for fp in SCOPE_DIR.rglob("refactoring_commits.csv"):
         name = fp.parent.name
         commits_df = pd.read_csv(fp)
-        out_fp = fp.parent / f"gpt_refactoring_motivation.csv"
+        out_fp = fp.parent / f"gpt_refactoring_motivation_update.csv"
 
         if out_fp.exists():
             df = pd.read_csv(out_fp)

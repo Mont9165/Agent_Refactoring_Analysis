@@ -9,7 +9,7 @@ import pandas as pd
 from .rq_common import OUTPUT_DIR, ANALYSIS_DIR, write_csv, write_json
 
 
-MOTIVATION_PATH = ANALYSIS_DIR / "gpt_refactoring_motivation.csv"
+MOTIVATION_PATH = ANALYSIS_DIR / "gpt_refactoring_motivation_update.csv"
 CONFIDENCE_THRESHOLD = 6
 
 TYPE_REMAP: Dict[str, str] = {
@@ -17,10 +17,12 @@ TYPE_REMAP: Dict[str, str] = {
     "readability": "readability",
     "testability": "testability",
     "legacy_code": "legacy_code",
-    "performance": "performance",
+    "slow_performance": "slow_performance",
     "dependency": "dependency",
     "duplication": "duplication",
-    "reuse": "reuse",
+    "repurpose_reuse": "repurpose_reuse",
+    "logical_mismatch": "logical_mismatch",
+    "hard_to_debug": "hard_to_debug",
 }
 
 
