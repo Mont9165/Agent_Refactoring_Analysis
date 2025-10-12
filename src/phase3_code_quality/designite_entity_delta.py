@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import tempfile
 from dataclasses import dataclass
+import logging
 from itertools import zip_longest
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
@@ -18,6 +19,8 @@ import pandas as pd
 
 TYPE_METRIC_COLUMNS = ["LOC", "WMC", "NOM", "NOF", "DIT", "LCOM", "FANIN", "FANOUT"]
 METHOD_METRIC_COLUMNS = ["LOC", "CC", "PC"]
+
+logger = logging.getLogger(__name__)
 
 def _resolve_designite_root() -> Path:
     env_root = os.environ.get("DESIGNITE_OUTPUT_ROOT")
@@ -122,10 +125,10 @@ class DesigniteDeltaCalculator:
         destination = self.config.repos_base / owner / repo
         destination.parent.mkdir(parents=True, exist_ok=True)
         remote = self.config.git_remote_template.format(owner=owner, repo=repo)
-        print(f"Cloning {remote} → {destination}")
+        logger.info("Cloning %s → %s", remote, destination)
         code, out, err = self._run(["git", "clone", remote, str(destination)])
         if code != 0:
-            print(f"  git clone failed: {err.strip() or out.strip()}")
+            logger.error("git clone failed for %s/%s: %s", owner, repo, err.strip() or out.strip())
             return None
         return destination if destination.exists() else None
 
@@ -133,11 +136,16 @@ class DesigniteDeltaCalculator:
         code, _, _ = self._run(["git", "rev-parse", "--verify", f"{sha}^{{commit}}"], cwd=repo_path)
         if code == 0:
             return True
-        print(f"Fetching commit {sha[:10]} for {repo_path.name}…")
+        logger.info("Fetching commit %s for %s", sha[:10], repo_path.name)
         fetch_cmd = ["git", "fetch", "origin", sha]
         code, out, err = self._run(fetch_cmd, cwd=repo_path)
         if code != 0:
-            print(f"  git fetch failed: {err.strip() or out.strip()}")
+            logger.error(
+                "git fetch failed for %s (%s): %s",
+                repo_path.name,
+                sha[:10],
+                err.strip() or out.strip(),
+            )
             return False
         return True
 
@@ -172,7 +180,7 @@ class DesigniteDeltaCalculator:
             return False
         designite_path = Path(self.config.designite_path)
         if not designite_path.exists():
-            print(f"Designite jar not found at {designite_path}")
+            logger.error("Designite jar not found at %s", designite_path)
             return False
 
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -182,9 +190,12 @@ class DesigniteDeltaCalculator:
             code, out, err = self._run(cmd, timeout=self.config.timeout_seconds)
             if code == 0:
                 return True
-            print(
-                f"Designite run failed (attempt {attempt}/{self.config.max_retries}) for {input_dir}:"
-                f" {err.strip() or out.strip()}"
+            logger.warning(
+                "Designite run failed (attempt %d/%d) for %s: %s",
+                attempt,
+                self.config.max_retries,
+                input_dir,
+                err.strip() or out.strip(),
             )
         return False
 
@@ -192,12 +203,16 @@ class DesigniteDeltaCalculator:
         child_dir = repo_commit.child_output_dir
         parent_dir = repo_commit.parent_output_dir
 
-        print(f"--- Checking Commit: {repo_commit.owner}/{repo_commit.repo}:{repo_commit.sha} ---")
-        print(f"Looking for CHILD data in: {child_dir}")
-        print(f"Looking for PARENT data in: {parent_dir}")
-        print(f"Child CSV exists? {(child_dir / 'typeMetrics.csv').exists()}")
-        print(f"Parent CSV exists? {(parent_dir / 'typeMetrics.csv').exists()}")
-        print("-" * 20)
+        logger.debug(
+            "Checking Designite outputs for %s/%s@%s",
+            repo_commit.owner,
+            repo_commit.repo,
+            repo_commit.sha[:10],
+        )
+        logger.debug("Child output dir: %s", child_dir)
+        logger.debug("Parent output dir: %s", parent_dir)
+        logger.debug("Child CSV exists? %s", (child_dir / "typeMetrics.csv").exists())
+        logger.debug("Parent CSV exists? %s", (parent_dir / "typeMetrics.csv").exists())
 
         child_ready = (child_dir / "typeMetrics.csv").exists()
         parent_ready = (parent_dir / "typeMetrics.csv").exists()
@@ -223,17 +238,21 @@ class DesigniteDeltaCalculator:
                             child_ready = True
                             child_dir = repo_commit.child_output_dir
                         else:
-                            print(
-                                f"Designite failed for child commit {repo_commit.sha[:10]}"
-                                f" in {repo_commit.owner}/{repo_commit.repo}"
+                            logger.warning(
+                                "Designite failed for child commit %s in %s/%s",
+                                repo_commit.sha[:10],
+                                repo_commit.owner,
+                                repo_commit.repo,
                             )
                             child_dir = None
                     finally:
                         self._cleanup_worktree(repo_path, child_worktree)
                 else:
-                    print(
-                        f"Could not create worktree for child commit {repo_commit.sha[:10]}"
-                        f" in {repo_commit.owner}/{repo_commit.repo}"
+                    logger.error(
+                        "Could not create worktree for child commit %s in %s/%s",
+                        repo_commit.sha[:10],
+                        repo_commit.owner,
+                        repo_commit.repo,
                     )
                     child_dir = None
 
@@ -246,17 +265,21 @@ class DesigniteDeltaCalculator:
                             parent_ready = True
                             parent_dir = repo_commit.parent_output_dir
                         else:
-                            print(
-                                f"Designite failed for parent commit {repo_commit.parent_sha[:10]}"
-                                f" in {repo_commit.owner}/{repo_commit.repo}"
+                            logger.warning(
+                                "Designite failed for parent commit %s in %s/%s",
+                                repo_commit.parent_sha[:10],
+                                repo_commit.owner,
+                                repo_commit.repo,
                             )
                             parent_dir = None
                     finally:
                         self._cleanup_worktree(repo_path, parent_worktree)
                 else:
-                    print(
-                        f"Could not create worktree for parent commit {repo_commit.parent_sha[:10]}"
-                        f" in {repo_commit.owner}/{repo_commit.repo}"
+                    logger.error(
+                        "Could not create worktree for parent commit %s in %s/%s",
+                        repo_commit.parent_sha[:10],
+                        repo_commit.owner,
+                        repo_commit.repo,
                     )
                     parent_dir = None
 
@@ -597,9 +620,11 @@ class DesigniteDeltaCalculator:
             owner, repo = parts[3], parts[4]
             repo_path = self._infer_repo_path(owner, repo)
             if not repo_path:
-                print(
-                    f"Repository clone not found for {owner}/{repo}; "
-                    f"skipping commit {str(commit['sha'])[:10]}"
+                logger.warning(
+                    "Repository clone not found for %s/%s; skipping commit %s",
+                    owner,
+                    repo,
+                    str(commit["sha"])[:10],
                 )
                 missing_repos.append(f"{owner}/{repo}:{commit['sha']}")
                 continue
@@ -628,23 +653,23 @@ class DesigniteDeltaCalculator:
             all_method_deltas.extend(method_deltas)
 
         if missing_designite:
-            print("Designite outputs missing for commits:")
+            logger.warning("Designite outputs missing for commits:")
             for entry in missing_designite[:20]:
-                print(f"  - {entry}")
+                logger.warning("  - %s", entry)
             if len(missing_designite) > 20:
-                print(f"  ... and {len(missing_designite) - 20} more")
+                logger.warning("  ... and %d more", len(missing_designite) - 20)
         if missing_repos:
-            print("Repository clones not found for commits:")
+            logger.warning("Repository clones not found for commits:")
             for entry in missing_repos[:20]:
-                print(f"  - {entry}")
+                logger.warning("  - %s", entry)
             if len(missing_repos) > 20:
-                print(f"  ... and {len(missing_repos) - 20} more")
+                logger.warning("  ... and %d more", len(missing_repos) - 20)
         if missing_parent_git:
-            print("Parent commit not reachable via git for commits:")
+            logger.warning("Parent commit not reachable via git for commits:")
             for entry in missing_parent_git[:20]:
-                print(f"  - {entry}")
+                logger.warning("  - %s", entry)
             if len(missing_parent_git) > 20:
-                print(f"  ... and {len(missing_parent_git) - 20} more")
+                logger.warning("  ... and %d more", len(missing_parent_git) - 20)
 
         type_df = pd.DataFrame(all_type_deltas)
         method_df = pd.DataFrame(all_method_deltas)
