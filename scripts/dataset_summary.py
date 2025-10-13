@@ -9,6 +9,7 @@ from typing import Dict, Iterable, Set
 import pandas as pd
 
 DATA_PATH = Path("data/filtered/java_repositories/java_pr_commits_no_merges.parquet")
+REFACTORING_COMMITS_PATH = Path("data/analysis/refactoring_instances/refactoring_commits.parquet")
 
 
 def _load_commit_table() -> pd.DataFrame:
@@ -96,7 +97,25 @@ def _safe_read_parquet(path: Path, column: str) -> Set[str]:
     return set(df[column].dropna().astype(str))
 
 
-def _coverage_stats(commit_shas: Set[str], sample_limit: int) -> Dict[str, Dict[str, object]]:
+def _load_refactoring_commit_shas() -> Set[str]:
+    shas = _safe_read_parquet(REFACTORING_COMMITS_PATH, "sha")
+    if shas:
+        return shas
+
+    csv_path = REFACTORING_COMMITS_PATH.with_suffix(".csv")
+    if not csv_path.exists():
+        return set()
+
+    try:
+        df = pd.read_csv(csv_path, usecols=["sha"])
+    except Exception as exc:  # noqa: BLE001
+        print(f"Warning: could not read {csv_path}: {exc}")
+        return set()
+
+    return set(df["sha"].dropna().astype(str))
+
+
+def _coverage_stats(target_commit_shas: Set[str], sample_limit: int) -> Dict[str, Dict[str, object]]:
     base = Path("data/analysis")
     designite_dir = base / "designite" / "deltas"
     type_shas = _safe_read_parquet(designite_dir / "type_metric_deltas.parquet", "commit_sha")
@@ -107,12 +126,12 @@ def _coverage_stats(commit_shas: Set[str], sample_limit: int) -> Dict[str, Dict[
     readability_shas = _safe_read_parquet(readability_path, "commit_sha")
 
     def summarize(processed: Set[str]) -> Dict[str, object]:
-        processed = processed & commit_shas
-        missing = commit_shas - processed
+        processed = processed & target_commit_shas
+        missing = target_commit_shas - processed
         return {
             "processed_commits": len(processed),
             "missing_commits": len(missing),
-            "coverage_pct": (len(processed) / len(commit_shas) * 100.0) if commit_shas else 0.0,
+            "coverage_pct": (len(processed) / len(target_commit_shas) * 100.0) if target_commit_shas else 0.0,
             "missing_samples": list(sorted(missing))[: max(sample_limit, 0)],
         }
 
@@ -161,7 +180,9 @@ def main() -> None:
     commit_df = get_java_commit_dataframe()
     commit_stats = _commit_level_stats(commit_df)
     pr_stats = _pr_level_stats(commit_df)
-    coverage = _coverage_stats(set(commit_df["sha"].astype(str)), args.show_missing)
+    refactoring_commit_shas = _load_refactoring_commit_shas()
+    coverage_target_shas = refactoring_commit_shas or set(commit_df["sha"].astype(str))
+    coverage = _coverage_stats(coverage_target_shas, args.show_missing)
     repo_count = (
         commit_df["html_url"].dropna()
         .apply(lambda url: "/".join(url.split("/")[3:5]) if isinstance(url, str) and url.count("/") >= 4 else None)

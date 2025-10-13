@@ -1,38 +1,32 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `src/` — core Python packages. Phase-specific logic lives under `src/phase1_*`, `src/phase3_*`, and `src/research_questions/`.
-- `scripts/` — CLI entry points that orchestrate each phase (e.g., `scripts/0_download_dataset.py`, `scripts/10_research_questions.py`).
-- `data/` — cached datasets and derived parquet/CSV artifacts (gitignored). Subfolders such as `data/analysis/designite/` and `data/analysis/readability/` hold quality metrics.
-- `outputs/` — generated reports, plots, and research-question summaries.
-- `config/` — repository-level configuration (`dataset_config.yaml`).
+- `src/` holds the Python packages that power each phase. Data ingestion lives in `src/data_loader`, Java filtering in `src/phase1_*`, refactoring analysis in `src/phase3_*`, and research outputs in `src/research_questions/`.
+- `scripts/` provides numbered CLI entry points that form the pipeline. Example: `python scripts/0_download_dataset.py` pulls HuggingFace data, and `python scripts/4_analyze_refactoring_instance_and_type.py` assembles commit-level refactoring summaries.
+- `data/` (gitignored) stores parquet/CSV artifacts such as `data/analysis/refactoring_instances/refminer_refactorings.parquet`. `outputs/` captures publishable plots and tables. Configuration is centralized in `config/dataset_config.yaml`. Shared tooling (Designite, RefactoringMiner) sits under `tools/`.
 
 ## Build, Test, and Development Commands
-- Create a virtual environment and install dependencies:
+- Bootstrap locally:
   ```bash
   python -m venv .venv && source .venv/bin/activate
+  pip install --upgrade pip
   pip install -r requirements.txt
   ```
-- Reproduce the data pipeline: `python scripts/0_download_dataset.py` → `python scripts/1_simple_java_extraction.py` → `python scripts/2_extract_commits.py` → `python scripts/3_apply_refactoringminer.py` → `python scripts/4_analyze_refactoring_instance_and_type.py`.
-- Generate plots and summaries for the paper: `python scripts/10_research_questions.py`.
-- Tests (when present): `pytest -q` from the repository root.
+- Run the end-to-end dataset pipeline in order: `scripts/0_download_dataset.py` → `1_simple_java_extraction.py` → `2_extract_commits.py` → `3_apply_refactoringminer.py` → `4_analyze_refactoring_instance_and_type.py`.
+- Quality deltas: `python scripts/6b_compute_designite_deltas.py --workers 4` (ensure `DESIGNITE_JAVA_PATH` and `REPOS_BASE` are set). Summaries and plots: `python scripts/10_research_questions.py`.
+- Tests: execute `pytest -q` from the repo root; use `pytest tests/test_phase1_filters.py::test_handles_gradle_build` when iterating on a specific case.
 
 ## Coding Style & Naming Conventions
-- Primary language is Python; follow PEP 8 with 4-space indentation and CapWords for classes. Modules and scripts use snake_case (`rq3_refactoring_types.py`).
-- Prefer type hints and short docstrings for public functions. When writing CLI scripts, keep top-level execution guarded with `if __name__ == "__main__"`.
-- When contributing notebooks or figures, place them under `notebooks/` or `outputs/` rather than `src/`.
+- Follow PEP 8: 4-space indentation, descriptive snake_case for variables/modules, CapWords for classes, and imperative verb module names in `scripts/`.
+- Add type hints for public APIs (`def load_dataset(...) -> Dataset`) and lightweight docstrings explaining data expectations.
+- Gate script entry points with `if __name__ == "__main__":` and keep logging informative but concise.
 
 ## Testing Guidelines
-- Tests use `pytest`; place new suites under `tests/test_*.py` with descriptive method names (e.g., `test_rq3_handles_missing_refminer`).
-- Focus on lightweight unit tests that stub filesystem dependencies; large parquet files should be mocked or truncated fixtures.
-- Run `pytest -q` before pushing to confirm compatibility with the shared virtual environment.
+- Targeted tests live under `tests/`, named `test_<area>.py`. Mock large parquet inputs; prefer fixtures stored alongside the test file.
+- Write assertions around both data shape and key numeric metrics (e.g., refactoring counts). Aim to keep runtime under one minute.
+- Always run `pytest -q` before opening a PR; integrate new datasets behind flags so tests remain deterministic.
 
 ## Commit & Pull Request Guidelines
-- Commits should be imperative and scoped (e.g., `phase1: cache java filter output`, `rq3: add non-sar plots`). Group related changes instead of mixing pipeline and documentation tweaks.
-- Pull requests must include:
-  - A concise summary of the change and affected scripts.
-  - Links to relevant issues or notebook experiments.
-  - Notes on new artifacts (e.g., `outputs/research_questions/...`) or data schema changes.
-  - Screenshots or sample plots when modifying visualization scripts.
-- Ensure CI/testing steps listed above pass and reference any required environment variables (e.g., `DESIGNITE_JAVA_PATH`, `REPOS_BASE`) in the PR description if reviewers need to reproduce results.
-
+- Use imperative, scoped commit messages (e.g., `phase3: dedupe refactoring shas`, `rq5: cache designite summary`). Avoid bundling unrelated pipeline and doc edits.
+- PRs should include: purpose summary, affected scripts/modules, reproduction commands, new artifacts or schema changes, and links to relevant issues/notebooks. Attach plot thumbnails when modifying visualization code.
+- Confirm required environment variables (`HF_TOKEN`, `DESIGNITE_JAVA_PATH`, `REPOS_BASE`) in the PR description if reviewers must rerun the pipeline. Ensure CI/tests pass before requesting review.
