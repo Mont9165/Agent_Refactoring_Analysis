@@ -17,8 +17,63 @@ import numpy as np
 import pandas as pd
 
 
-TYPE_METRIC_COLUMNS = ["LOC", "WMC", "NOM", "NOF", "DIT", "LCOM", "FANIN", "FANOUT"]
+TYPE_METRIC_COLUMNS = [
+    "LOC",
+    "WMC",
+    "NOM",
+    "NOF",
+    "NOPM",
+    "NOPF",
+    "NC",
+    "DIT",
+    "LCOM",
+    "FANIN",
+    "FANOUT",
+]
 METHOD_METRIC_COLUMNS = ["LOC", "CC", "PC"]
+DESIGN_SMELL_NAMES = [
+    "Imperative Abstraction",
+    "Multifaceted Abstraction",
+    "Unnecessary Abstraction",
+    "Unutilized Abstraction",
+    "Deficient Encapsulation",
+    "Unexploited Encapsulation",
+    "Broken Modularization",
+    "Cyclic-Dependent Modularization",
+    "Insufficient Modularization",
+    "Hub-like Modularization",
+    "Broken Hierarchy",
+    "Cyclic Hierarchy",
+    "Deep Hierarchy",
+    "Missing Hierarchy",
+    "Multipath Hierarchy",
+    "Rebellious Hierarchy",
+    "Wide Hierarchy",
+]
+IMPLEMENTATION_SMELL_NAMES = [
+    "Abstract Function Call From Constructor",
+    "Complex Conditional",
+    "Complex Method",
+    "Empty catch clause",
+    "Long Identifier",
+    "Long Method",
+    "Long Parameter List",
+    "Long Statement",
+    "Magic Number",
+    "Missing default",
+]
+DESIGN_SMELL_FILE_CANDIDATES = (
+    "designCodeSmells.csv",
+    "DesignSmells.csv",
+    "designSmells.csv",
+)
+IMPLEMENTATION_SMELL_FILE_CANDIDATES = (
+    "implementationCodeSmells.csv",
+    "ImplementationSmells.csv",
+    "implementationSmells.csv",
+)
+SMELL_COLUMN_CANDIDATES = ("Code Smell", "Smell", "Smell Name")
+SMELL_REF_TYPE = "__commit__"
 
 logger = logging.getLogger(__name__)
 
@@ -403,6 +458,47 @@ class DesigniteDeltaCalculator:
         )
         return df
 
+    @classmethod
+    def _load_smell_frame(cls, output_dir: Optional[Path], candidates: Tuple[str, ...], fallback_glob: str) -> Optional[pd.DataFrame]:
+        if output_dir is None:
+            return None
+        for candidate in candidates:
+            df = cls._read_csv(output_dir / candidate)
+            if df is not None:
+                return df
+        for path in output_dir.glob(fallback_glob):
+            df = cls._read_csv(path)
+            if df is not None:
+                return df
+        return None
+
+    @classmethod
+    def load_design_smells(cls, output_dir: Optional[Path]) -> Optional[pd.DataFrame]:
+        return cls._load_smell_frame(output_dir, DESIGN_SMELL_FILE_CANDIDATES, "**/*DesignSmells*.csv")
+
+    @classmethod
+    def load_implementation_smells(cls, output_dir: Optional[Path]) -> Optional[pd.DataFrame]:
+        return cls._load_smell_frame(output_dir, IMPLEMENTATION_SMELL_FILE_CANDIDATES, "**/*ImplementationSmells*.csv")
+
+    @staticmethod
+    def _smell_counts(smell_df: Optional[pd.DataFrame], smell_names: Iterable[str]) -> pd.Series:
+        base = pd.Series({name: 0.0 for name in smell_names}, dtype=float)
+        if smell_df is None or smell_df.empty:
+            return base
+        smell_column = next((col for col in SMELL_COLUMN_CANDIDATES if col in smell_df.columns), None)
+        if not smell_column:
+            return base
+        counts = (
+            smell_df[smell_column]
+            .dropna()
+            .astype(str)
+            .str.strip()
+            .value_counts()
+        )
+        for name in base.index:
+            base.at[name] = float(counts.get(name, 0))
+        return base
+
     # ------------------------------------------------------------------
     # Refactoring entity extraction
     # ------------------------------------------------------------------
@@ -530,15 +626,26 @@ class DesigniteDeltaCalculator:
         repo_commit: RepoCommit,
         type_entities: List[EntityRecord],
         method_entities: List[EntityRecord],
-    ) -> Tuple[List[Dict[str, object]], List[Dict[str, object]]]:
+    ) -> Tuple[
+        List[Dict[str, object]],
+        List[Dict[str, object]],
+        List[Dict[str, object]],
+        List[Dict[str, object]],
+    ]:
         parent_dir, child_dir = repo_commit.parent_output_dir, repo_commit.child_output_dir
         parent_types = self.load_type_metrics(parent_dir)
         child_types = self.load_type_metrics(child_dir)
         parent_methods = self.load_method_metrics(parent_dir)
         child_methods = self.load_method_metrics(child_dir)
+        parent_design_smells = self.load_design_smells(parent_dir)
+        child_design_smells = self.load_design_smells(child_dir)
+        parent_impl_smells = self.load_implementation_smells(parent_dir)
+        child_impl_smells = self.load_implementation_smells(child_dir)
 
         type_deltas: List[Dict[str, object]] = []
         method_deltas: List[Dict[str, object]] = []
+        design_smell_deltas: List[Dict[str, object]] = []
+        implementation_smell_deltas: List[Dict[str, object]] = []
 
         type_map_parent = {row["type_key"]: row for _, row in parent_types.iterrows()} if parent_types is not None else {}
         type_map_child = {row["type_key"]: row for _, row in child_types.iterrows()} if child_types is not None else {}
@@ -594,18 +701,59 @@ class DesigniteDeltaCalculator:
                 )
             )
 
-        return type_deltas, method_deltas
+        parent_design_counts = self._smell_counts(parent_design_smells, DESIGN_SMELL_NAMES)
+        child_design_counts = self._smell_counts(child_design_smells, DESIGN_SMELL_NAMES)
+        design_smell_deltas.extend(
+            self._compute_metric_delta(
+                parent_design_counts,
+                child_design_counts,
+                DESIGN_SMELL_NAMES,
+                repo_commit.sha,
+                SMELL_REF_TYPE,
+                "design_smell",
+                None,
+                None,
+                repo_commit.parent_sha,
+                repo_commit.sha,
+            )
+        )
+
+        parent_impl_counts = self._smell_counts(parent_impl_smells, IMPLEMENTATION_SMELL_NAMES)
+        child_impl_counts = self._smell_counts(child_impl_smells, IMPLEMENTATION_SMELL_NAMES)
+        implementation_smell_deltas.extend(
+            self._compute_metric_delta(
+                parent_impl_counts,
+                child_impl_counts,
+                IMPLEMENTATION_SMELL_NAMES,
+                repo_commit.sha,
+                SMELL_REF_TYPE,
+                "implementation_smell",
+                None,
+                None,
+                repo_commit.parent_sha,
+                repo_commit.sha,
+            )
+        )
+
+        return type_deltas, method_deltas, design_smell_deltas, implementation_smell_deltas
 
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
-    def process(self, commits_df: pd.DataFrame, refminer_df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def process(self, commits_df: pd.DataFrame, refminer_df: pd.DataFrame) -> Tuple[
+        pd.DataFrame,
+        pd.DataFrame,
+        pd.DataFrame,
+        pd.DataFrame,
+    ]:
         commits = commits_df[commits_df.get("has_refactoring", False) == True].copy()
         if self.max_commits is not None:
             commits = commits.head(self.max_commits)
 
         all_type_deltas: List[Dict[str, object]] = []
         all_method_deltas: List[Dict[str, object]] = []
+        all_design_smell_deltas: List[Dict[str, object]] = []
+        all_impl_smell_deltas: List[Dict[str, object]] = []
         missing_designite: List[str] = []
         missing_repos: List[str] = []
         missing_parent_git: List[str] = []
@@ -645,12 +793,15 @@ class DesigniteDeltaCalculator:
             entities = self.extract_entities_for_commit(commit_refs)
             type_entities = [e for e in entities if e.entity_kind == "type"]
             method_entities = [e for e in entities if e.entity_kind == "method"]
-            if not type_entities and not method_entities:
-                continue
-
-            type_deltas, method_deltas = self.compute_commit_deltas(repo_commit, type_entities, method_entities)
+            type_deltas, method_deltas, design_smell_deltas, impl_smell_deltas = self.compute_commit_deltas(
+                repo_commit,
+                type_entities,
+                method_entities,
+            )
             all_type_deltas.extend(type_deltas)
             all_method_deltas.extend(method_deltas)
+            all_design_smell_deltas.extend(design_smell_deltas)
+            all_impl_smell_deltas.extend(impl_smell_deltas)
 
         if missing_designite:
             logger.warning("Designite outputs missing for commits:")
@@ -673,6 +824,8 @@ class DesigniteDeltaCalculator:
 
         type_df = pd.DataFrame(all_type_deltas)
         method_df = pd.DataFrame(all_method_deltas)
+        design_smell_df = pd.DataFrame(all_design_smell_deltas)
+        implementation_smell_df = pd.DataFrame(all_impl_smell_deltas)
 
         if self.persist_outputs:
             if not type_df.empty:
@@ -681,8 +834,14 @@ class DesigniteDeltaCalculator:
             if not method_df.empty:
                 method_df.to_parquet(DELTA_Output_DIR / "method_metric_deltas.parquet", index=False)
                 method_df.to_csv(DELTA_Output_DIR / "method_metric_deltas.csv", index=False)
+            if not design_smell_df.empty:
+                design_smell_df.to_parquet(DELTA_Output_DIR / "design_smell_deltas.parquet", index=False)
+                design_smell_df.to_csv(DELTA_Output_DIR / "design_smell_deltas.csv", index=False)
+            if not implementation_smell_df.empty:
+                implementation_smell_df.to_parquet(DELTA_Output_DIR / "implementation_smell_deltas.parquet", index=False)
+                implementation_smell_df.to_csv(DELTA_Output_DIR / "implementation_smell_deltas.csv", index=False)
 
-        return type_df, method_df
+        return type_df, method_df, design_smell_df, implementation_smell_df
 
 
 def load_tool_config() -> ToolConfig:

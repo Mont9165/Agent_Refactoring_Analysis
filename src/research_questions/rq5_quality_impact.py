@@ -186,6 +186,8 @@ def rq5_quality_impact(
     for path in (
         DESIGNITE_DELTA_DIR / "type_metric_deltas.parquet",
         DESIGNITE_DELTA_DIR / "method_metric_deltas.parquet",
+        DESIGNITE_DELTA_DIR / "design_smell_deltas.parquet",
+        DESIGNITE_DELTA_DIR / "implementation_smell_deltas.parquet",
     ):
         frame = _load_parquet(path)
         if frame is not None:

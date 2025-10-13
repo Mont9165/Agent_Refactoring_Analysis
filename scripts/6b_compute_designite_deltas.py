@@ -26,6 +26,9 @@ COMMITS_PATH = Path("data/analysis/refactoring_instances/commits_with_refactorin
 REFMINER_PATH = Path("data/analysis/refactoring_instances/refminer_refactorings.parquet")
 TYPE_DELTA_PATH = DELTA_Output_DIR / "type_metric_deltas.parquet"
 METHOD_DELTA_PATH = DELTA_Output_DIR / "method_metric_deltas.parquet"
+DESIGN_SMELL_DELTA_PATH = DELTA_Output_DIR / "design_smell_deltas.parquet"
+IMPLEMENTATION_SMELL_DELTA_PATH = DELTA_Output_DIR / "implementation_smell_deltas.parquet"
+DEFAULT_LOG_PATH = DELTA_Output_DIR / "compute_designite_deltas.log"
 
 logger = logging.getLogger(__name__)
 LOG_LEVELS = ("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG")
@@ -62,6 +65,12 @@ def parse_args() -> argparse.Namespace:
         default="INFO",
         choices=LOG_LEVELS,
         help="Logging level (default: INFO).",
+    )
+    parser.add_argument(
+        "--log-file",
+        type=str,
+        default=str(DEFAULT_LOG_PATH),
+        help="Path to append log output (default: %(default)s).",
     )
     return parser.parse_args()
 
@@ -100,27 +109,34 @@ def _process_commit(
     commit_record: Dict[str, Any],
     refminer_by_sha: Dict[str, pd.DataFrame],
     cfg,
-) -> Tuple[str, pd.DataFrame, pd.DataFrame]:
+) -> Tuple[str, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     sha = str(commit_record.get("sha", ""))
     refminer_subset = refminer_by_sha.get(sha)
     if refminer_subset is None or refminer_subset.empty:
-        return sha, pd.DataFrame(), pd.DataFrame()
+        empty = pd.DataFrame()
+        return sha, empty, empty, empty, empty
 
     commit_df = pd.DataFrame([commit_record])
     calculator = DesigniteDeltaCalculator(cfg, max_commits=None, persist_outputs=False)
-    type_df, method_df = calculator.process(commit_df, refminer_subset)
-    return sha, type_df, method_df
+    type_df, method_df, design_smell_df, impl_smell_df = calculator.process(commit_df, refminer_subset)
+    return sha, type_df, method_df, design_smell_df, impl_smell_df
 
 
 def main() -> None:
     args = parse_args()
 
     log_level = getattr(logging, args.log_level, logging.INFO)
+    log_path = Path(args.log_file).expanduser()
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    handlers = [logging.StreamHandler(), logging.FileHandler(log_path, encoding="utf-8")]
+
     logging.basicConfig(
         level=log_level,
         format="%(asctime)s %(levelname)s %(name)s - %(message)s",
+        handlers=handlers,
     )
     logger.debug("Parsed arguments: %s", args)
+    logger.info("File logging enabled at %s.", log_path)
 
     if not COMMITS_PATH.exists():
         raise FileNotFoundError(f"Missing commits dataset: {COMMITS_PATH}")
@@ -135,12 +151,18 @@ def main() -> None:
 
     existing_type = _safe_read_parquet(TYPE_DELTA_PATH)
     existing_method = _safe_read_parquet(METHOD_DELTA_PATH)
+    existing_design_smell = _safe_read_parquet(DESIGN_SMELL_DELTA_PATH)
+    existing_impl_smell = _safe_read_parquet(IMPLEMENTATION_SMELL_DELTA_PATH)
 
     processed_shas: set[str] = set()
     if not existing_type.empty:
         processed_shas.update(existing_type["commit_sha"].astype(str))
     if not existing_method.empty:
         processed_shas.update(existing_method["commit_sha"].astype(str))
+    if not existing_design_smell.empty:
+        processed_shas.update(existing_design_smell["commit_sha"].astype(str))
+    if not existing_impl_smell.empty:
+        processed_shas.update(existing_impl_smell["commit_sha"].astype(str))
 
     if processed_shas:
         logger.info("Skipping %d commits already present in cached deltas.", len(processed_shas))
@@ -149,7 +171,16 @@ def main() -> None:
 
     if commits_df.empty:
         logger.info("No new commits to process; existing deltas are up to date.")
-        existing_frames = [df for df in (existing_type, existing_method) if not df.empty]
+        existing_frames = [
+            df
+            for df in (
+                existing_type,
+                existing_method,
+                existing_design_smell,
+                existing_impl_smell,
+            )
+            if not df.empty
+        ]
         if existing_frames:
             logger.debug("Aggregating existing deltas without new commits.")
             aggregate_deltas(pd.concat(existing_frames, ignore_index=True))
@@ -180,7 +211,16 @@ def main() -> None:
 
     if normalized_commits.empty:
         logger.warning("No commits available after repository normalization.")
-        existing_frames = [df for df in (existing_type, existing_method) if not df.empty]
+        existing_frames = [
+            df
+            for df in (
+                existing_type,
+                existing_method,
+                existing_design_smell,
+                existing_impl_smell,
+            )
+            if not df.empty
+        ]
         if existing_frames:
             logger.debug("Aggregating existing deltas after normalization left no commits.")
             aggregate_deltas(pd.concat(existing_frames, ignore_index=True))
@@ -208,7 +248,16 @@ def main() -> None:
 
     if commits_with_refminer.empty:
         logger.warning("No commits have associated RefactoringMiner data; exiting early.")
-        existing_frames = [df for df in (existing_type, existing_method) if not df.empty]
+        existing_frames = [
+            df
+            for df in (
+                existing_type,
+                existing_method,
+                existing_design_smell,
+                existing_impl_smell,
+            )
+            if not df.empty
+        ]
         if existing_frames:
             logger.debug("Aggregating existing deltas before exiting due to missing RefactoringMiner data.")
             aggregate_deltas(pd.concat(existing_frames, ignore_index=True))
@@ -229,6 +278,8 @@ def main() -> None:
     commit_records: List[Dict[str, Any]] = commits_with_refminer.to_dict("records")
     type_frames: List[pd.DataFrame] = []
     method_frames: List[pd.DataFrame] = []
+    design_smell_frames: List[pd.DataFrame] = []
+    impl_smell_frames: List[pd.DataFrame] = []
     errors: List[Tuple[str, str, str, Exception]] = []
 
     tqdm_disabled = not sys.stderr.isatty()
@@ -248,18 +299,24 @@ def main() -> None:
             repo = str(record.get("repo", "unknown"))
             sha = str(record.get("sha", ""))
             try:
-                _, commit_type_df, commit_method_df = future.result()
+                _, commit_type_df, commit_method_df, commit_design_smell_df, commit_impl_smell_df = future.result()
                 if not commit_type_df.empty:
                     type_frames.append(commit_type_df)
                 if not commit_method_df.empty:
                     method_frames.append(commit_method_df)
+                if not commit_design_smell_df.empty:
+                    design_smell_frames.append(commit_design_smell_df)
+                if not commit_impl_smell_df.empty:
+                    impl_smell_frames.append(commit_impl_smell_df)
                 logger.debug(
-                    "✓ %s/%s@%s: type_rows=%d, method_rows=%d",
+                    "✓ %s/%s@%s: type_rows=%d, method_rows=%d, design_smell_rows=%d, impl_smell_rows=%d",
                     owner,
                     repo,
                     sha[:10],
                     len(commit_type_df),
                     len(commit_method_df),
+                    len(commit_design_smell_df),
+                    len(commit_impl_smell_df),
                 )
             except Exception as exc:  # noqa: BLE001
                 errors.append((owner, repo, sha, exc))
@@ -274,6 +331,8 @@ def main() -> None:
 
     type_df = pd.concat(type_frames, ignore_index=True) if type_frames else pd.DataFrame()
     method_df = pd.concat(method_frames, ignore_index=True) if method_frames else pd.DataFrame()
+    design_smell_df = pd.concat(design_smell_frames, ignore_index=True) if design_smell_frames else pd.DataFrame()
+    impl_smell_df = pd.concat(impl_smell_frames, ignore_index=True) if impl_smell_frames else pd.DataFrame()
 
     final_frames = []
     if not type_df.empty:
@@ -315,6 +374,44 @@ def main() -> None:
         final_frames.append(combined_method)
     elif not existing_method.empty:
         final_frames.append(existing_method)
+
+    if not design_smell_df.empty:
+        combined_design_smell = pd.concat([existing_design_smell, design_smell_df], ignore_index=True)
+        combined_design_smell = combined_design_smell.drop_duplicates(
+            subset=[
+                "commit_sha",
+                "child_sha",
+                "parent_sha",
+                "entity_kind",
+                "metric",
+                "refactoring_type",
+            ],
+            keep="last",
+        )
+        combined_design_smell.to_parquet(DESIGN_SMELL_DELTA_PATH, index=False)
+        combined_design_smell.to_csv(DESIGN_SMELL_DELTA_PATH.with_suffix(".csv"), index=False)
+        final_frames.append(combined_design_smell)
+    elif not existing_design_smell.empty:
+        final_frames.append(existing_design_smell)
+
+    if not impl_smell_df.empty:
+        combined_impl_smell = pd.concat([existing_impl_smell, impl_smell_df], ignore_index=True)
+        combined_impl_smell = combined_impl_smell.drop_duplicates(
+            subset=[
+                "commit_sha",
+                "child_sha",
+                "parent_sha",
+                "entity_kind",
+                "metric",
+                "refactoring_type",
+            ],
+            keep="last",
+        )
+        combined_impl_smell.to_parquet(IMPLEMENTATION_SMELL_DELTA_PATH, index=False)
+        combined_impl_smell.to_csv(IMPLEMENTATION_SMELL_DELTA_PATH.with_suffix(".csv"), index=False)
+        final_frames.append(combined_impl_smell)
+    elif not existing_impl_smell.empty:
+        final_frames.append(existing_impl_smell)
 
     if not final_frames:
         logger.warning(
