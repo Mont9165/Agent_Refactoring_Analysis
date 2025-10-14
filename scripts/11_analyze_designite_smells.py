@@ -175,12 +175,12 @@ def _kruskal_tests(df: pd.DataFrame, group_col: str, min_group_size: int = 10) -
     records: List[Dict[str, object]] = []
     for (metric_category, metric_name), group in df.groupby(["metric_category", "metric_name"]):
         grouped_values: List[np.ndarray] = []
-        labels: List[str] = []
+        counts: List[int] = []
         for label, sub in group.groupby(group_col):
             deltas = sub["delta"].dropna().to_numpy()
             if len(deltas) >= min_group_size:
                 grouped_values.append(deltas)
-                labels.append(str(label))
+                counts.append(len(deltas))
         if len(grouped_values) < 2:
             records.append(
                 {
@@ -189,10 +189,18 @@ def _kruskal_tests(df: pd.DataFrame, group_col: str, min_group_size: int = 10) -
                     "groups_tested": len(grouped_values),
                     "kruskal_stat": np.nan,
                     "kruskal_p_value": np.nan,
+                    "eta_squared": np.nan,
+                    "epsilon_squared": np.nan,
                 }
             )
             continue
         stat, p_value = stats.kruskal(*grouped_values)
+        total_n = sum(counts)
+        eta_squared = np.nan
+        epsilon_squared = np.nan
+        if total_n > len(grouped_values):
+            eta_squared = (stat - len(grouped_values) + 1) / (total_n - len(grouped_values))
+            epsilon_squared = stat / (total_n - 1)
         records.append(
             {
                 "metric_category": metric_category,
@@ -200,6 +208,8 @@ def _kruskal_tests(df: pd.DataFrame, group_col: str, min_group_size: int = 10) -
                 "groups_tested": len(grouped_values),
                 "kruskal_stat": float(stat),
                 "kruskal_p_value": float(p_value),
+                "eta_squared": float(eta_squared) if not np.isnan(eta_squared) else np.nan,
+                "epsilon_squared": float(epsilon_squared) if not np.isnan(epsilon_squared) else np.nan,
             }
         )
     result = pd.DataFrame.from_records(records)
