@@ -1,0 +1,381 @@
+metric_category,metric_name,motivation_label,observation_count,unique_commit_count,median_delta,mean_delta,q1_delta,q3_delta,improvement_rate,worsening_rate
+design_smell,Broken Hierarchy,dependency,59,59,0.0,0.06779661016949153,0.0,0.0,0.0,0.01694915254237288
+design_smell,Broken Hierarchy,duplication,21,21,0.0,0.23809523809523808,0.0,0.0,0.0,0.047619047619047616
+design_smell,Broken Hierarchy,hard_to_debug,37,37,0.0,0.02702702702702703,0.0,0.0,0.0,0.02702702702702703
+design_smell,Broken Hierarchy,legacy_code,47,47,0.0,-0.02127659574468085,0.0,0.0,0.02127659574468085,0.0
+design_smell,Broken Hierarchy,logical_mismatch,443,443,0.0,-0.009029345372460496,0.0,0.0,0.002257336343115124,0.002257336343115124
+design_smell,Broken Hierarchy,maintainability,1018,1018,0.0,-1.4607072691552063,0.0,0.0,0.005893909626719057,0.018664047151277015
+design_smell,Broken Hierarchy,readability,1096,1096,0.0,0.0018248175182481751,0.0,0.0,0.0018248175182481751,0.0018248175182481751
+design_smell,Broken Hierarchy,repurpose_reuse,89,89,0.0,0.1797752808988764,0.0,0.0,0.0,0.033707865168539325
+design_smell,Broken Hierarchy,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Hierarchy,testability,97,97,0.0,-0.38144329896907214,0.0,0.0,0.010309278350515464,0.010309278350515464
+design_smell,Broken Modularization,dependency,59,59,0.0,-0.864406779661017,0.0,0.0,0.01694915254237288,0.0
+design_smell,Broken Modularization,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,logical_mismatch,443,443,0.0,0.009029345372460496,0.0,0.0,0.0,0.002257336343115124
+design_smell,Broken Modularization,maintainability,1018,1018,0.0,-0.08055009823182711,0.0,0.0,0.007858546168958742,0.011787819253438114
+design_smell,Broken Modularization,readability,1096,1096,0.0,0.006386861313868613,0.0,0.0,0.0009124087591240876,0.005474452554744526
+design_smell,Broken Modularization,repurpose_reuse,89,89,0.0,0.011235955056179775,0.0,0.0,0.02247191011235955,0.011235955056179775
+design_smell,Broken Modularization,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,testability,97,97,0.0,0.0,0.0,0.0,0.010309278350515464,0.010309278350515464
+design_smell,Cyclic Hierarchy,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,maintainability,1018,1018,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,readability,1096,1096,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,testability,97,97,0.0,-0.030927835051546393,0.0,0.0,0.010309278350515464,0.0
+design_smell,Cyclic-Dependent Modularization,dependency,59,59,0.0,0.1016949152542373,0.0,0.0,0.01694915254237288,0.03389830508474576
+design_smell,Cyclic-Dependent Modularization,duplication,21,21,0.0,0.09523809523809523,0.0,0.0,0.0,0.047619047619047616
+design_smell,Cyclic-Dependent Modularization,hard_to_debug,37,37,0.0,0.02702702702702703,0.0,0.0,0.0,0.02702702702702703
+design_smell,Cyclic-Dependent Modularization,legacy_code,47,47,0.0,0.02127659574468085,0.0,0.0,0.0,0.02127659574468085
+design_smell,Cyclic-Dependent Modularization,logical_mismatch,443,443,0.0,0.01805869074492099,0.0,0.0,0.0,0.013544018058690745
+design_smell,Cyclic-Dependent Modularization,maintainability,1018,1018,0.0,-1.6640471512770139,0.0,0.0,0.007858546168958742,0.023575638506876228
+design_smell,Cyclic-Dependent Modularization,readability,1096,1096,0.0,0.035583941605839414,0.0,0.0,0.0009124087591240876,0.01551094890510949
+design_smell,Cyclic-Dependent Modularization,repurpose_reuse,89,89,0.0,0.20224719101123595,0.0,0.0,0.0,0.033707865168539325
+design_smell,Cyclic-Dependent Modularization,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,testability,97,97,0.0,-0.711340206185567,0.0,0.0,0.010309278350515464,0.0
+design_smell,Deep Hierarchy,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,maintainability,1018,1018,0.0,-0.012770137524557957,0.0,0.0,0.0009823182711198428,0.0
+design_smell,Deep Hierarchy,readability,1096,1096,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,testability,97,97,0.0,-0.030927835051546393,0.0,0.0,0.010309278350515464,0.0
+design_smell,Deficient Encapsulation,dependency,59,59,0.0,-0.1864406779661017,0.0,0.0,0.01694915254237288,0.01694915254237288
+design_smell,Deficient Encapsulation,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,legacy_code,47,47,0.0,0.0425531914893617,0.0,0.0,0.0,0.0425531914893617
+design_smell,Deficient Encapsulation,logical_mismatch,443,443,0.0,0.004514672686230248,0.0,0.0,0.004514672686230248,0.009029345372460496
+design_smell,Deficient Encapsulation,maintainability,1018,1018,0.0,-2.0481335952848725,0.0,0.0,0.0068762278978389,0.0206286836935167
+design_smell,Deficient Encapsulation,readability,1096,1096,0.0,0.013686131386861315,0.0,0.0,0.002737226277372263,0.01551094890510949
+design_smell,Deficient Encapsulation,repurpose_reuse,89,89,0.0,0.056179775280898875,0.0,0.0,0.0,0.02247191011235955
+design_smell,Deficient Encapsulation,slow_performance,45,45,0.0,0.06666666666666667,0.0,0.0,0.0,0.022222222222222223
+design_smell,Deficient Encapsulation,testability,97,97,0.0,-0.5876288659793815,0.0,0.0,0.020618556701030927,0.0
+design_smell,Hub-like Modularization,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,maintainability,1018,1018,0.0,-0.0618860510805501,0.0,0.0,0.0029469548133595285,0.0
+design_smell,Hub-like Modularization,readability,1096,1096,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,testability,97,97,0.0,-0.010309278350515464,0.0,0.0,0.010309278350515464,0.0
+design_smell,Imperative Abstraction,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,legacy_code,47,47,0.0,0.02127659574468085,0.0,0.0,0.0,0.02127659574468085
+design_smell,Imperative Abstraction,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.002257336343115124,0.002257336343115124
+design_smell,Imperative Abstraction,maintainability,1018,1018,0.0,-0.009823182711198428,0.0,0.0,0.003929273084479371,0.008840864440078585
+design_smell,Imperative Abstraction,readability,1096,1096,0.0,0.0009124087591240876,0.0,0.0,0.004562043795620438,0.005474452554744526
+design_smell,Imperative Abstraction,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,testability,97,97,0.0,-0.061855670103092786,0.0,0.0,0.010309278350515464,0.0
+design_smell,Insufficient Modularization,dependency,59,59,0.0,0.06779661016949153,0.0,0.0,0.0,0.01694915254237288
+design_smell,Insufficient Modularization,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,logical_mismatch,443,443,0.0,0.009029345372460496,0.0,0.0,0.0,0.006772009029345372
+design_smell,Insufficient Modularization,maintainability,1018,1018,0.0,-1.2907662082514735,0.0,0.0,0.008840864440078585,0.025540275049115914
+design_smell,Insufficient Modularization,readability,1096,1096,0.0,0.009124087591240875,0.0,0.0,0.0018248175182481751,0.010948905109489052
+design_smell,Insufficient Modularization,repurpose_reuse,89,89,0.0,0.011235955056179775,0.0,0.0,0.0,0.011235955056179775
+design_smell,Insufficient Modularization,slow_performance,45,45,0.0,0.044444444444444446,0.0,0.0,0.0,0.044444444444444446
+design_smell,Insufficient Modularization,testability,97,97,0.0,-0.5670103092783505,0.0,0.0,0.020618556701030927,0.0
+design_smell,Missing Hierarchy,dependency,59,59,0.0,0.1016949152542373,0.0,0.0,0.0,0.01694915254237288
+design_smell,Missing Hierarchy,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,logical_mismatch,443,443,0.0,0.004514672686230248,0.0,0.0,0.0,0.004514672686230248
+design_smell,Missing Hierarchy,maintainability,1018,1018,0.0,-0.03929273084479371,0.0,0.0,0.0029469548133595285,0.0
+design_smell,Missing Hierarchy,readability,1096,1096,0.0,0.0,0.0,0.0,0.0009124087591240876,0.0009124087591240876
+design_smell,Missing Hierarchy,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,testability,97,97,0.0,-0.041237113402061855,0.0,0.0,0.010309278350515464,0.0
+design_smell,Multifaceted Abstraction,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,maintainability,1018,1018,0.0,-0.02455795677799607,0.0,0.0,0.005893909626719057,0.0
+design_smell,Multifaceted Abstraction,readability,1096,1096,0.0,0.0,0.0,0.0,0.002737226277372263,0.0018248175182481751
+design_smell,Multifaceted Abstraction,repurpose_reuse,89,89,0.0,0.033707865168539325,0.0,0.0,0.0,0.011235955056179775
+design_smell,Multifaceted Abstraction,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,testability,97,97,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,maintainability,1018,1018,0.0,-0.005893909626719057,0.0,0.0,0.0019646365422396855,0.0019646365422396855
+design_smell,Multipath Hierarchy,readability,1096,1096,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,testability,97,97,0.0,-0.041237113402061855,0.0,0.0,0.010309278350515464,0.0
+design_smell,Rebellious Hierarchy,dependency,59,59,0.0,-0.01694915254237288,0.0,0.0,0.01694915254237288,0.0
+design_smell,Rebellious Hierarchy,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,maintainability,1018,1018,0.0,-0.08055009823182711,0.0,0.0,0.0019646365422396855,0.0019646365422396855
+design_smell,Rebellious Hierarchy,readability,1096,1096,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,testability,97,97,0.0,-0.041237113402061855,0.0,0.0,0.010309278350515464,0.0
+design_smell,Unexploited Encapsulation,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,logical_mismatch,443,443,0.0,0.002257336343115124,0.0,0.0,0.0,0.002257336343115124
+design_smell,Unexploited Encapsulation,maintainability,1018,1018,0.0,-0.025540275049115914,0.0,0.0,0.0029469548133595285,0.0
+design_smell,Unexploited Encapsulation,readability,1096,1096,0.0,-0.0009124087591240876,0.0,0.0,0.0009124087591240876,0.0
+design_smell,Unexploited Encapsulation,repurpose_reuse,89,89,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,testability,97,97,0.0,-0.05154639175257732,0.0,0.0,0.010309278350515464,0.0
+design_smell,Unnecessary Abstraction,dependency,59,59,0.0,-0.8135593220338984,0.0,0.0,0.01694915254237288,0.0
+design_smell,Unnecessary Abstraction,duplication,21,21,0.0,-0.047619047619047616,0.0,0.0,0.047619047619047616,0.0
+design_smell,Unnecessary Abstraction,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.02702702702702703,0.02702702702702703
+design_smell,Unnecessary Abstraction,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,logical_mismatch,443,443,0.0,0.009029345372460496,0.0,0.0,0.0,0.004514672686230248
+design_smell,Unnecessary Abstraction,maintainability,1018,1018,0.0,-0.6159135559921415,0.0,0.0,0.02455795677799607,0.02455795677799607
+design_smell,Unnecessary Abstraction,readability,1096,1096,0.0,0.010036496350364963,0.0,0.0,0.005474452554744526,0.011861313868613138
+design_smell,Unnecessary Abstraction,repurpose_reuse,89,89,0.0,0.1348314606741573,0.0,0.0,0.011235955056179775,0.06741573033707865
+design_smell,Unnecessary Abstraction,slow_performance,45,45,0.0,0.0,0.0,0.0,0.022222222222222223,0.022222222222222223
+design_smell,Unnecessary Abstraction,testability,97,97,0.0,-0.08247422680412371,0.0,0.0,0.030927835051546393,0.041237113402061855
+design_smell,Unutilized Abstraction,dependency,59,59,0.0,-1.2542372881355932,0.0,0.0,0.06779661016949153,0.06779661016949153
+design_smell,Unutilized Abstraction,duplication,21,21,0.0,0.23809523809523808,0.0,0.0,0.09523809523809523,0.19047619047619047
+design_smell,Unutilized Abstraction,hard_to_debug,37,37,0.0,-0.13513513513513514,0.0,0.0,0.05405405405405406,0.10810810810810811
+design_smell,Unutilized Abstraction,legacy_code,47,47,0.0,-0.02127659574468085,0.0,0.0,0.1276595744680851,0.0851063829787234
+design_smell,Unutilized Abstraction,logical_mismatch,443,443,0.0,0.07223476297968397,0.0,0.0,0.013544018058690745,0.060948081264108354
+design_smell,Unutilized Abstraction,maintainability,1018,1018,0.0,-7.37819253438114,0.0,0.0,0.08153241650294696,0.2082514734774067
+design_smell,Unutilized Abstraction,readability,1096,1096,0.0,0.008211678832116789,0.0,0.0,0.03375912408759124,0.08394160583941605
+design_smell,Unutilized Abstraction,repurpose_reuse,89,89,0.0,0.3146067415730337,0.0,0.0,0.07865168539325842,0.19101123595505617
+design_smell,Unutilized Abstraction,slow_performance,45,45,0.0,0.2,0.0,0.0,0.0,0.15555555555555556
+design_smell,Unutilized Abstraction,testability,97,97,0.0,-1.3505154639175259,0.0,0.0,0.07216494845360824,0.24742268041237114
+design_smell,Wide Hierarchy,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,maintainability,1018,1018,0.0,-0.0550098231827112,0.0,0.0,0.0019646365422396855,0.003929273084479371
+design_smell,Wide Hierarchy,readability,1096,1096,0.0,0.0009124087591240876,0.0,0.0,0.0,0.0009124087591240876
+design_smell,Wide Hierarchy,repurpose_reuse,89,89,0.0,0.011235955056179775,0.0,0.0,0.0,0.011235955056179775
+design_smell,Wide Hierarchy,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,testability,97,97,0.0,-0.010309278350515464,0.0,0.0,0.010309278350515464,0.0
+implementation_smell,Abstract Function Call From Constructor,dependency,59,59,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,maintainability,1018,1018,0.0,-0.03732809430255403,0.0,0.0,0.0019646365422396855,0.0009823182711198428
+implementation_smell,Abstract Function Call From Constructor,readability,1096,1096,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,repurpose_reuse,89,89,0.0,0.011235955056179775,0.0,0.0,0.0,0.011235955056179775
+implementation_smell,Abstract Function Call From Constructor,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,testability,97,97,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Conditional,dependency,59,59,0.0,0.6271186440677966,0.0,0.0,0.03389830508474576,0.05084745762711865
+implementation_smell,Complex Conditional,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Conditional,hard_to_debug,37,37,0.0,0.13513513513513514,0.0,0.0,0.0,0.08108108108108109
+implementation_smell,Complex Conditional,legacy_code,47,47,0.0,-0.0851063829787234,0.0,0.0,0.06382978723404255,0.0
+implementation_smell,Complex Conditional,logical_mismatch,443,443,0.0,0.02708803611738149,0.0,0.0,0.020316027088036117,0.05191873589164785
+implementation_smell,Complex Conditional,maintainability,1018,1018,0.0,-2.7406679764243616,0.0,0.0,0.01669941060903733,0.07072691552062868
+implementation_smell,Complex Conditional,readability,1096,1096,0.0,0.0666058394160584,0.0,0.0,0.01916058394160584,0.05930656934306569
+implementation_smell,Complex Conditional,repurpose_reuse,89,89,0.0,-0.02247191011235955,0.0,0.0,0.011235955056179775,0.011235955056179775
+implementation_smell,Complex Conditional,slow_performance,45,45,0.0,0.06666666666666667,0.0,0.0,0.022222222222222223,0.044444444444444446
+implementation_smell,Complex Conditional,testability,97,97,0.0,-1.134020618556701,0.0,0.0,0.010309278350515464,0.010309278350515464
+implementation_smell,Complex Method,dependency,59,59,0.0,0.5932203389830508,0.0,0.0,0.01694915254237288,0.06779661016949153
+implementation_smell,Complex Method,duplication,21,21,0.0,-0.14285714285714285,0.0,0.0,0.09523809523809523,0.0
+implementation_smell,Complex Method,hard_to_debug,37,37,0.0,0.08108108108108109,0.0,0.0,0.0,0.08108108108108109
+implementation_smell,Complex Method,legacy_code,47,47,0.0,0.1276595744680851,0.0,0.0,0.0,0.1276595744680851
+implementation_smell,Complex Method,logical_mismatch,443,443,0.0,0.040632054176072234,0.0,0.0,0.013544018058690745,0.05417607223476298
+implementation_smell,Complex Method,maintainability,1018,1018,0.0,-4.327111984282908,0.0,0.0,0.01669941060903733,0.09037328094302555
+implementation_smell,Complex Method,readability,1096,1096,0.0,0.10857664233576643,0.0,0.0,0.012773722627737226,0.08667883211678833
+implementation_smell,Complex Method,repurpose_reuse,89,89,0.0,0.06741573033707865,0.0,0.0,0.02247191011235955,0.0898876404494382
+implementation_smell,Complex Method,slow_performance,45,45,0.0,0.17777777777777778,0.0,0.0,0.022222222222222223,0.08888888888888889
+implementation_smell,Complex Method,testability,97,97,0.0,-1.8144329896907216,0.0,0.0,0.010309278350515464,0.020618556701030927
+implementation_smell,Empty catch clause,dependency,59,59,0.0,0.1016949152542373,0.0,0.0,0.01694915254237288,0.03389830508474576
+implementation_smell,Empty catch clause,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Empty catch clause,hard_to_debug,37,37,0.0,-0.10810810810810811,0.0,0.0,0.08108108108108109,0.0
+implementation_smell,Empty catch clause,legacy_code,47,47,0.0,-0.0425531914893617,0.0,0.0,0.0425531914893617,0.0
+implementation_smell,Empty catch clause,logical_mismatch,443,443,0.0,0.022573363431151242,0.0,0.0,0.009029345372460496,0.02708803611738149
+implementation_smell,Empty catch clause,maintainability,1018,1018,0.0,-2.4489194499017684,0.0,0.0,0.009823182711198428,0.0343811394891945
+implementation_smell,Empty catch clause,readability,1096,1096,0.0,0.03923357664233577,0.0,0.0,0.008211678832116789,0.03102189781021898
+implementation_smell,Empty catch clause,repurpose_reuse,89,89,0.0,0.056179775280898875,0.0,0.0,0.011235955056179775,0.056179775280898875
+implementation_smell,Empty catch clause,slow_performance,45,45,0.0,0.08888888888888889,0.0,0.0,0.0,0.044444444444444446
+implementation_smell,Empty catch clause,testability,97,97,0.0,-0.14432989690721648,0.0,0.0,0.010309278350515464,0.030927835051546393
+implementation_smell,Long Identifier,dependency,59,59,0.0,-0.1016949152542373,0.0,0.0,0.01694915254237288,0.01694915254237288
+implementation_smell,Long Identifier,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,logical_mismatch,443,443,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,maintainability,1018,1018,0.0,-4.894891944990177,0.0,0.0,0.005893909626719057,0.007858546168958742
+implementation_smell,Long Identifier,readability,1096,1096,0.0,0.032846715328467155,0.0,0.0,0.0018248175182481751,0.008211678832116789
+implementation_smell,Long Identifier,repurpose_reuse,89,89,0.0,0.011235955056179775,0.0,0.0,0.0,0.011235955056179775
+implementation_smell,Long Identifier,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,testability,97,97,0.0,-0.23711340206185566,0.0,0.0,0.010309278350515464,0.0
+implementation_smell,Long Method,dependency,59,59,0.0,0.05084745762711865,0.0,0.0,0.0,0.01694915254237288
+implementation_smell,Long Method,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,hard_to_debug,37,37,0.0,0.02702702702702703,0.0,0.0,0.0,0.02702702702702703
+implementation_smell,Long Method,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,logical_mismatch,443,443,0.0,0.006772009029345372,0.0,0.0,0.002257336343115124,0.009029345372460496
+implementation_smell,Long Method,maintainability,1018,1018,0.0,-0.9459724950884086,0.0,0.0,0.005893909626719057,0.01669941060903733
+implementation_smell,Long Method,readability,1096,1096,0.0,0.020985401459854013,0.0,0.0,0.0036496350364963502,0.020985401459854013
+implementation_smell,Long Method,repurpose_reuse,89,89,0.0,0.011235955056179775,0.0,0.0,0.0,0.011235955056179775
+implementation_smell,Long Method,slow_performance,45,45,0.0,0.022222222222222223,0.0,0.0,0.0,0.022222222222222223
+implementation_smell,Long Method,testability,97,97,0.0,-0.1134020618556701,0.0,0.0,0.010309278350515464,0.010309278350515464
+implementation_smell,Long Parameter List,dependency,59,59,0.0,0.0,0.0,0.0,0.03389830508474576,0.01694915254237288
+implementation_smell,Long Parameter List,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,hard_to_debug,37,37,0.0,0.10810810810810811,0.0,0.0,0.0,0.05405405405405406
+implementation_smell,Long Parameter List,legacy_code,47,47,0.0,0.02127659574468085,0.0,0.0,0.0,0.02127659574468085
+implementation_smell,Long Parameter List,logical_mismatch,443,443,0.0,0.024830699774266364,0.0,0.0,0.0,0.020316027088036117
+implementation_smell,Long Parameter List,maintainability,1018,1018,0.0,-1.2072691552062869,0.0,0.0,0.010805500982318271,0.07956777996070727
+implementation_smell,Long Parameter List,readability,1096,1096,0.0,0.028284671532846715,0.0,0.0,0.006386861313868613,0.02737226277372263
+implementation_smell,Long Parameter List,repurpose_reuse,89,89,0.0,0.14606741573033707,0.0,0.0,0.0,0.10112359550561797
+implementation_smell,Long Parameter List,slow_performance,45,45,0.0,0.1111111111111111,0.0,0.0,0.0,0.06666666666666667
+implementation_smell,Long Parameter List,testability,97,97,0.0,-0.4329896907216495,0.0,0.0,0.010309278350515464,0.030927835051546393
+implementation_smell,Long Statement,dependency,59,59,0.0,-4.288135593220339,0.0,0.0,0.15254237288135594,0.1864406779661017
+implementation_smell,Long Statement,duplication,21,21,0.0,0.14285714285714285,0.0,0.0,0.09523809523809523,0.19047619047619047
+implementation_smell,Long Statement,hard_to_debug,37,37,0.0,1.054054054054054,0.0,1.0,0.05405405405405406,0.3783783783783784
+implementation_smell,Long Statement,legacy_code,47,47,0.0,-0.06382978723404255,0.0,0.0,0.10638297872340426,0.2127659574468085
+implementation_smell,Long Statement,logical_mismatch,443,443,0.0,0.18510158013544017,0.0,0.0,0.05417607223476298,0.14672686230248308
+implementation_smell,Long Statement,maintainability,1018,1018,0.0,-39.76031434184676,0.0,0.0,0.08055009823182711,0.2337917485265226
+implementation_smell,Long Statement,readability,1096,1096,0.0,0.3585766423357664,0.0,0.0,0.08667883211678833,0.23266423357664234
+implementation_smell,Long Statement,repurpose_reuse,89,89,0.0,0.7865168539325843,0.0,0.0,0.056179775280898875,0.19101123595505617
+implementation_smell,Long Statement,slow_performance,45,45,0.0,0.4222222222222222,0.0,0.0,0.1111111111111111,0.17777777777777778
+implementation_smell,Long Statement,testability,97,97,0.0,-2.3608247422680413,0.0,0.0,0.07216494845360824,0.23711340206185566
+implementation_smell,Magic Number,dependency,59,59,0.0,-1.3220338983050848,0.0,0.0,0.06779661016949153,0.1694915254237288
+implementation_smell,Magic Number,duplication,21,21,0.0,-2.380952380952381,0.0,0.0,0.14285714285714285,0.09523809523809523
+implementation_smell,Magic Number,hard_to_debug,37,37,0.0,0.9459459459459459,0.0,0.0,0.0,0.08108108108108109
+implementation_smell,Magic Number,legacy_code,47,47,0.0,0.06382978723404255,0.0,1.5,0.0425531914893617,0.2765957446808511
+implementation_smell,Magic Number,logical_mismatch,443,443,0.0,0.6884875846501128,0.0,0.0,0.045146726862302484,0.1873589164785553
+implementation_smell,Magic Number,maintainability,1018,1018,0.0,-259.3899803536346,0.0,1.0,0.06777996070726916,0.28487229862475444
+implementation_smell,Magic Number,readability,1096,1096,0.0,1.4233576642335766,0.0,1.0,0.06478102189781022,0.2728102189781022
+implementation_smell,Magic Number,repurpose_reuse,89,89,0.0,2.1235955056179776,0.0,1.0,0.033707865168539325,0.2808988764044944
+implementation_smell,Magic Number,slow_performance,45,45,0.0,2.4444444444444446,0.0,2.0,0.08888888888888889,0.4222222222222222
+implementation_smell,Magic Number,testability,97,97,0.0,-23.371134020618555,0.0,3.0,0.08247422680412371,0.3711340206185567
+implementation_smell,Missing default,dependency,59,59,0.0,0.0847457627118644,0.0,0.0,0.0,0.03389830508474576
+implementation_smell,Missing default,duplication,21,21,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,hard_to_debug,37,37,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,legacy_code,47,47,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,logical_mismatch,443,443,0.0,0.004514672686230248,0.0,0.0,0.0,0.004514672686230248
+implementation_smell,Missing default,maintainability,1018,1018,0.0,-0.35363457760314343,0.0,0.0,0.005893909626719057,0.014734774066797643
+implementation_smell,Missing default,readability,1096,1096,0.0,0.009124087591240875,0.0,0.0,0.002737226277372263,0.010948905109489052
+implementation_smell,Missing default,repurpose_reuse,89,89,0.0,0.011235955056179775,0.0,0.0,0.0,0.011235955056179775
+implementation_smell,Missing default,slow_performance,45,45,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,testability,97,97,0.0,-0.32989690721649484,0.0,0.0,0.010309278350515464,0.0
+method_metric,CC,dependency,160,79,0.0,-0.0375,0.0,0.0,0.05625,0.0625
+method_metric,CC,duplication,240,41,0.0,-0.825,-0.25,0.0,0.25,0.075
+method_metric,CC,hard_to_debug,95,38,0.0,0.042105263157894736,0.0,0.0,0.12631578947368421,0.11578947368421053
+method_metric,CC,legacy_code,224,64,0.0,0.0625,0.0,0.0,0.04017857142857143,0.09821428571428571
+method_metric,CC,logical_mismatch,556,337,0.0,-0.00539568345323741,0.0,0.0,0.09532374100719425,0.14388489208633093
+method_metric,CC,maintainability,8639,2076,0.0,-0.5935872207431415,0.0,0.0,0.17756684801481654,0.09711772195856001
+method_metric,CC,readability,3627,754,0.0,-0.005789909015715467,0.0,0.0,0.04659498207885305,0.05762338020402537
+method_metric,CC,repurpose_reuse,420,218,0.0,0.29523809523809524,0.0,0.0,0.047619047619047616,0.20952380952380953
+method_metric,CC,slow_performance,228,53,0.0,-1.0701754385964912,0.0,0.0,0.06578947368421052,0.09210526315789473
+method_metric,CC,testability,833,145,0.0,0.027611044417767107,0.0,0.0,0.012004801920768308,0.024009603841536616
+method_metric,LOC,dependency,160,79,0.0,-0.1125,0.0,1.0,0.15,0.2875
+method_metric,LOC,duplication,240,41,0.0,-6.245833333333334,-5.0,0.0,0.36666666666666664,0.13333333333333333
+method_metric,LOC,hard_to_debug,95,38,0.0,0.6,-1.5,1.0,0.2736842105263158,0.2736842105263158
+method_metric,LOC,legacy_code,224,64,0.0,0.48660714285714285,0.0,3.0,0.13839285714285715,0.3169642857142857
+method_metric,LOC,logical_mismatch,556,337,0.0,0.10071942446043165,0.0,1.0,0.1474820143884892,0.35251798561151076
+method_metric,LOC,maintainability,8639,2076,0.0,-3.8588957055214723,-2.0,0.0,0.3018867924528302,0.23023498090056718
+method_metric,LOC,readability,3627,754,0.0,-0.4138406396470913,0.0,0.0,0.08602150537634409,0.11717673007995588
+method_metric,LOC,repurpose_reuse,420,218,1.0,1.5928571428571427,0.0,2.0,0.07857142857142857,0.5928571428571429
+method_metric,LOC,slow_performance,228,53,0.0,-5.25,0.0,0.0,0.09649122807017543,0.17982456140350878
+method_metric,LOC,testability,833,145,0.0,-0.22328931572629052,0.0,0.0,0.1368547418967587,0.11284513805522209
+method_metric,PC,dependency,160,79,0.0,0.0875,0.0,0.0,0.125,0.19375
+method_metric,PC,duplication,240,41,0.0,0.20416666666666666,0.0,0.0,0.07083333333333333,0.21666666666666667
+method_metric,PC,hard_to_debug,95,38,0.0,0.08421052631578947,0.0,0.0,0.06315789473684211,0.14736842105263157
+method_metric,PC,legacy_code,224,64,0.0,0.013392857142857142,0.0,0.0,0.05803571428571429,0.05357142857142857
+method_metric,PC,logical_mismatch,556,337,0.0,0.19784172661870503,0.0,0.0,0.05575539568345324,0.20503597122302158
+method_metric,PC,maintainability,8639,2076,0.0,0.10441023266581781,0.0,0.0,0.10255816645445075,0.1864799166570205
+method_metric,PC,readability,3627,754,0.0,0.065343258891646,0.0,0.0,0.0242624758753791,0.07775020678246485
+method_metric,PC,repurpose_reuse,420,218,1.0,0.8380952380952381,0.0,1.0,0.009523809523809525,0.6309523809523809
+method_metric,PC,slow_performance,228,53,0.0,0.03070175438596491,0.0,0.0,0.06140350877192982,0.13157894736842105
+method_metric,PC,testability,833,145,0.0,0.07082833133253301,0.0,0.0,0.030012004801920768,0.09123649459783914
+type_metric,DIT,dependency,243,68,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,duplication,32,16,0.0,0.1875,0.0,0.0,0.0,0.1875
+type_metric,DIT,hard_to_debug,86,34,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,legacy_code,222,41,0.0,-0.03153153153153153,0.0,0.0,0.03153153153153153,0.0
+type_metric,DIT,logical_mismatch,81,68,0.0,0.024691358024691357,0.0,0.0,0.0,0.024691358024691357
+type_metric,DIT,maintainability,3318,904,0.0,0.020192887281494876,0.0,0.0,0.006329113924050633,0.026823387582881254
+type_metric,DIT,readability,856,237,0.0,-34.55373831775701,0.0,0.0,0.005841121495327103,0.0
+type_metric,DIT,repurpose_reuse,80,36,0.0,0.1375,0.0,0.0,0.0,0.1375
+type_metric,DIT,slow_performance,14,13,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,testability,347,124,0.0,0.002881844380403458,0.0,0.0,0.0,0.002881844380403458
+type_metric,FANIN,dependency,243,68,0.0,0.15637860082304528,0.0,0.0,0.024691358024691357,0.1646090534979424
+type_metric,FANIN,duplication,32,16,0.0,-0.03125,0.0,0.0,0.125,0.09375
+type_metric,FANIN,hard_to_debug,86,34,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,legacy_code,222,41,0.0,-0.0045045045045045045,0.0,0.0,0.036036036036036036,0.02702702702702703
+type_metric,FANIN,logical_mismatch,81,68,0.0,0.012345679012345678,0.0,0.0,0.024691358024691357,0.037037037037037035
+type_metric,FANIN,maintainability,3318,904,0.0,0.009644364074743821,0.0,0.0,0.04159132007233273,0.06931886678722121
+type_metric,FANIN,readability,856,237,0.0,0.011682242990654205,0.0,0.0,0.018691588785046728,0.03154205607476635
+type_metric,FANIN,repurpose_reuse,80,36,0.0,0.0625,0.0,0.0,0.1125,0.1375
+type_metric,FANIN,slow_performance,14,13,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,testability,347,124,0.0,0.040345821325648415,0.0,0.0,0.002881844380403458,0.04610951008645533
+type_metric,FANOUT,dependency,243,68,0.0,0.16049382716049382,0.0,0.0,0.01646090534979424,0.1646090534979424
+type_metric,FANOUT,duplication,32,16,0.0,0.15625,0.0,0.0,0.0625,0.1875
+type_metric,FANOUT,hard_to_debug,86,34,0.0,0.0,0.0,0.0,0.023255813953488372,0.023255813953488372
+type_metric,FANOUT,legacy_code,222,41,0.0,0.013513513513513514,0.0,0.0,0.036036036036036036,0.04504504504504504
+type_metric,FANOUT,logical_mismatch,81,68,0.0,0.06172839506172839,0.0,0.0,0.012345679012345678,0.06172839506172839
+type_metric,FANOUT,maintainability,3318,904,0.0,0.03074141048824593,0.0,0.0,0.051537070524412296,0.09734779987944545
+type_metric,FANOUT,readability,856,237,0.0,0.036214953271028034,0.0,0.0,0.018691588785046728,0.0397196261682243
+type_metric,FANOUT,repurpose_reuse,80,36,0.0,0.075,0.0,0.0,0.0875,0.125
+type_metric,FANOUT,slow_performance,14,13,0.0,0.21428571428571427,0.0,0.0,0.0,0.21428571428571427
+type_metric,FANOUT,testability,347,124,0.0,-0.04899135446685879,0.0,0.0,0.06628242074927954,0.069164265129683
+type_metric,LCOM,dependency,243,68,0.0,0.18012531982394,0.0,0.2,0.1111111111111111,0.2716049382716049
+type_metric,LCOM,duplication,32,16,0.0,-0.16980883699633698,-0.10576923076923078,0.0,0.28125,0.0625
+type_metric,LCOM,hard_to_debug,86,34,0.0,0.018217054263565888,0.0,0.0,0.023255813953488372,0.023255813953488372
+type_metric,LCOM,legacy_code,222,41,0.0,-0.009497484497484495,0.0,0.0,0.03153153153153153,0.036036036036036036
+type_metric,LCOM,logical_mismatch,81,68,0.0,0.008307161595795056,0.0,0.0,0.06172839506172839,0.037037037037037035
+type_metric,LCOM,maintainability,3318,904,0.0,0.00544173320150681,0.0,0.0,0.05575647980711272,0.0650994575045208
+type_metric,LCOM,readability,856,237,0.0,-0.030833171565803216,0.0,0.0,0.07126168224299065,0.04088785046728972
+type_metric,LCOM,repurpose_reuse,80,36,0.0,0.0016156740837696333,0.0,0.0,0.0625,0.0625
+type_metric,LCOM,slow_performance,14,13,0.0,0.013102968460111315,0.0,0.0,0.07142857142857142,0.07142857142857142
+type_metric,LCOM,testability,347,124,0.0,0.037907898379275246,0.0,0.0,0.020172910662824207,0.06340057636887608
+type_metric,LOC,dependency,243,68,3.0,7.979423868312757,0.0,16.0,0.02880658436213992,0.588477366255144
+type_metric,LOC,duplication,32,16,0.0,-15.0625,-13.0,0.0,0.3125,0.125
+type_metric,LOC,hard_to_debug,86,34,3.0,5.872093023255814,1.0,5.0,0.0,0.8255813953488372
+type_metric,LOC,legacy_code,222,41,0.0,0.1036036036036036,0.0,0.0,0.08558558558558559,0.12612612612612611
+type_metric,LOC,logical_mismatch,81,68,0.0,4.62962962962963,0.0,1.0,0.06172839506172839,0.25925925925925924
+type_metric,LOC,maintainability,3318,904,0.0,-1.095539481615431,0.0,0.0,0.13321277878239904,0.14496684749849306
+type_metric,LOC,readability,856,237,0.0,-1.3995327102803738,0.0,0.0,0.14485981308411214,0.1413551401869159
+type_metric,LOC,repurpose_reuse,80,36,0.0,0.8,0.0,1.5,0.2375,0.275
+type_metric,LOC,slow_performance,14,13,0.0,11.714285714285714,0.0,16.0,0.0,0.42857142857142855
+type_metric,LOC,testability,347,124,0.0,0.3861671469740634,0.0,0.0,0.17579250720461095,0.1037463976945245
+type_metric,NOF,dependency,243,68,0.0,0.1111111111111111,0.0,0.0,0.00411522633744856,0.10699588477366255
+type_metric,NOF,duplication,32,16,0.0,-0.375,0.0,0.0,0.15625,0.0625
+type_metric,NOF,hard_to_debug,86,34,0.0,0.046511627906976744,0.0,0.0,0.0,0.023255813953488372
+type_metric,NOF,legacy_code,222,41,0.0,-0.02702702702702703,0.0,0.0,0.04054054054054054,0.06306306306306306
+type_metric,NOF,logical_mismatch,81,68,0.0,0.2222222222222222,0.0,0.0,0.0,0.13580246913580246
+type_metric,NOF,maintainability,3318,904,0.0,0.005123568414707656,0.0,0.0,0.06419529837251356,0.07233273056057866
+type_metric,NOF,readability,856,237,0.0,0.03387850467289719,0.0,0.0,0.029205607476635514,0.038551401869158876
+type_metric,NOF,repurpose_reuse,80,36,0.0,0.175,0.0,0.0,0.0625,0.1125
+type_metric,NOF,slow_performance,14,13,0.0,0.0,0.0,0.0,0.07142857142857142,0.07142857142857142
+type_metric,NOF,testability,347,124,0.0,-0.069164265129683,0.0,0.0,0.0893371757925072,0.06628242074927954
+type_metric,NOM,dependency,243,68,0.0,2.0329218106995883,0.0,4.5,0.03292181069958848,0.48559670781893005
+type_metric,NOM,duplication,32,16,0.0,-0.28125,-1.0,0.0,0.3125,0.0625
+type_metric,NOM,hard_to_debug,86,34,0.0,0.16279069767441862,0.0,0.0,0.0,0.08139534883720931
+type_metric,NOM,legacy_code,222,41,0.0,-0.04504504504504504,0.0,0.0,0.05405405405405406,0.03153153153153153
+type_metric,NOM,logical_mismatch,81,68,0.0,0.4074074074074074,0.0,0.0,0.037037037037037035,0.16049382716049382
+type_metric,NOM,maintainability,3318,904,0.0,-0.0189873417721519,0.0,0.0,0.07203134418324292,0.09734779987944545
+type_metric,NOM,readability,856,237,0.0,-0.1939252336448598,0.0,0.0,0.07009345794392523,0.08411214953271028
+type_metric,NOM,repurpose_reuse,80,36,0.0,0.0375,0.0,0.0,0.15,0.125
+type_metric,NOM,slow_performance,14,13,0.0,0.6428571428571429,0.0,1.0,0.0,0.35714285714285715
+type_metric,NOM,testability,347,124,0.0,0.2680115273775216,0.0,0.0,0.04899135446685879,0.06340057636887608
+type_metric,WMC,dependency,243,68,0.0,2.54320987654321,0.0,5.5,0.02880658436213992,0.49794238683127573
+type_metric,WMC,duplication,32,16,0.0,-1.84375,-1.0,0.0,0.3125,0.125
+type_metric,WMC,hard_to_debug,86,34,0.0,0.27906976744186046,0.0,0.0,0.0,0.09302325581395349
+type_metric,WMC,legacy_code,222,41,0.0,-0.05405405405405406,0.0,0.0,0.06306306306306306,0.04504504504504504
+type_metric,WMC,logical_mismatch,81,68,0.0,0.6666666666666666,0.0,0.0,0.037037037037037035,0.1728395061728395
+type_metric,WMC,maintainability,3318,904,0.0,-0.19590114526823388,0.0,0.0,0.09764918625678119,0.10397830018083183
+type_metric,WMC,readability,856,237,0.0,-0.12032710280373832,0.0,0.0,0.06658878504672897,0.09462616822429906
+type_metric,WMC,repurpose_reuse,80,36,0.0,0.1375,0.0,0.0,0.175,0.2125
+type_metric,WMC,slow_performance,14,13,0.0,1.9285714285714286,0.0,2.75,0.0,0.42857142857142855
+type_metric,WMC,testability,347,124,0.0,0.2564841498559078,0.0,0.0,0.04899135446685879,0.06340057636887608

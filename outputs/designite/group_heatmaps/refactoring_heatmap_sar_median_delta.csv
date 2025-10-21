@@ -1,0 +1,10 @@
+metric,Merge Class,Merge Conditional,Add Class Modifier,Try With Resources,Change Return Type,Remove Variable Modifier
+Class-Level Metric – Depth of Inheritance Tree*,0.0,,0.0,,0.0,
+Class-Level Metric – Fan-Out*,0.0,,1.0,,0.0,
+Class-Level Metric – Fan-In*,1.0,,1.0,,3.0,
+Class-Level Metric – Number of Methods*,15.0,,7.0,,5.0,
+Class-Level Metric – Weighted Methods per Class*,8.0,,7.0,,5.0,
+Class-Level Metric – Lines of Code*,119.0,,35.0,,20.0,
+Method-Level Metric – Parameter Count*,,0.0,,0.0,0.0,1.5
+Method-Level Metric – Cyclomatic Complexity*,,-9.5,,-1.0,0.0,-1.0
+Method-Level Metric – Lines of Code*,,-44.0,,-12.0,0.0,-6.5

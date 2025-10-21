@@ -1,0 +1,94 @@
+refactoring_type,count
+Rename Variable,1306
+Rename Attribute,1139
+Move Class,1035
+Rename Method,704
+Rename Parameter,695
+Change Variable Type,689
+Change Parameter Type,521
+Change Return Type,464
+Extract And Move Method,454
+Change Attribute Type,424
+Extract Method,418
+Move Attribute,365
+Move Method,350
+Add Attribute Modifier,345
+Change Method Access Modifier,270
+Change Attribute Access Modifier,261
+Extract Variable,254
+Extract Class,250
+Add Method Annotation,217
+Add Parameter,217
+Add Class Annotation,194
+Remove Method Annotation,167
+Add Attribute Annotation,151
+Inline Variable,141
+Remove Parameter,136
+Remove Attribute Annotation,135
+Push Down Method,130
+Remove Class Annotation,120
+Parameterize Variable,89
+Change Type Declaration Kind,85
+Merge Conditional,82
+Modify Method Annotation,81
+Move And Rename Method,79
+Change Class Access Modifier,74
+Pull Up Attribute,71
+Rename Class,65
+Push Down Attribute,60
+Pull Up Method,60
+Encapsulate Attribute,56
+Modify Class Annotation,53
+Remove Attribute Modifier,53
+Replace Variable With Attribute,50
+Remove Method Modifier,46
+Add Method Modifier,46
+Move And Rename Class,41
+Replace Attribute With Variable,35
+Add Parameter Annotation,32
+Invert Condition,29
+Move Source Folder,28
+Replace Generic With Diamond,26
+Extract Attribute,25
+Localize Parameter,25
+Remove Thrown Exception Type,22
+Try With Resources,22
+Remove Variable Modifier,22
+Remove Class Modifier,21
+Inline Method,21
+Split Conditional,21
+Extract Subclass,20
+Add Thrown Exception Type,20
+Extract Superclass,18
+Modify Attribute Annotation,17
+Replace Loop With Pipeline,16
+Extract Interface,16
+Remove Parameter Annotation,13
+Replace Anonymous With Lambda,13
+Replace Conditional With Ternary,10
+Move Code,9
+Split Parameter,8
+Merge Attribute,8
+Move And Inline Method,8
+Merge Parameter,8
+Split Attribute,7
+Replace Pipeline With Loop,7
+Move Package,5
+Move And Rename Attribute,5
+Merge Variable,5
+Add Class Modifier,4
+Parameterize Attribute,3
+Split Class,3
+Modify Parameter Annotation,3
+Split Variable,2
+Add Variable Modifier,2
+Remove Parameter Modifier,2
+Change Thrown Exception Type,2
+Assert Throws,2
+Merge Class,1
+Merge Catch,1
+Inline Attribute,1
+Rename Package,1
+Split Method,1
+Reorder Parameter,1
+Add Parameter Modifier,1

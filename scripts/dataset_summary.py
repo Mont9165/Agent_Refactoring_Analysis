@@ -214,6 +214,12 @@ def main() -> None:
         default=5,
         help="List up to N missing commit SHAs per coverage category (default: 5).",
     )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("outputs/dataset_summary"),
+        help="Directory to store summary CSV/PDF outputs (default: outputs/dataset_summary).",
+    )
     args = parser.parse_args()
 
     commit_df = get_java_commit_dataframe()
@@ -234,6 +240,101 @@ def main() -> None:
     )
     agent_stats = _agent_stats(commit_df)
 
+    summary_rows = []
+    def _format_value(value: object) -> str:
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            if isinstance(value, float) and value.is_integer():
+                return f"{int(value)}"
+            return f"{value:.2f}"
+        if isinstance(value, (set, list, tuple)):
+            return ", ".join(str(item) for item in value)
+        return str(value)
+
+    for key, value in commit_stats.items():
+        summary_rows.append({
+            "category": "commit",
+            "metric": key,
+            "value": _format_value(value),
+        })
+    for key, value in pr_stats.items():
+        summary_rows.append({
+            "category": "pull_request",
+            "metric": key,
+            "value": _format_value(value),
+        })
+    summary_rows.append({
+        "category": "repositories",
+        "metric": "unique_repositories",
+        "value": _format_value(int(repo_count)),
+    })
+    for scope, analyses in coverage.items():
+        for name, stats in analyses.items():
+            prefix = f"{scope}:{name}"
+            summary_rows.append({
+                "category": f"coverage_processed",
+                "metric": prefix,
+                "value": _format_value(stats["processed_commits"]),
+            })
+            summary_rows.append({
+                "category": f"coverage_missing",
+                "metric": prefix,
+                "value": _format_value(stats["missing_commits"]),
+            })
+            summary_rows.append({
+                "category": f"coverage_pct",
+                "metric": prefix,
+                "value": _format_value(stats["coverage_pct"]),
+            })
+            if args.show_missing > 0 and stats["missing_commits"] > 0:
+                summary_rows.append({
+                    "category": f"coverage_missing_samples",
+                    "metric": prefix,
+                    "value": _format_value(stats["missing_samples"]),
+                })
+    for agent, stats in agent_stats.items():
+        summary_rows.append({
+            "category": "agent_commit_share",
+            "metric": agent,
+            "value": f"{stats['commit_count']} ({stats['commit_pct']:.2f}%)",
+        })
+        summary_rows.append({
+            "category": "agent_pr_share",
+            "metric": agent,
+            "value": f"{stats['pr_count']} ({stats['pr_pct']:.2f}%)",
+        })
+
+    summary_df = pd.DataFrame(summary_rows, columns=["category", "metric", "value"])
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    csv_path = args.output_dir / "dataset_summary_metrics.csv"
+    summary_df.to_csv(csv_path, index=False)
+
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except Exception as exc:  # noqa: BLE001
+        print(f"Warning: could not import matplotlib for PDF export: {exc}")
+        pdf_path = None
+    else:
+        pdf_path = args.output_dir / "dataset_summary_metrics.pdf"
+        fig_height = max(3, 0.35 * len(summary_df) + 1)
+        fig, ax = plt.subplots(figsize=(11, fig_height))
+        ax.axis("off")
+        table = ax.table(
+            cellText=summary_df.values,
+            colLabels=summary_df.columns,
+            loc="upper left",
+            cellLoc="left",
+        )
+        table.auto_set_font_size(False)
+        table.set_fontsize(8)
+        table.scale(1, 1.3)
+        ax.set_title("Dataset Summary Metrics", fontweight="bold", fontsize=12, loc="left")
+        fig.tight_layout()
+        fig.savefig(pdf_path, bbox_inches="tight")
+        plt.close(fig)
+
     if args.as_json:
         import json
 
@@ -243,6 +344,8 @@ def main() -> None:
             "coverage": coverage,
             "repositories": int(repo_count),
             "agents": agent_stats,
+            "summary_csv": str(csv_path),
+            "summary_pdf": str(pdf_path) if pdf_path else None,
         }
         print(json.dumps(payload, indent=2))
         return
@@ -276,6 +379,10 @@ def main() -> None:
             f"  {agent}: commits={stats['commit_count']} ({stats['commit_pct']:.2f}%),"
             f" PRs={stats['pr_count']} ({stats['pr_pct']:.2f}%)"
         )
+    print()
+    print(f"Wrote dataset summary CSV to {csv_path}")
+    if pdf_path:
+        print(f"Wrote dataset summary PDF to {pdf_path}")
 
 
 if __name__ == "__main__":

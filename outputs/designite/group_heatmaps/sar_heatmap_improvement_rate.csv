@@ -1,0 +1,14 @@
+metric,Self-Affirmed,Non-SAR
+Implementation Smell – Long Parameter List*,1.20481927710843,0.64885496183206
+Implementation Smell – Complex Method*,3.01204819277108,1.29770992366412
+Implementation Smell – Magic Number*,8.13253012048192,5.99236641221374
+Implementation Smell – Complex Conditional*,2.1084337349397497,1.8320610687022902
+Implementation Smell – Long Statement*,13.855421686746979,7.25190839694656
+Design Smell – Broken Hierarchy*,0.30120481927709997,0.38167938931297
+Class-Level Metric – Fan-Out*,8.2693947144075,3.3365806137359897
+Class-Level Metric – Number of Methods*,10.74168797953964,5.72333170969313
+Class-Level Metric – Weighted Methods per Class*,14.4927536231884,6.7218704335119295
+Class-Level Metric – Lines of Code*,21.31287297527706,10.642961519727221
+Method-Level Metric – Parameter Count*,10.97560975609756,6.46230323115161
+Method-Level Metric – Cyclomatic Complexity*,25.677506775067748,9.38690969345484
+Method-Level Metric – Lines of Code*,39.600271002710016,17.986743993371988

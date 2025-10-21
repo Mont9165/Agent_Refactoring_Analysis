@@ -9,6 +9,27 @@ import pandas as pd
 from .rq_common import OUTPUT_DIR, write_csv, write_json
 
 
+def _benjamini_hochberg(p_values: list[float]) -> list[float]:
+    """Adjust p-values using the Benjamini–Hochberg FDR procedure."""
+    if not p_values:
+        return []
+    indexed = [(idx, p) for idx, p in enumerate(p_values) if pd.notna(p)]
+    if not indexed:
+        return [float("nan")] * len(p_values)
+    sorted_pairs = sorted(indexed, key=lambda x: x[1])
+    m = len(sorted_pairs)
+    adjusted = [float("nan")] * len(p_values)
+    prev = 1.0
+    for rank, (idx, p_val) in enumerate(reversed(sorted_pairs), start=1):
+        if pd.isna(p_val):
+            adj = float("nan")
+        else:
+            adj = min(prev, p_val * m / (m - rank + 1))
+            prev = adj
+        adjusted[idx] = adj
+    return adjusted
+
+
 def _run_mannwhitneyu_tests(
     per_commit_df: pd.DataFrame, top_types: list[str]
 ) -> Dict[str, Dict[str, float]]:
@@ -18,7 +39,7 @@ def _run_mannwhitneyu_tests(
     except ImportError:
         return {"error": "scipy is not installed, skipping Mann-Whitney U tests."}
 
-    results = {}
+    raw_records = []
     sar_df = per_commit_df[per_commit_df["is_self_affirmed"]]
     if sar_df.empty:
         return {"note": "No SAR commits to compare."}
@@ -45,10 +66,59 @@ def _run_mannwhitneyu_tests(
             stat, p_value = mannwhitneyu(
                 sar_series, non_sar_series, alternative="greater"
             )
-            results[ref_type] = {"statistic": stat, "p_value": p_value}
+            n_sar = len(sar_series)
+            n_non_sar = len(non_sar_series)
+            denominator = n_sar * n_non_sar
+            rank_biserial = float(2 * stat / denominator - 1) if denominator else float("nan")
+            median_sar = float(sar_series.median())
+            median_non_sar = float(non_sar_series.median())
+            raw_records.append(
+                (
+                    ref_type,
+                    float(stat),
+                    float(p_value),
+                    n_sar,
+                    n_non_sar,
+                    median_sar,
+                    median_non_sar,
+                    median_sar - median_non_sar,
+                    rank_biserial,
+                )
+            )
         except ValueError:
             # Can occur if all values are identical
             continue
+
+    if not raw_records:
+        return {}
+
+    p_values = [record[2] for record in raw_records]
+    adj_values = _benjamini_hochberg(p_values)
+
+    results: Dict[str, Dict[str, float]] = {}
+    for record, adj in zip(raw_records, adj_values):
+        (
+            ref_type,
+            stat,
+            p_value,
+            n_sar,
+            n_non_sar,
+            median_sar,
+            median_non_sar,
+            median_diff,
+            rank_biserial,
+        ) = record
+        results[ref_type] = {
+            "statistic": stat,
+            "p_value": p_value,
+            "p_value_fdr": float(adj) if pd.notna(adj) else float("nan"),
+            "n_sar": n_sar,
+            "n_non_sar": n_non_sar,
+            "median_sar": median_sar,
+            "median_non_sar": median_non_sar,
+            "median_diff": median_diff,
+            "rank_biserial_effect": rank_biserial,
+        }
 
     return results
 

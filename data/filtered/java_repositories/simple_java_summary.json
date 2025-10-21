@@ -1,0 +1,48 @@
+{
+  "total_prs_in_dataset": 932791,
+  "java_prs_found": 17461,
+  "java_pr_percentage": 1.8719091414904303,
+  "java_files_stats": {
+    "total_java_files": 101060,
+    "avg_java_files_per_pr": 5.787755569555008,
+    "median_java_files_per_pr": 2.0,
+    "max_java_files_per_pr": 1251
+  },
+  "java_percentage_stats": {
+    "avg_java_percentage": 79.37030525170378,
+    "median_java_percentage": 100.0,
+    "prs_with_high_java_percentage": 13109,
+    "prs_with_100_percent_java": 9589
+  },
+  "pr_status_stats": {
+    "closed_prs": 15871,
+    "open_prs": 1590,
+    "merged_prs": 14578,
+    "closed_not_merged": 1293
+  },
+  "agent_stats": {
+    "total_agentic_prs": 17461,
+    "total_human_prs": 0,
+    "agent_breakdown": {
+      "OpenAI_Codex": 16321,
+      "Cursor": 618,
+      "Devin": 477,
+      "Claude_Code": 45
+    }
+  },
+  "repository_stats": {
+    "avg_stars": 92.38348319111162,
+    "median_stars": 0.0,
+    "max_stars": 63892,
+    "avg_forks": 17.34717370139167,
+    "median_forks": 0.0,
+    "max_forks": 6665,
+    "unique_repositories": 3258,
+    "top_repositories_by_stars": {
+      "Stirling-Tools/Stirling-PDF": {
+        "stars": 63892,
+        "forks": 5443
+      }
+    }
+  }
+}

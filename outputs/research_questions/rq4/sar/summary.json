@@ -1,0 +1,18 @@
+{
+  "total_refactoring_commits": 887,
+  "purpose_distribution": {
+    "maintainability": 586,
+    "readability": 235,
+    "testability": 18,
+    "legacy_code": 10,
+    "repurpose_reuse": 9,
+    "duplication": 9,
+    "dependency": 6,
+    "slow_performance": 5,
+    "logical_mismatch": 5,
+    "hard_to_debug": 4
+  },
+  "examples_file": "outputs/research_questions/rq4/sar/examples.csv",
+  "note": "Based on GPT motivations with confidence >= 6.",
+  "output_dir": "outputs/research_questions/rq4/sar"
+}

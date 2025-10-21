@@ -1,0 +1,10 @@
+metric,dependency,hard_to_debug,duplication,slow_performance,legacy_code,readability,testability,logical_mismatch,maintainability,repurpose_reuse
+Design Smell – Unutilized Abstraction*,-89.0,,6.0,1.0,0.0,0.0,0.5,0.0,0.0,0.0
+Class-Level Metric – Depth of Inheritance Tree*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.0,0.0
+Class-Level Metric – Fan-Out*,0.0,-0.5,0.0,0.0,0.0,0.0,0.0,,0.0,0.0
+Class-Level Metric – Number of Methods*,0.0,0.0,-0.5,1.0,-0.5,0.0,0.0,,0.0,0.0
+Class-Level Metric – Weighted Methods per Class*,0.0,0.5,-0.5,1.0,0.0,0.0,0.0,,0.0,0.0
+Class-Level Metric – Lines of Code*,0.0,27.5,-6.5,8.0,-0.5,-1.0,0.0,,0.0,0.0
+Method-Level Metric – Parameter Count*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Method-Level Metric – Cyclomatic Complexity*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Method-Level Metric – Lines of Code*,-2.0,0.0,-3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

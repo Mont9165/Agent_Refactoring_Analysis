@@ -1,0 +1,39 @@
+{
+  "total_file_changes": 148201,
+  "unique_commits": 22999,
+  "java_file_changes": 88913,
+  "unique_prs": 17429,
+  "unique_authors": 2535,
+  "agentic_file_changes": 148201,
+  "unique_agentic_commits": 22999,
+  "agentic_percentage": 100.0,
+  "top_agents_in_commits": {
+    "OpenAI_Codex": 109198,
+    "Cursor": 23348,
+    "Devin": 12412,
+    "Claude_Code": 3243
+  },
+  "file_stats": {
+    "avg_additions": 61.56547852023808,
+    "avg_deletions": 21.606177371681536,
+    "avg_changes": 83.17165589191961,
+    "max_changes": 525538.0
+  },
+  "java_file_stats": {
+    "java_file_changes": 88913,
+    "unique_java_commits": 20589,
+    "avg_java_additions": 30.629514244261244,
+    "avg_java_deletions": 12.142836255665651,
+    "avg_java_changes": 42.772350499926894,
+    "largest_java_change": 43379.0
+  },
+  "potential_refactoring_commits": {
+    "refactor_in_message": 6515,
+    "cleanup_in_message": 933,
+    "rename_in_message": 2344,
+    "move_in_message": 926,
+    "extract_in_message": 221,
+    "total_potential_refactoring": 9573,
+    "percentage_potential_refactoring": 10.766704531395858
+  }
+}

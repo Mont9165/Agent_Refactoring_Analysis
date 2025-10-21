@@ -1,0 +1,346 @@
+metric_category,metric_name,motivation_label,observation_count,unique_commit_count,median_delta,mean_delta,q1_delta,q3_delta,improvement_rate,worsening_rate
+design_smell,Broken Hierarchy,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Hierarchy,duplication,1,1,5.0,5.0,5.0,5.0,0.0,1.0
+design_smell,Broken Hierarchy,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Hierarchy,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Hierarchy,maintainability,143,143,0.0,0.15384615384615385,0.0,0.0,0.0,0.03496503496503497
+design_smell,Broken Hierarchy,readability,175,175,0.0,0.011428571428571429,0.0,0.0,0.005714285714285714,0.005714285714285714
+design_smell,Broken Hierarchy,repurpose_reuse,3,3,0.0,1.0,0.0,1.5,0.0,0.3333333333333333
+design_smell,Broken Hierarchy,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Hierarchy,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,dependency,1,1,-51.0,-51.0,-51.0,-51.0,1.0,0.0
+design_smell,Broken Modularization,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,maintainability,143,143,0.0,0.027972027972027972,0.0,0.0,0.0,0.02097902097902098
+design_smell,Broken Modularization,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Broken Modularization,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,maintainability,143,143,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic Hierarchy,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,maintainability,143,143,0.0,0.07692307692307693,0.0,0.0,0.013986013986013986,0.04195804195804196
+design_smell,Cyclic-Dependent Modularization,readability,175,175,0.0,0.005714285714285714,0.0,0.0,0.0,0.005714285714285714
+design_smell,Cyclic-Dependent Modularization,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,maintainability,143,143,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deep Hierarchy,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,dependency,1,1,-18.0,-18.0,-18.0,-18.0,1.0,0.0
+design_smell,Deficient Encapsulation,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,maintainability,143,143,0.0,-0.006993006993006993,0.0,0.0,0.006993006993006993,0.0
+design_smell,Deficient Encapsulation,readability,175,175,0.0,0.005714285714285714,0.0,0.0,0.0,0.005714285714285714
+design_smell,Deficient Encapsulation,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,slow_performance,2,2,1.5,1.5,0.75,2.25,0.0,0.5
+design_smell,Deficient Encapsulation,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,maintainability,143,143,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Hub-like Modularization,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,maintainability,143,143,0.0,0.006993006993006993,0.0,0.0,0.0,0.006993006993006993
+design_smell,Imperative Abstraction,readability,175,175,0.0,0.005714285714285714,0.0,0.0,0.0,0.005714285714285714
+design_smell,Imperative Abstraction,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,maintainability,143,143,0.0,-0.013986013986013986,0.0,0.0,0.02097902097902098,0.02097902097902098
+design_smell,Insufficient Modularization,readability,175,175,0.0,0.005714285714285714,0.0,0.0,0.0,0.005714285714285714
+design_smell,Insufficient Modularization,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Insufficient Modularization,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,maintainability,143,143,0.0,-0.013986013986013986,0.0,0.0,0.006993006993006993,0.0
+design_smell,Missing Hierarchy,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Missing Hierarchy,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,maintainability,143,143,0.0,-0.006993006993006993,0.0,0.0,0.006993006993006993,0.0
+design_smell,Multifaceted Abstraction,readability,175,175,0.0,-0.005714285714285714,0.0,0.0,0.005714285714285714,0.0
+design_smell,Multifaceted Abstraction,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multifaceted Abstraction,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,maintainability,143,143,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Multipath Hierarchy,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,dependency,1,1,-1.0,-1.0,-1.0,-1.0,1.0,0.0
+design_smell,Rebellious Hierarchy,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,maintainability,143,143,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,maintainability,143,143,0.0,-0.013986013986013986,0.0,0.0,0.006993006993006993,0.0
+design_smell,Unexploited Encapsulation,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unexploited Encapsulation,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,dependency,1,1,-48.0,-48.0,-48.0,-48.0,1.0,0.0
+design_smell,Unnecessary Abstraction,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,maintainability,143,143,0.0,0.0979020979020979,0.0,0.0,0.02097902097902098,0.006993006993006993
+design_smell,Unnecessary Abstraction,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unnecessary Abstraction,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unutilized Abstraction,dependency,1,1,-89.0,-89.0,-89.0,-89.0,1.0,0.0
+design_smell,Unutilized Abstraction,duplication,1,1,6.0,6.0,6.0,6.0,0.0,1.0
+design_smell,Unutilized Abstraction,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Unutilized Abstraction,logical_mismatch,4,4,0.0,0.5,0.0,0.5,0.0,0.25
+design_smell,Unutilized Abstraction,maintainability,143,143,0.0,0.42657342657342656,0.0,0.0,0.0979020979020979,0.21678321678321677
+design_smell,Unutilized Abstraction,readability,175,175,0.0,0.05142857142857143,0.0,0.0,0.02857142857142857,0.02857142857142857
+design_smell,Unutilized Abstraction,repurpose_reuse,3,3,0.0,-0.3333333333333333,-0.5,0.0,0.3333333333333333,0.0
+design_smell,Unutilized Abstraction,slow_performance,2,2,1.0,1.0,1.0,1.0,0.0,1.0
+design_smell,Unutilized Abstraction,testability,2,2,0.5,0.5,0.25,0.75,0.0,0.5
+design_smell,Wide Hierarchy,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,maintainability,143,143,0.0,0.006993006993006993,0.0,0.0,0.0,0.006993006993006993
+design_smell,Wide Hierarchy,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Wide Hierarchy,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,maintainability,143,143,0.0,0.006993006993006993,0.0,0.0,0.0,0.006993006993006993
+implementation_smell,Abstract Function Call From Constructor,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Abstract Function Call From Constructor,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Conditional,dependency,1,1,-3.0,-3.0,-3.0,-3.0,1.0,0.0
+implementation_smell,Complex Conditional,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Conditional,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Conditional,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Conditional,maintainability,143,143,0.0,-0.02097902097902098,0.0,0.0,0.03496503496503497,0.02097902097902098
+implementation_smell,Complex Conditional,readability,175,175,0.0,0.04,0.0,0.0,0.0,0.017142857142857144
+implementation_smell,Complex Conditional,repurpose_reuse,3,3,0.0,-1.0,-1.5,0.0,0.3333333333333333,0.0
+implementation_smell,Complex Conditional,slow_performance,2,2,1.0,1.0,0.5,1.5,0.0,0.5
+implementation_smell,Complex Conditional,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Method,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Method,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Method,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Method,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Method,maintainability,143,143,0.0,-0.03496503496503497,0.0,0.0,0.04895104895104895,0.02097902097902098
+implementation_smell,Complex Method,readability,175,175,0.0,0.005714285714285714,0.0,0.0,0.011428571428571429,0.017142857142857144
+implementation_smell,Complex Method,repurpose_reuse,3,3,0.0,-0.6666666666666666,-1.0,0.0,0.3333333333333333,0.0
+implementation_smell,Complex Method,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Complex Method,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Empty catch clause,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Empty catch clause,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Empty catch clause,legacy_code,1,1,-1.0,-1.0,-1.0,-1.0,1.0,0.0
+implementation_smell,Empty catch clause,logical_mismatch,4,4,0.0,0.25,0.0,0.25,0.0,0.25
+implementation_smell,Empty catch clause,maintainability,143,143,0.0,-0.006993006993006993,0.0,0.0,0.02097902097902098,0.013986013986013986
+implementation_smell,Empty catch clause,readability,175,175,0.0,0.022857142857142857,0.0,0.0,0.0,0.005714285714285714
+implementation_smell,Empty catch clause,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Empty catch clause,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Empty catch clause,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,dependency,1,1,-7.0,-7.0,-7.0,-7.0,1.0,0.0
+implementation_smell,Long Identifier,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,maintainability,143,143,0.0,0.04195804195804196,0.0,0.0,0.02097902097902098,0.006993006993006993
+implementation_smell,Long Identifier,readability,175,175,0.0,-0.02857142857142857,0.0,0.0,0.011428571428571429,0.005714285714285714
+implementation_smell,Long Identifier,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Identifier,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,maintainability,143,143,0.0,0.0,0.0,0.0,0.006993006993006993,0.006993006993006993
+implementation_smell,Long Method,readability,175,175,0.0,0.005714285714285714,0.0,0.0,0.0,0.005714285714285714
+implementation_smell,Long Method,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Method,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,dependency,1,1,-2.0,-2.0,-2.0,-2.0,1.0,0.0
+implementation_smell,Long Parameter List,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,maintainability,143,143,0.0,0.0,0.0,0.0,0.02097902097902098,0.02097902097902098
+implementation_smell,Long Parameter List,readability,175,175,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Parameter List,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Statement,dependency,1,1,-261.0,-261.0,-261.0,-261.0,1.0,0.0
+implementation_smell,Long Statement,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Statement,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Statement,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Long Statement,maintainability,143,143,0.0,0.0979020979020979,0.0,0.0,0.13286713286713286,0.1888111888111888
+implementation_smell,Long Statement,readability,175,175,0.0,-0.06857142857142857,0.0,0.0,0.13142857142857142,0.13142857142857142
+implementation_smell,Long Statement,repurpose_reuse,3,3,-2.0,-0.6666666666666666,-2.5,0.5,0.6666666666666666,0.3333333333333333
+implementation_smell,Long Statement,slow_performance,2,2,1.5,1.5,-0.25,3.25,0.5,0.5
+implementation_smell,Long Statement,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Magic Number,dependency,1,1,-129.0,-129.0,-129.0,-129.0,1.0,0.0
+implementation_smell,Magic Number,duplication,1,1,-9.0,-9.0,-9.0,-9.0,1.0,0.0
+implementation_smell,Magic Number,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Magic Number,logical_mismatch,4,4,0.0,0.0,-0.25,0.25,0.25,0.25
+implementation_smell,Magic Number,maintainability,143,143,0.0,1.6783216783216783,0.0,0.0,0.1048951048951049,0.18181818181818182
+implementation_smell,Magic Number,readability,175,175,0.0,0.21142857142857144,0.0,0.0,0.04,0.03428571428571429
+implementation_smell,Magic Number,repurpose_reuse,3,3,1.0,-2.3333333333333335,-6.5,3.5,0.3333333333333333,0.6666666666666666
+implementation_smell,Magic Number,slow_performance,2,2,24.0,24.0,12.0,36.0,0.0,0.5
+implementation_smell,Magic Number,testability,2,2,0.0,0.0,-1.5,1.5,0.5,0.5
+implementation_smell,Missing default,dependency,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,duplication,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,legacy_code,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,logical_mismatch,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,maintainability,143,143,0.0,-0.006993006993006993,0.0,0.0,0.006993006993006993,0.0
+implementation_smell,Missing default,readability,175,175,0.0,-0.005714285714285714,0.0,0.0,0.005714285714285714,0.0
+implementation_smell,Missing default,repurpose_reuse,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,slow_performance,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+implementation_smell,Missing default,testability,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,dependency,4,3,0.0,0.0,-0.25,0.25,0.25,0.25
+method_metric,CC,duplication,97,8,0.0,-1.8041237113402062,-2.0,0.0,0.41237113402061853,0.05154639175257732
+method_metric,CC,hard_to_debug,6,4,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,legacy_code,10,6,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,logical_mismatch,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,maintainability,2499,350,0.0,-1.2545018007202882,-1.0,0.0,0.27130852340936373,0.051220488195278115
+method_metric,CC,readability,172,43,0.0,-0.9244186046511628,0.0,0.0,0.18023255813953487,0.06395348837209303
+method_metric,CC,repurpose_reuse,13,6,0.0,0.0,0.0,0.0,0.15384615384615385,0.15384615384615385
+method_metric,CC,slow_performance,5,3,0.0,-0.2,0.0,0.0,0.2,0.0
+method_metric,CC,testability,145,13,0.0,0.013793103448275862,0.0,0.0,0.034482758620689655,0.034482758620689655
+method_metric,LOC,dependency,4,3,-2.0,-3.75,-6.5,0.75,0.5,0.25
+method_metric,LOC,duplication,97,8,-3.0,-12.742268041237113,-11.0,0.0,0.5876288659793815,0.05154639175257732
+method_metric,LOC,hard_to_debug,6,4,0.0,-0.6666666666666666,0.0,0.75,0.16666666666666666,0.3333333333333333
+method_metric,LOC,legacy_code,10,6,0.0,-1.4,-0.75,0.0,0.3,0.1
+method_metric,LOC,logical_mismatch,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,LOC,maintainability,2499,350,0.0,-8.2296918767507,-6.0,0.0,0.4129651860744298,0.11924769907963186
+method_metric,LOC,readability,172,43,0.0,-10.505813953488373,-5.0,0.0,0.3313953488372093,0.12790697674418605
+method_metric,LOC,repurpose_reuse,13,6,0.0,0.3076923076923077,0.0,0.0,0.15384615384615385,0.23076923076923078
+method_metric,LOC,slow_performance,5,3,0.0,2.4,0.0,1.0,0.2,0.4
+method_metric,LOC,testability,145,13,0.0,-0.5862068965517241,0.0,0.0,0.09655172413793103,0.08275862068965517
+method_metric,PC,dependency,4,3,0.0,0.25,0.0,0.25,0.0,0.25
+method_metric,PC,duplication,97,8,0.0,0.4020618556701031,0.0,1.0,0.08247422680412371,0.32989690721649484
+method_metric,PC,hard_to_debug,6,4,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,legacy_code,10,6,0.0,-0.2,0.0,0.0,0.2,0.0
+method_metric,PC,logical_mismatch,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,maintainability,2499,350,0.0,0.03281312525010004,0.0,0.0,0.1208483393357343,0.14365746298519408
+method_metric,PC,readability,172,43,0.0,0.11046511627906977,0.0,0.0,0.05232558139534884,0.11627906976744186
+method_metric,PC,repurpose_reuse,13,6,0.0,0.3076923076923077,0.0,1.0,0.07692307692307693,0.3076923076923077
+method_metric,PC,slow_performance,5,3,0.0,-0.2,0.0,0.0,0.2,0.2
+method_metric,PC,testability,145,13,0.0,0.013793103448275862,0.0,0.0,0.006896551724137931,0.020689655172413793
+type_metric,DIT,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,duplication,16,4,0.0,0.375,0.0,1.0,0.0,0.375
+type_metric,DIT,hard_to_debug,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,legacy_code,10,4,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,maintainability,1040,184,0.0,0.009615384615384616,0.0,0.0,0.016346153846153847,0.025961538461538463
+type_metric,DIT,readability,43,19,0.0,-0.023255813953488372,0.0,0.0,0.023255813953488372,0.0
+type_metric,DIT,repurpose_reuse,3,2,0.0,0.3333333333333333,0.0,0.5,0.0,0.3333333333333333
+type_metric,DIT,slow_performance,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,testability,55,10,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,duplication,16,4,0.0,-0.125,0.0,0.0,0.1875,0.0625
+type_metric,FANIN,hard_to_debug,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,legacy_code,10,4,0.0,-0.1,0.0,0.0,0.2,0.1
+type_metric,FANIN,maintainability,1040,184,0.0,0.08269230769230769,0.0,0.0,0.04230769230769231,0.07115384615384615
+type_metric,FANIN,readability,43,19,0.0,0.32558139534883723,0.0,0.0,0.0,0.09302325581395349
+type_metric,FANIN,repurpose_reuse,3,2,-2.0,-2.0,-2.0,-2.0,1.0,0.0
+type_metric,FANIN,slow_performance,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,testability,55,10,0.0,0.03636363636363636,0.0,0.0,0.0,0.03636363636363636
+type_metric,FANOUT,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANOUT,duplication,16,4,0.0,1.125,0.0,3.0,0.0,0.375
+type_metric,FANOUT,hard_to_debug,2,1,-0.5,-0.5,-0.75,-0.25,0.5,0.0
+type_metric,FANOUT,legacy_code,10,4,0.0,-0.6,-1.0,0.0,0.4,0.0
+type_metric,FANOUT,maintainability,1040,184,0.0,-0.07307692307692308,0.0,0.0,0.07788461538461539,0.08461538461538462
+type_metric,FANOUT,readability,43,19,0.0,0.11627906976744186,0.0,0.0,0.023255813953488372,0.13953488372093023
+type_metric,FANOUT,repurpose_reuse,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANOUT,slow_performance,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANOUT,testability,55,10,0.0,-0.10909090909090909,0.0,0.0,0.18181818181818182,0.07272727272727272
+type_metric,LCOM,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LCOM,duplication,16,4,0.0,-0.317742673992674,-0.4642857142857143,0.0,0.4375,0.0625
+type_metric,LCOM,hard_to_debug,2,1,-0.2,-0.2,-0.30000000000000004,-0.1,0.5,0.0
+type_metric,LCOM,legacy_code,10,4,0.0,-0.42285714285714276,-1.0499999999999998,0.0,0.3,0.0
+type_metric,LCOM,maintainability,1040,184,0.0,-0.03784910029565186,0.0,0.0,0.07211538461538461,0.051923076923076926
+type_metric,LCOM,readability,43,19,0.0,-0.18949819450395441,-0.1114551083591331,0.0,0.3488372093023256,0.046511627906976744
+type_metric,LCOM,repurpose_reuse,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LCOM,slow_performance,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LCOM,testability,55,10,0.0,0.018063754427390794,0.0,0.0,0.03636363636363636,0.05454545454545454
+type_metric,LOC,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LOC,duplication,16,4,-6.5,-9.0625,-19.0,0.0,0.5,0.125
+type_metric,LOC,hard_to_debug,2,1,27.5,27.5,13.75,41.25,0.0,0.5
+type_metric,LOC,legacy_code,10,4,-0.5,-12.6,-32.0,0.0,0.5,0.2
+type_metric,LOC,maintainability,1040,184,0.0,-5.331730769230769,0.0,0.0,0.18365384615384617,0.06826923076923076
+type_metric,LOC,readability,43,19,-1.0,-10.69767441860465,-19.5,0.0,0.5348837209302325,0.13953488372093023
+type_metric,LOC,repurpose_reuse,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LOC,slow_performance,1,1,8.0,8.0,8.0,8.0,0.0,1.0
+type_metric,LOC,testability,55,10,0.0,-0.36363636363636365,-1.0,0.0,0.41818181818181815,0.16363636363636364
+type_metric,NOF,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOF,duplication,16,4,0.0,-0.25,-0.25,0.0,0.25,0.0
+type_metric,NOF,hard_to_debug,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOF,legacy_code,10,4,0.0,-0.7,-0.75,0.0,0.3,0.0
+type_metric,NOF,maintainability,1040,184,0.0,-0.24711538461538463,0.0,0.0,0.09903846153846153,0.0375
+type_metric,NOF,readability,43,19,0.0,-0.4186046511627907,0.0,0.0,0.13953488372093023,0.023255813953488372
+type_metric,NOF,repurpose_reuse,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOF,slow_performance,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOF,testability,55,10,0.0,-0.45454545454545453,-1.0,0.0,0.4,0.07272727272727272
+type_metric,NOM,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOM,duplication,16,4,-0.5,-0.8125,-1.0,0.0,0.5,0.0
+type_metric,NOM,hard_to_debug,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOM,legacy_code,10,4,-0.5,-1.6,-3.25,0.0,0.5,0.0
+type_metric,NOM,maintainability,1040,184,0.0,-0.4442307692307692,0.0,0.0,0.09038461538461538,0.041346153846153845
+type_metric,NOM,readability,43,19,0.0,-3.744186046511628,-6.5,0.0,0.4186046511627907,0.09302325581395349
+type_metric,NOM,repurpose_reuse,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOM,slow_performance,1,1,1.0,1.0,1.0,1.0,0.0,1.0
+type_metric,NOM,testability,55,10,0.0,0.2545454545454545,0.0,0.0,0.01818181818181818,0.09090909090909091
+type_metric,WMC,dependency,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,WMC,duplication,16,4,-0.5,-1.6875,-2.75,0.0,0.5,0.125
+type_metric,WMC,hard_to_debug,2,1,0.5,0.5,0.25,0.75,0.0,0.5
+type_metric,WMC,legacy_code,10,4,0.0,-1.3,-3.25,0.0,0.4,0.1
+type_metric,WMC,maintainability,1040,184,0.0,-0.9721153846153846,0.0,0.0,0.1326923076923077,0.04230769230769231
+type_metric,WMC,readability,43,19,0.0,-3.744186046511628,-6.5,0.0,0.4186046511627907,0.09302325581395349
+type_metric,WMC,repurpose_reuse,3,2,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,WMC,slow_performance,1,1,1.0,1.0,1.0,1.0,0.0,1.0
+type_metric,WMC,testability,55,10,0.0,0.09090909090909091,0.0,0.0,0.03636363636363636,0.07272727272727272

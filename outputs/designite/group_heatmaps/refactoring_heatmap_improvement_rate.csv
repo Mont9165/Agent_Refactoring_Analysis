@@ -1,0 +1,10 @@
+metric,Extract Method,Remove Class Annotation,Rename Method,Add Class Annotation,Move Class
+Class-Level Metric – Depth of Inheritance Tree*,,0.33840947546531,,0.0,1.16340560549973
+Class-Level Metric – Fan-Out*,,11.6751269035533,,1.40495867768595,1.48069804336329
+Class-Level Metric – Fan-In*,,1.6920473773265599,,1.07438016528925,3.75462718138551
+Class-Level Metric – Number of Methods*,,6.768189509306261,,9.17355371900826,0.31729243786356
+Class-Level Metric – Weighted Methods per Class*,,10.65989847715736,,9.00826446280991,0.58170280274986
+Class-Level Metric – Lines of Code*,,17.766497461928928,,13.140495867768589,0.8989952406134301
+Method-Level Metric – Parameter Count*,14.664410603496892,,3.46347607052896,,
+Method-Level Metric – Cyclomatic Complexity*,38.860688099266774,,3.4005037783375296,,
+Method-Level Metric – Lines of Code*,59.84207557811618,,10.76826196473551,,

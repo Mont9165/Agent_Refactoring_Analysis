@@ -1,0 +1,39 @@
+metric_category,metric_name,groups_tested,kruskal_stat,kruskal_p_value,eta_squared,epsilon_squared,kruskal_p_value_fdr
+design_smell,Broken Hierarchy,1,,,,,
+design_smell,Broken Modularization,1,,,,,
+design_smell,Cyclic Hierarchy,1,,,,,
+design_smell,Cyclic-Dependent Modularization,1,,,,,
+design_smell,Deep Hierarchy,1,,,,,
+design_smell,Deficient Encapsulation,1,,,,,
+design_smell,Hub-like Modularization,1,,,,,
+design_smell,Imperative Abstraction,1,,,,,
+design_smell,Insufficient Modularization,1,,,,,
+design_smell,Missing Hierarchy,1,,,,,
+design_smell,Multifaceted Abstraction,1,,,,,
+design_smell,Multipath Hierarchy,1,,,,,
+design_smell,Rebellious Hierarchy,1,,,,,
+design_smell,Unexploited Encapsulation,1,,,,,
+design_smell,Unnecessary Abstraction,1,,,,,
+design_smell,Unutilized Abstraction,1,,,,,
+design_smell,Wide Hierarchy,1,,,,,
+implementation_smell,Abstract Function Call From Constructor,1,,,,,
+implementation_smell,Complex Conditional,1,,,,,
+implementation_smell,Complex Method,1,,,,,
+implementation_smell,Empty catch clause,1,,,,,
+implementation_smell,Long Identifier,1,,,,,
+implementation_smell,Long Method,1,,,,,
+implementation_smell,Long Parameter List,1,,,,,
+implementation_smell,Long Statement,1,,,,,
+implementation_smell,Magic Number,1,,,,,
+implementation_smell,Missing default,1,,,,,
+method_metric,CC,46,2414.6433477543424,0.0,0.15857882270992052,0.16110510726943839,0.0
+method_metric,LOC,46,3747.0397113343097,0.0,0.24774407490693365,0.25000264954192086,0.0
+method_metric,PC,46,6554.34033938813,0.0,0.43561134573968613,0.4373058673197311,0.0
+type_metric,DIT,17,1717.5080769661724,0.0,0.32385003368217974,0.3259028609043971,0.0
+type_metric,FANIN,17,173.18375301433957,1.9483937420958011e-28,0.029916968598085188,0.03286219222283483,2.1432331163053815e-28
+type_metric,FANOUT,17,283.36378735958755,7.029840213435483e-51,0.05088766413391464,0.053769219612824964,8.592026927532258e-51
+type_metric,LCOM,17,46.82362856693417,7.254725007402055e-05,0.005866697481335015,0.008884939007008381,7.254725007402055e-05
+type_metric,LOC,17,531.0654856208791,9.089677420049108e-103,0.09803301972228382,0.10077143939675126,1.6664408603423364e-102
+type_metric,NOF,17,411.4907491493894,1.418260652677333e-77,0.07527421948027967,0.07808173608147806,1.950108397431333e-77
+type_metric,NOM,17,519.6551912867627,2.3468696920752225e-100,0.09586128498035072,0.09860629815688098,3.6879380875467777e-100
+type_metric,WMC,17,584.1787102016955,5.174662397795732e-114,0.10814212223100408,0.11084985013314905,1.138425727515061e-113

@@ -194,7 +194,10 @@ def _kruskal_tests(df: pd.DataFrame, group_col: str, min_group_size: int = 10) -
                 }
             )
             continue
-        stat, p_value = stats.kruskal(*grouped_values)
+        try:
+            stat, p_value = stats.kruskal(*grouped_values)
+        except ValueError:
+            stat, p_value = np.nan, np.nan
         total_n = sum(counts)
         eta_squared = np.nan
         epsilon_squared = np.nan
@@ -314,6 +317,24 @@ def main() -> None:
 
     motivation_tests = _kruskal_tests(joined, "motivation_label", min_group_size=args.min_group_size)
     motivation_tests.to_csv(args.output_dir / "metric_by_motivation_tests.csv", index=False)
+
+    sar_only = joined[joined["is_self_affirmed"] == True].copy()
+    if not sar_only.empty:
+        sar_motivation = _group_summary(sar_only, "motivation_label")
+        if not sar_motivation.empty:
+            sar_motivation = sar_motivation.sort_values(["metric_category", "metric_name", "motivation_label"])
+        sar_motivation.to_csv(args.output_dir / "metric_by_motivation_sar_summary.csv", index=False)
+
+        sar_motivation_tests = _kruskal_tests(sar_only, "motivation_label", min_group_size=args.min_group_size)
+        sar_motivation_tests.to_csv(args.output_dir / "metric_by_motivation_sar_tests.csv", index=False)
+
+        sar_refactoring = _group_summary(sar_only, "refactoring_type")
+        if not sar_refactoring.empty:
+            sar_refactoring = sar_refactoring.sort_values(["metric_category", "metric_name", "refactoring_type"])
+        sar_refactoring.to_csv(args.output_dir / "metric_by_refactoring_sar_summary.csv", index=False)
+
+        sar_refactoring_tests = _kruskal_tests(sar_only, "refactoring_type", min_group_size=args.min_group_size)
+        sar_refactoring_tests.to_csv(args.output_dir / "metric_by_refactoring_sar_tests.csv", index=False)
 
     sar_summary = _group_summary(joined, "is_self_affirmed")
     if not sar_summary.empty:

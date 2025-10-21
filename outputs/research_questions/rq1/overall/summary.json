@@ -1,0 +1,7 @@
+{
+  "total_agentic_file_changes": 134473,
+  "total_agentic_commits": 20589,
+  "agentic_refactoring_commits": 7865,
+  "agentic_refactoring_instances": 65859,
+  "refminer_available": true
+}

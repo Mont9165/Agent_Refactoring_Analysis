@@ -1,0 +1,307 @@
+metric_category,metric_name,refactoring_type,observation_count,unique_commit_count,median_delta,mean_delta,q1_delta,q3_delta,improvement_rate,worsening_rate
+design_smell,Broken Hierarchy,__commit__,332,332,0.0,0.0963855421686747,0.0,0.0,0.0030120481927710845,0.024096385542168676
+design_smell,Broken Modularization,__commit__,332,332,0.0,-0.14156626506024098,0.0,0.0,0.0030120481927710845,0.009036144578313253
+design_smell,Cyclic Hierarchy,__commit__,332,332,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Cyclic-Dependent Modularization,__commit__,332,332,0.0,0.03614457831325301,0.0,0.0,0.006024096385542169,0.02108433734939759
+design_smell,Deep Hierarchy,__commit__,332,332,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Deficient Encapsulation,__commit__,332,332,0.0,-0.045180722891566265,0.0,0.0,0.006024096385542169,0.006024096385542169
+design_smell,Hub-like Modularization,__commit__,332,332,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Imperative Abstraction,__commit__,332,332,0.0,0.006024096385542169,0.0,0.0,0.0,0.006024096385542169
+design_smell,Insufficient Modularization,__commit__,332,332,0.0,-0.0030120481927710845,0.0,0.0,0.009036144578313253,0.012048192771084338
+design_smell,Missing Hierarchy,__commit__,332,332,0.0,-0.006024096385542169,0.0,0.0,0.0030120481927710845,0.0
+design_smell,Multifaceted Abstraction,__commit__,332,332,0.0,-0.006024096385542169,0.0,0.0,0.006024096385542169,0.0
+design_smell,Multipath Hierarchy,__commit__,332,332,0.0,0.0,0.0,0.0,0.0,0.0
+design_smell,Rebellious Hierarchy,__commit__,332,332,0.0,-0.0030120481927710845,0.0,0.0,0.0030120481927710845,0.0
+design_smell,Unexploited Encapsulation,__commit__,332,332,0.0,-0.006024096385542169,0.0,0.0,0.0030120481927710845,0.0
+design_smell,Unnecessary Abstraction,__commit__,332,332,0.0,-0.10240963855421686,0.0,0.0,0.012048192771084338,0.0030120481927710845
+design_smell,Unutilized Abstraction,__commit__,332,332,0.0,-0.02710843373493976,0.0,0.0,0.06325301204819277,0.12349397590361445
+design_smell,Wide Hierarchy,__commit__,332,332,0.0,0.0030120481927710845,0.0,0.0,0.0,0.0030120481927710845
+implementation_smell,Abstract Function Call From Constructor,__commit__,332,332,0.0,0.0030120481927710845,0.0,0.0,0.0,0.0030120481927710845
+implementation_smell,Complex Conditional,__commit__,332,332,0.0,0.0,0.0,0.0,0.02108433734939759,0.02108433734939759
+implementation_smell,Complex Method,__commit__,332,332,0.0,-0.018072289156626505,0.0,0.0,0.030120481927710843,0.018072289156626505
+implementation_smell,Empty catch clause,__commit__,332,332,0.0,0.009036144578313253,0.0,0.0,0.012048192771084338,0.012048192771084338
+implementation_smell,Long Identifier,__commit__,332,332,0.0,-0.018072289156626505,0.0,0.0,0.018072289156626505,0.006024096385542169
+implementation_smell,Long Method,__commit__,332,332,0.0,0.0030120481927710845,0.0,0.0,0.0030120481927710845,0.006024096385542169
+implementation_smell,Long Parameter List,__commit__,332,332,0.0,-0.006024096385542169,0.0,0.0,0.012048192771084338,0.009036144578313253
+implementation_smell,Long Statement,__commit__,332,332,0.0,-0.7771084337349398,0.0,0.0,0.13855421686746988,0.1566265060240964
+implementation_smell,Magic Number,__commit__,332,332,0.0,0.5421686746987951,0.0,0.0,0.08132530120481928,0.11144578313253012
+implementation_smell,Missing default,__commit__,332,332,0.0,-0.006024096385542169,0.0,0.0,0.006024096385542169,0.0
+method_metric,CC,Add Method Annotation,63,17,0.0,-0.06349206349206349,0.0,0.0,0.06349206349206349,0.0
+method_metric,CC,Add Method Modifier,4,2,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Add Parameter,81,51,0.0,-0.037037037037037035,0.0,0.0,0.06172839506172839,0.024691358024691357
+method_metric,CC,Add Parameter Annotation,9,5,0.0,0.4444444444444444,0.0,0.0,0.0,0.2222222222222222
+method_metric,CC,Add Thrown Exception Type,11,8,0.0,0.09090909090909091,0.0,0.0,0.0,0.09090909090909091
+method_metric,CC,Add Variable Modifier,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Assert Throws,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Change Method Access Modifier,100,13,0.0,-0.03,0.0,0.0,0.02,0.02
+method_metric,CC,Change Return Type,243,60,0.0,-0.07407407407407407,0.0,0.0,0.0823045267489712,0.04526748971193416
+method_metric,CC,Change Thrown Exception Type,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Extract And Move Method,648,76,0.0,-2.1666666666666665,-2.0,0.0,0.4583333333333333,0.029320987654320986
+method_metric,CC,Extract Class,166,24,0.0,-0.42168674698795183,0.0,0.0,0.22289156626506024,0.13253012048192772
+method_metric,CC,Extract Method,487,102,-1.0,-3.414784394250513,-3.0,0.0,0.5297741273100616,0.055441478439425054
+method_metric,CC,Extract Subclass,39,3,0.0,0.0,0.0,0.0,0.1282051282051282,0.15384615384615385
+method_metric,CC,Inline Method,19,8,0.0,0.10526315789473684,0.0,1.0,0.21052631578947367,0.3157894736842105
+method_metric,CC,Invert Condition,10,9,0.0,-1.6,-0.75,0.75,0.3,0.3
+method_metric,CC,Merge Conditional,8,8,-9.5,-16.0,-27.0,-1.75,1.0,0.0
+method_metric,CC,Merge Parameter,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Merge Variable,4,4,1.0,1.0,-0.25,2.25,0.25,0.5
+method_metric,CC,Modify Method Annotation,42,18,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Modify Parameter Annotation,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Move And Inline Method,10,2,5.0,4.0,1.25,7.0,0.1,0.8
+method_metric,CC,Move And Rename Method,59,28,0.0,-0.01694915254237288,0.0,0.0,0.06779661016949153,0.05084745762711865
+method_metric,CC,Move Code,5,5,0.0,-0.8,-2.0,0.0,0.4,0.2
+method_metric,CC,Move Method,289,56,0.0,-0.02768166089965398,0.0,0.0,0.07612456747404844,0.03806228373702422
+method_metric,CC,Pull Up Method,25,5,0.0,0.08,0.0,0.0,0.0,0.08
+method_metric,CC,Push Down Method,130,4,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Remove Method Annotation,112,26,0.0,-0.08035714285714286,0.0,0.0,0.08035714285714286,0.017857142857142856
+method_metric,CC,Remove Method Modifier,36,9,0.0,-0.5555555555555556,0.0,0.0,0.1111111111111111,0.0
+method_metric,CC,Remove Parameter,40,27,0.0,-0.125,0.0,0.0,0.1,0.025
+method_metric,CC,Remove Parameter Annotation,6,4,0.0,-0.5,0.0,0.0,0.16666666666666666,0.0
+method_metric,CC,Remove Parameter Modifier,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Remove Thrown Exception Type,11,8,0.0,0.18181818181818182,0.0,0.0,0.0,0.09090909090909091
+method_metric,CC,Remove Variable Modifier,20,5,-1.0,-2.35,-3.0,0.0,0.55,0.2
+method_metric,CC,Rename Method,194,81,0.0,-0.09278350515463918,0.0,0.0,0.0979381443298969,0.05670103092783505
+method_metric,CC,Replace Anonymous With Lambda,8,4,0.0,-0.25,-0.25,0.0,0.25,0.0
+method_metric,CC,Replace Conditional With Ternary,7,6,-1.0,-4.571428571428571,-6.0,-1.0,0.8571428571428571,0.0
+method_metric,CC,Replace Generic With Diamond,7,5,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Replace Loop With Pipeline,14,10,-2.0,-2.4285714285714284,-3.0,-2.0,1.0,0.0
+method_metric,CC,Replace Pipeline With Loop,6,4,0.5,1.0,0.0,1.0,0.0,0.5
+method_metric,CC,Split Conditional,4,4,-1.0,-3.25,-5.5,1.25,0.5,0.5
+method_metric,CC,Split Method,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,CC,Split Parameter,3,3,0.0,-0.3333333333333333,-0.5,0.0,0.3333333333333333,0.0
+method_metric,CC,Split Variable,2,1,-0.5,-0.5,-0.75,-0.25,0.5,0.0
+method_metric,CC,Try With Resources,18,10,-1.0,-1.2222222222222223,-1.75,0.0,0.6111111111111112,0.0
+method_metric,LOC,Add Method Annotation,63,17,0.0,-0.6190476190476191,0.0,0.0,0.1746031746031746,0.047619047619047616
+method_metric,LOC,Add Method Modifier,4,2,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,LOC,Add Parameter,81,51,0.0,0.4691358024691358,0.0,1.0,0.1111111111111111,0.4691358024691358
+method_metric,LOC,Add Parameter Annotation,9,5,0.0,1.5555555555555556,0.0,1.0,0.1111111111111111,0.3333333333333333
+method_metric,LOC,Add Thrown Exception Type,11,8,-5.0,-11.909090909090908,-16.0,0.0,0.6363636363636364,0.18181818181818182
+method_metric,LOC,Add Variable Modifier,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,LOC,Assert Throws,1,1,2.0,2.0,2.0,2.0,0.0,1.0
+method_metric,LOC,Change Method Access Modifier,100,13,0.0,-0.01,0.0,0.0,0.03,0.02
+method_metric,LOC,Change Return Type,243,60,0.0,0.0411522633744856,0.0,0.0,0.1440329218106996,0.17695473251028807
+method_metric,LOC,Change Thrown Exception Type,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,LOC,Extract And Move Method,648,76,-3.0,-14.983024691358025,-15.0,0.0,0.6188271604938271,0.04938271604938271
+method_metric,LOC,Extract Class,166,24,0.0,-0.7831325301204819,-3.0,2.0,0.41566265060240964,0.3072289156626506
+method_metric,LOC,Extract Method,487,102,-8.0,-23.39425051334702,-32.0,0.0,0.7207392197125256,0.07186858316221766
+method_metric,LOC,Extract Subclass,39,3,0.0,-1.1282051282051282,-3.0,0.0,0.4358974358974359,0.23076923076923078
+method_metric,LOC,Inline Method,19,8,1.0,0.10526315789473684,-4.5,4.0,0.3684210526315789,0.631578947368421
+method_metric,LOC,Invert Condition,10,9,0.0,-7.7,-5.75,1.75,0.4,0.4
+method_metric,LOC,Merge Conditional,8,8,-44.0,-69.875,-118.25,-4.75,1.0,0.0
+method_metric,LOC,Merge Parameter,3,3,-1.0,-0.6666666666666666,-1.0,-0.5,0.6666666666666666,0.0
+method_metric,LOC,Merge Variable,4,4,-0.5,0.25,-11.0,10.75,0.5,0.5
+method_metric,LOC,Modify Method Annotation,42,18,0.0,-0.6190476190476191,0.0,0.0,0.047619047619047616,0.09523809523809523
+method_metric,LOC,Modify Parameter Annotation,2,2,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,LOC,Move And Inline Method,10,2,-1.5,3.7,-3.0,6.25,0.5,0.4
+method_metric,LOC,Move And Rename Method,59,28,0.0,-0.847457627118644,-2.0,0.0,0.3898305084745763,0.15254237288135594
+method_metric,LOC,Move Code,5,5,-9.0,-33.4,-20.0,0.0,0.6,0.2
+method_metric,LOC,Move Method,289,56,0.0,-0.21107266435986158,0.0,0.0,0.13494809688581316,0.08996539792387544
+method_metric,LOC,Pull Up Method,25,5,0.0,0.52,0.0,0.0,0.08,0.16
+method_metric,LOC,Push Down Method,130,4,0.0,0.038461538461538464,0.0,0.0,0.0,0.03076923076923077
+method_metric,LOC,Remove Method Annotation,112,26,0.0,-1.2410714285714286,0.0,0.0,0.23214285714285715,0.10714285714285714
+method_metric,LOC,Remove Method Modifier,36,9,0.0,-2.888888888888889,-0.25,0.0,0.25,0.0
+method_metric,LOC,Remove Parameter,40,27,-1.0,-1.4,-1.0,0.0,0.525,0.05
+method_metric,LOC,Remove Parameter Annotation,6,4,-1.5,-1.8333333333333333,-3.0,0.0,0.5,0.16666666666666666
+method_metric,LOC,Remove Parameter Modifier,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,LOC,Remove Thrown Exception Type,11,8,0.0,0.09090909090909091,-0.5,0.0,0.2727272727272727,0.18181818181818182
+method_metric,LOC,Remove Variable Modifier,20,5,-6.5,-19.3,-18.75,0.0,0.7,0.1
+method_metric,LOC,Rename Method,194,81,0.0,-0.9896907216494846,0.0,0.0,0.19072164948453607,0.13917525773195877
+method_metric,LOC,Replace Anonymous With Lambda,8,4,-5.5,-6.125,-7.0,-5.0,1.0,0.0
+method_metric,LOC,Replace Conditional With Ternary,7,6,-6.0,-18.142857142857142,-31.5,-5.0,1.0,0.0
+method_metric,LOC,Replace Generic With Diamond,7,5,-4.0,-2.857142857142857,-6.0,1.5,0.5714285714285714,0.42857142857142855
+method_metric,LOC,Replace Loop With Pipeline,14,10,-6.5,-7.071428571428571,-10.25,-5.25,1.0,0.0
+method_metric,LOC,Replace Pipeline With Loop,6,4,2.5,3.8333333333333335,0.0,8.0,0.16666666666666666,0.5
+method_metric,LOC,Split Conditional,4,4,-6.5,-12.75,-24.25,5.0,0.5,0.5
+method_metric,LOC,Split Method,1,1,2.0,2.0,2.0,2.0,0.0,1.0
+method_metric,LOC,Split Parameter,3,3,1.0,-1.0,-2.5,1.5,0.3333333333333333,0.6666666666666666
+method_metric,LOC,Split Variable,2,1,-6.5,-6.5,-7.25,-5.75,1.0,0.0
+method_metric,LOC,Try With Resources,18,10,-12.0,-12.222222222222221,-16.25,-6.25,0.8888888888888888,0.0
+method_metric,PC,Add Method Annotation,63,17,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Add Method Modifier,4,2,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Add Parameter,81,51,1.0,1.2098765432098766,1.0,1.0,0.0,0.9629629629629629
+method_metric,PC,Add Parameter Annotation,9,5,0.0,0.1111111111111111,0.0,0.0,0.0,0.1111111111111111
+method_metric,PC,Add Thrown Exception Type,11,8,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Add Variable Modifier,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Assert Throws,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Change Method Access Modifier,100,13,0.0,0.07,0.0,0.0,0.0,0.02
+method_metric,PC,Change Return Type,243,60,0.0,0.024691358024691357,0.0,0.0,0.0,0.024691358024691357
+method_metric,PC,Change Thrown Exception Type,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Extract And Move Method,648,76,0.0,-0.08179012345679013,0.0,0.0,0.16820987654320987,0.13734567901234568
+method_metric,PC,Extract Class,166,24,0.0,-0.2891566265060241,-1.0,0.0,0.4457831325301205,0.18674698795180722
+method_metric,PC,Extract Method,487,102,0.0,0.25667351129363447,0.0,1.0,0.13552361396303902,0.28542094455852157
+method_metric,PC,Extract Subclass,39,3,0.0,-0.23076923076923078,-1.0,0.0,0.38461538461538464,0.15384615384615385
+method_metric,PC,Inline Method,19,8,0.0,0.0,0.0,0.0,0.05263157894736842,0.15789473684210525
+method_metric,PC,Invert Condition,10,9,0.0,0.0,0.0,0.0,0.1,0.1
+method_metric,PC,Merge Conditional,8,8,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Merge Parameter,3,3,-1.0,-1.3333333333333333,-1.5,-1.0,1.0,0.0
+method_metric,PC,Merge Variable,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Modify Method Annotation,42,18,0.0,0.07142857142857142,0.0,0.0,0.0,0.07142857142857142
+method_metric,PC,Modify Parameter Annotation,2,2,0.5,0.5,0.25,0.75,0.0,0.5
+method_metric,PC,Move And Inline Method,10,2,2.0,1.4,0.25,2.0,0.0,0.7
+method_metric,PC,Move And Rename Method,59,28,0.0,0.05084745762711865,0.0,0.0,0.11864406779661017,0.22033898305084745
+method_metric,PC,Move Code,5,5,0.0,0.4,0.0,1.0,0.2,0.4
+method_metric,PC,Move Method,289,56,0.0,-0.01384083044982699,0.0,0.0,0.006920415224913495,0.01384083044982699
+method_metric,PC,Pull Up Method,25,5,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Push Down Method,130,4,0.0,0.007692307692307693,0.0,0.0,0.0,0.007692307692307693
+method_metric,PC,Remove Method Annotation,112,26,0.0,0.07142857142857142,0.0,0.0,0.008928571428571428,0.07142857142857142
+method_metric,PC,Remove Method Modifier,36,9,0.0,-0.2222222222222222,0.0,0.0,0.08333333333333333,0.0
+method_metric,PC,Remove Parameter,40,27,-1.0,-0.55,-1.0,0.0,0.7,0.125
+method_metric,PC,Remove Parameter Annotation,6,4,0.0,-0.6666666666666666,0.0,0.0,0.16666666666666666,0.0
+method_metric,PC,Remove Parameter Modifier,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Remove Thrown Exception Type,11,8,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Remove Variable Modifier,20,5,1.5,1.35,0.0,2.0,0.0,0.6
+method_metric,PC,Rename Method,194,81,0.0,-0.020618556701030927,0.0,0.0,0.061855670103092786,0.02577319587628866
+method_metric,PC,Replace Anonymous With Lambda,8,4,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Replace Conditional With Ternary,7,6,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Replace Generic With Diamond,7,5,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Replace Loop With Pipeline,14,10,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Replace Pipeline With Loop,6,4,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Split Conditional,4,4,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Split Method,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Split Parameter,3,3,1.0,1.0,0.5,1.5,0.0,0.6666666666666666
+method_metric,PC,Split Variable,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+method_metric,PC,Try With Resources,18,10,0.0,0.05555555555555555,0.0,0.0,0.0,0.05555555555555555
+type_metric,DIT,Add Class Annotation,73,39,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Add Class Modifier,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Change Class Access Modifier,38,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Change Return Type,5,4,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Extract Class,109,58,0.0,-0.009174311926605505,0.0,0.0,0.009174311926605505,0.0
+type_metric,DIT,Extract Interface,10,3,0.0,0.1,0.0,0.0,0.0,0.1
+type_metric,DIT,Extract Superclass,36,10,1.0,0.8055555555555556,1.0,1.0,0.0,0.8055555555555556
+type_metric,DIT,Merge Class,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Modify Class Annotation,23,13,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Move And Rename Class,27,13,0.0,0.037037037037037035,0.0,0.0,0.037037037037037035,0.07407407407407407
+type_metric,DIT,Move Class,704,47,0.0,-0.022727272727272728,0.0,0.0,0.022727272727272728,0.0
+type_metric,DIT,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Move Source Folder,7,4,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Remove Class Annotation,72,31,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Remove Class Modifier,16,8,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Rename Class,43,29,0.0,0.023255813953488372,0.0,0.0,0.0,0.023255813953488372
+type_metric,DIT,Rename Package,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,DIT,Split Class,3,3,0.0,0.3333333333333333,0.0,0.5,0.0,0.3333333333333333
+type_metric,FANIN,Add Class Annotation,73,39,0.0,0.3013698630136986,0.0,0.0,0.0,0.1506849315068493
+type_metric,FANIN,Add Class Modifier,3,3,1.0,0.6666666666666666,0.5,1.0,0.0,0.6666666666666666
+type_metric,FANIN,Change Class Access Modifier,38,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,Change Return Type,5,4,3.0,2.0,0.0,3.0,0.0,0.6
+type_metric,FANIN,Extract Class,109,58,0.0,-0.045871559633027525,0.0,0.0,0.09174311926605505,0.03669724770642202
+type_metric,FANIN,Extract Interface,10,3,0.0,0.6,0.0,0.0,0.0,0.2
+type_metric,FANIN,Extract Superclass,36,10,0.0,0.2777777777777778,0.0,1.0,0.1388888888888889,0.2777777777777778
+type_metric,FANIN,Merge Class,1,1,1.0,1.0,1.0,1.0,0.0,1.0
+type_metric,FANIN,Modify Class Annotation,23,13,0.0,0.17391304347826086,0.0,0.0,0.0,0.08695652173913043
+type_metric,FANIN,Move And Rename Class,27,13,0.0,-0.37037037037037035,0.0,0.0,0.2222222222222222,0.037037037037037035
+type_metric,FANIN,Move Class,704,47,0.0,0.03977272727272727,0.0,0.0,0.03125,0.03977272727272727
+type_metric,FANIN,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANIN,Move Source Folder,7,4,0.0,0.7142857142857143,0.0,1.0,0.0,0.42857142857142855
+type_metric,FANIN,Remove Class Annotation,72,31,0.0,0.041666666666666664,0.0,0.0,0.041666666666666664,0.05555555555555555
+type_metric,FANIN,Remove Class Modifier,16,8,0.0,0.1875,0.0,0.0,0.125,0.1875
+type_metric,FANIN,Rename Class,43,29,0.0,0.32558139534883723,0.0,0.0,0.06976744186046512,0.16279069767441862
+type_metric,FANIN,Rename Package,1,1,1.0,1.0,1.0,1.0,0.0,1.0
+type_metric,FANIN,Split Class,3,3,0.0,-0.3333333333333333,-0.5,0.0,0.3333333333333333,0.0
+type_metric,FANOUT,Add Class Annotation,73,39,0.0,0.0547945205479452,0.0,0.0,0.0136986301369863,0.0547945205479452
+type_metric,FANOUT,Add Class Modifier,3,3,1.0,1.0,0.0,2.0,0.3333333333333333,0.6666666666666666
+type_metric,FANOUT,Change Class Access Modifier,38,1,0.0,-0.21052631578947367,0.0,0.0,0.21052631578947367,0.0
+type_metric,FANOUT,Change Return Type,5,4,0.0,-0.2,0.0,0.0,0.2,0.2
+type_metric,FANOUT,Extract Class,109,58,1.0,0.3119266055045872,0.0,1.0,0.14678899082568808,0.5963302752293578
+type_metric,FANOUT,Extract Interface,10,3,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANOUT,Extract Superclass,36,10,0.0,0.5277777777777778,0.0,1.0,0.0,0.3611111111111111
+type_metric,FANOUT,Merge Class,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANOUT,Modify Class Annotation,23,13,0.0,-0.17391304347826086,0.0,0.0,0.13043478260869565,0.0
+type_metric,FANOUT,Move And Rename Class,27,13,0.0,-0.14814814814814814,0.0,0.0,0.14814814814814814,0.07407407407407407
+type_metric,FANOUT,Move Class,704,47,0.0,-0.009943181818181818,0.0,0.0,0.028409090909090908,0.009943181818181818
+type_metric,FANOUT,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANOUT,Move Source Folder,7,4,0.0,0.0,0.0,0.0,0.14285714285714285,0.14285714285714285
+type_metric,FANOUT,Remove Class Annotation,72,31,-1.0,-1.4444444444444444,-2.25,0.0,0.5555555555555556,0.06944444444444445
+type_metric,FANOUT,Remove Class Modifier,16,8,0.0,0.0625,0.0,0.0,0.0,0.0625
+type_metric,FANOUT,Rename Class,43,29,0.0,0.023255813953488372,0.0,0.0,0.046511627906976744,0.06976744186046512
+type_metric,FANOUT,Rename Package,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,FANOUT,Split Class,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LCOM,Add Class Annotation,73,39,0.0,-0.2259085224748045,-0.1538461538461538,0.0,0.3424657534246575,0.1095890410958904
+type_metric,LCOM,Add Class Modifier,3,3,-1.0,-0.5833333333333334,-1.0,-0.375,0.6666666666666666,0.3333333333333333
+type_metric,LCOM,Change Class Access Modifier,38,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LCOM,Change Return Type,5,4,0.0,0.05639846743295018,-0.012452107279693508,0.0,0.4,0.2
+type_metric,LCOM,Extract Class,109,58,0.0,0.00908396003505757,0.0,0.0,0.10091743119266056,0.23853211009174313
+type_metric,LCOM,Extract Interface,10,3,0.0,0.00869565217391304,0.0,0.0,0.0,0.1
+type_metric,LCOM,Extract Superclass,36,10,0.0,0.07930199065067484,0.0,0.8115384615384615,0.2222222222222222,0.4166666666666667
+type_metric,LCOM,Merge Class,1,1,-0.2,-0.2,-0.2,-0.2,1.0,0.0
+type_metric,LCOM,Modify Class Annotation,23,13,0.0,-0.03260869565217391,0.0,0.0,0.043478260869565216,0.0
+type_metric,LCOM,Move And Rename Class,27,13,0.0,-0.004629629629629629,0.0,0.0,0.037037037037037035,0.0
+type_metric,LCOM,Move Class,704,47,0.0,0.001953125,0.0,0.0,0.0014204545454545455,0.0014204545454545455
+type_metric,LCOM,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LCOM,Move Source Folder,7,4,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LCOM,Remove Class Annotation,72,31,-1.0,-0.5604196729196729,-1.0,0.0,0.5833333333333334,0.041666666666666664
+type_metric,LCOM,Remove Class Modifier,16,8,0.0,0.061197916666666664,0.0,0.0,0.1875,0.125
+type_metric,LCOM,Rename Class,43,29,0.0,-0.06121010772173562,0.0,0.0,0.11627906976744186,0.046511627906976744
+type_metric,LCOM,Rename Package,1,1,-0.5,-0.5,-0.5,-0.5,1.0,0.0
+type_metric,LCOM,Split Class,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LOC,Add Class Annotation,73,39,0.0,-15.712328767123287,-18.0,0.0,0.4657534246575342,0.2054794520547945
+type_metric,LOC,Add Class Modifier,3,3,35.0,22.0,13.5,37.0,0.3333333333333333,0.6666666666666666
+type_metric,LOC,Change Class Access Modifier,38,1,0.0,-0.5526315789473685,-1.0,0.0,0.47368421052631576,0.02631578947368421
+type_metric,LOC,Change Return Type,5,4,20.0,17.0,17.0,23.0,0.2,0.8
+type_metric,LOC,Extract Class,109,58,-15.0,-31.825688073394495,-32.0,-3.0,0.8440366972477065,0.07339449541284404
+type_metric,LOC,Extract Interface,10,3,-1.0,-0.4,-1.0,-1.0,0.8,0.1
+type_metric,LOC,Extract Superclass,36,10,-4.0,-10.63888888888889,-13.0,-0.25,0.75,0.25
+type_metric,LOC,Merge Class,1,1,119.0,119.0,119.0,119.0,0.0,1.0
+type_metric,LOC,Modify Class Annotation,23,13,0.0,-0.2608695652173913,0.0,0.0,0.08695652173913043,0.043478260869565216
+type_metric,LOC,Move And Rename Class,27,13,0.0,-6.111111111111111,0.0,0.0,0.2222222222222222,0.037037037037037035
+type_metric,LOC,Move Class,704,47,0.0,0.05113636363636364,0.0,0.0,0.007102272727272727,0.008522727272727272
+type_metric,LOC,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,LOC,Move Source Folder,7,4,1.0,3.2857142857142856,0.0,5.5,0.14285714285714285,0.5714285714285714
+type_metric,LOC,Remove Class Annotation,72,31,-9.0,-12.347222222222221,-22.0,0.0,0.6527777777777778,0.18055555555555555
+type_metric,LOC,Remove Class Modifier,16,8,3.0,2.5,1.75,3.0,0.0625,0.8125
+type_metric,LOC,Rename Class,43,29,0.0,-11.604651162790697,0.0,2.0,0.11627906976744186,0.27906976744186046
+type_metric,LOC,Rename Package,1,1,6.0,6.0,6.0,6.0,0.0,1.0
+type_metric,LOC,Split Class,3,3,-9.0,-8.333333333333334,-12.5,-4.5,0.6666666666666666,0.0
+type_metric,NOF,Add Class Annotation,73,39,0.0,0.6027397260273972,0.0,0.0,0.0,0.1506849315068493
+type_metric,NOF,Add Class Modifier,3,3,-1.0,0.0,-1.5,1.0,0.6666666666666666,0.3333333333333333
+type_metric,NOF,Change Class Access Modifier,38,1,-0.5,-0.7105263157894737,-1.0,0.0,0.5,0.0
+type_metric,NOF,Change Return Type,5,4,2.0,2.2,2.0,3.0,0.2,0.8
+type_metric,NOF,Extract Class,109,58,0.0,-1.853211009174312,-2.0,0.0,0.43119266055045874,0.06422018348623854
+type_metric,NOF,Extract Interface,10,3,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOF,Extract Superclass,36,10,-0.5,-0.8333333333333334,-2.0,0.0,0.5,0.08333333333333333
+type_metric,NOF,Merge Class,1,1,2.0,2.0,2.0,2.0,0.0,1.0
+type_metric,NOF,Modify Class Annotation,23,13,0.0,-0.13043478260869565,0.0,0.0,0.043478260869565216,0.043478260869565216
+type_metric,NOF,Move And Rename Class,27,13,0.0,-0.2222222222222222,0.0,0.0,0.1111111111111111,0.0
+type_metric,NOF,Move Class,704,47,0.0,0.0014204545454545455,0.0,0.0,0.0014204545454545455,0.002840909090909091
+type_metric,NOF,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOF,Move Source Folder,7,4,0.0,0.14285714285714285,0.0,0.0,0.14285714285714285,0.14285714285714285
+type_metric,NOF,Remove Class Annotation,72,31,-1.0,-1.2361111111111112,-3.0,0.0,0.5555555555555556,0.08333333333333333
+type_metric,NOF,Remove Class Modifier,16,8,0.0,0.625,0.0,1.0,0.0,0.375
+type_metric,NOF,Rename Class,43,29,0.0,-0.5348837209302325,0.0,0.0,0.11627906976744186,0.023255813953488372
+type_metric,NOF,Rename Package,1,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOF,Split Class,3,3,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOM,Add Class Annotation,73,39,0.0,-6.273972602739726,-7.0,0.0,0.4383561643835616,0.0958904109589041
+type_metric,NOM,Add Class Modifier,3,3,7.0,4.666666666666667,3.0,7.5,0.3333333333333333,0.6666666666666666
+type_metric,NOM,Change Class Access Modifier,38,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOM,Change Return Type,5,4,5.0,3.6,0.0,6.0,0.0,0.6
+type_metric,NOM,Extract Class,109,58,0.0,-1.1376146788990826,-1.0,0.0,0.44036697247706424,0.07339449541284404
+type_metric,NOM,Extract Interface,10,3,-1.0,-0.7,-1.0,-1.0,0.8,0.1
+type_metric,NOM,Extract Superclass,36,10,0.0,-0.08333333333333333,-1.0,0.0,0.3055555555555556,0.2222222222222222
+type_metric,NOM,Merge Class,1,1,15.0,15.0,15.0,15.0,0.0,1.0
+type_metric,NOM,Modify Class Annotation,23,13,0.0,-0.08695652173913043,0.0,0.0,0.043478260869565216,0.0
+type_metric,NOM,Move And Rename Class,27,13,0.0,0.037037037037037035,0.0,0.0,0.1111111111111111,0.07407407407407407
+type_metric,NOM,Move Class,704,47,0.0,0.011363636363636364,0.0,0.0,0.0,0.005681818181818182
+type_metric,NOM,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,NOM,Move Source Folder,7,4,0.0,0.7142857142857143,0.0,0.5,0.0,0.2857142857142857
+type_metric,NOM,Remove Class Annotation,72,31,0.0,-0.6944444444444444,0.0,0.0,0.20833333333333334,0.08333333333333333
+type_metric,NOM,Remove Class Modifier,16,8,0.0,0.25,0.0,0.0,0.0,0.1875
+type_metric,NOM,Rename Class,43,29,0.0,-1.2790697674418605,0.0,0.0,0.11627906976744186,0.11627906976744186
+type_metric,NOM,Rename Package,1,1,2.0,2.0,2.0,2.0,0.0,1.0
+type_metric,NOM,Split Class,3,3,-1.0,-1.6666666666666667,-2.5,-0.5,0.6666666666666666,0.0
+type_metric,WMC,Add Class Annotation,73,39,0.0,-6.219178082191781,-7.0,0.0,0.4383561643835616,0.1095890410958904
+type_metric,WMC,Add Class Modifier,3,3,7.0,5.0,3.0,8.0,0.3333333333333333,0.6666666666666666
+type_metric,WMC,Change Class Access Modifier,38,1,0.0,0.02631578947368421,0.0,0.0,0.0,0.02631578947368421
+type_metric,WMC,Change Return Type,5,4,5.0,3.8,0.0,6.0,0.0,0.6
+type_metric,WMC,Extract Class,109,58,-2.0,-5.431192660550459,-5.0,0.0,0.7064220183486238,0.05504587155963303
+type_metric,WMC,Extract Interface,10,3,-1.0,-0.7,-1.0,-1.0,0.8,0.1
+type_metric,WMC,Extract Superclass,36,10,0.0,-1.7777777777777777,-2.25,0.0,0.4444444444444444,0.19444444444444445
+type_metric,WMC,Merge Class,1,1,8.0,8.0,8.0,8.0,0.0,1.0
+type_metric,WMC,Modify Class Annotation,23,13,0.0,-0.08695652173913043,0.0,0.0,0.043478260869565216,0.0
+type_metric,WMC,Move And Rename Class,27,13,0.0,0.25925925925925924,0.0,0.0,0.1111111111111111,0.1111111111111111
+type_metric,WMC,Move Class,704,47,0.0,0.01278409090909091,0.0,0.0,0.0,0.007102272727272727
+type_metric,WMC,Move Package,2,1,0.0,0.0,0.0,0.0,0.0,0.0
+type_metric,WMC,Move Source Folder,7,4,0.0,1.1428571428571428,0.0,2.0,0.0,0.42857142857142855
+type_metric,WMC,Remove Class Annotation,72,31,0.0,-1.2083333333333333,-1.0,0.0,0.3611111111111111,0.09722222222222222
+type_metric,WMC,Remove Class Modifier,16,8,0.0,0.25,0.0,0.0,0.0,0.1875
+type_metric,WMC,Rename Class,43,29,0.0,-1.5348837209302326,0.0,0.0,0.09302325581395349,0.13953488372093023
+type_metric,WMC,Rename Package,1,1,2.0,2.0,2.0,2.0,0.0,1.0
+type_metric,WMC,Split Class,3,3,-2.0,-2.0,-3.0,-1.0,0.6666666666666666,0.0

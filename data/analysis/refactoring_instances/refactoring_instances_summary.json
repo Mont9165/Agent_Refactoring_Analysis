@@ -1,0 +1,509 @@
+{
+  "instances_overall": 65859,
+  "commits_overall_with_refactoring": 7865,
+  "instances_agentic": 65859,
+  "instances_sar": 13215,
+  "sar_instance_percentage": 20.06559467954266,
+  "per_type": {
+    "Change Variable Type": {
+      "overall": 4352,
+      "sar": 689,
+      "sar_pct": 15.831801470588236
+    },
+    "Add Method Annotation": {
+      "overall": 4251,
+      "sar": 217,
+      "sar_pct": 5.104681251470242
+    },
+    "Rename Variable": {
+      "overall": 3907,
+      "sar": 1306,
+      "sar_pct": 33.42718198105963
+    },
+    "Extract Variable": {
+      "overall": 3321,
+      "sar": 254,
+      "sar_pct": 7.648298705209275
+    },
+    "Move Class": {
+      "overall": 3320,
+      "sar": 1035,
+      "sar_pct": 31.17469879518072
+    },
+    "Add Parameter": {
+      "overall": 2739,
+      "sar": 217,
+      "sar_pct": 7.922599488864549
+    },
+    "Change Attribute Type": {
+      "overall": 2705,
+      "sar": 424,
+      "sar_pct": 15.67467652495379
+    },
+    "Rename Parameter": {
+      "overall": 2577,
+      "sar": 695,
+      "sar_pct": 26.969344198680634
+    },
+    "Rename Method": {
+      "overall": 2469,
+      "sar": 704,
+      "sar_pct": 28.513568246253545
+    },
+    "Change Parameter Type": {
+      "overall": 2430,
+      "sar": 521,
+      "sar_pct": 21.440329218106996
+    },
+    "Change Return Type": {
+      "overall": 2351,
+      "sar": 464,
+      "sar_pct": 19.736282433007233
+    },
+    "Modify Method Annotation": {
+      "overall": 2293,
+      "sar": 81,
+      "sar_pct": 3.532490187527257
+    },
+    "Rename Attribute": {
+      "overall": 2262,
+      "sar": 1139,
+      "sar_pct": 50.35366931918656
+    },
+    "Add Class Annotation": {
+      "overall": 2166,
+      "sar": 194,
+      "sar_pct": 8.956602031394276
+    },
+    "Add Parameter Annotation": {
+      "overall": 1801,
+      "sar": 32,
+      "sar_pct": 1.776790671848973
+    },
+    "Extract Method": {
+      "overall": 1665,
+      "sar": 418,
+      "sar_pct": 25.105105105105107
+    },
+    "Add Attribute Annotation": {
+      "overall": 1441,
+      "sar": 151,
+      "sar_pct": 10.47883414295628
+    },
+    "Extract And Move Method": {
+      "overall": 1203,
+      "sar": 454,
+      "sar_pct": 37.73898586866168
+    },
+    "Add Attribute Modifier": {
+      "overall": 1020,
+      "sar": 345,
+      "sar_pct": 33.82352941176471
+    },
+    "Remove Attribute Annotation": {
+      "overall": 928,
+      "sar": 135,
+      "sar_pct": 14.547413793103448
+    },
+    "Remove Class Annotation": {
+      "overall": 895,
+      "sar": 120,
+      "sar_pct": 13.40782122905028
+    },
+    "Change Attribute Access Modifier": {
+      "overall": 882,
+      "sar": 261,
+      "sar_pct": 29.591836734693878
+    },
+    "Encapsulate Attribute": {
+      "overall": 868,
+      "sar": 56,
+      "sar_pct": 6.451612903225806
+    },
+    "Move Attribute": {
+      "overall": 865,
+      "sar": 365,
+      "sar_pct": 42.19653179190752
+    },
+    "Change Method Access Modifier": {
+      "overall": 855,
+      "sar": 270,
+      "sar_pct": 31.57894736842105
+    },
+    "Remove Method Annotation": {
+      "overall": 840,
+      "sar": 167,
+      "sar_pct": 19.88095238095238
+    },
+    "Remove Parameter": {
+      "overall": 830,
+      "sar": 136,
+      "sar_pct": 16.3855421686747
+    },
+    "Move Method": {
+      "overall": 790,
+      "sar": 350,
+      "sar_pct": 44.303797468354425
+    },
+    "Inline Variable": {
+      "overall": 760,
+      "sar": 141,
+      "sar_pct": 18.552631578947366
+    },
+    "Modify Class Annotation": {
+      "overall": 691,
+      "sar": 53,
+      "sar_pct": 7.670043415340087
+    },
+    "Modify Attribute Annotation": {
+      "overall": 561,
+      "sar": 17,
+      "sar_pct": 3.0303030303030303
+    },
+    "Move And Inline Method": {
+      "overall": 536,
+      "sar": 8,
+      "sar_pct": 1.4925373134328357
+    },
+    "Rename Class": {
+      "overall": 524,
+      "sar": 65,
+      "sar_pct": 12.404580152671755
+    },
+    "Remove Attribute Modifier": {
+      "overall": 457,
+      "sar": 53,
+      "sar_pct": 11.597374179431071
+    },
+    "Extract Class": {
+      "overall": 448,
+      "sar": 250,
+      "sar_pct": 55.80357142857143
+    },
+    "Add Thrown Exception Type": {
+      "overall": 255,
+      "sar": 20,
+      "sar_pct": 7.8431372549019605
+    },
+    "Replace Attribute With Variable": {
+      "overall": 252,
+      "sar": 35,
+      "sar_pct": 13.88888888888889
+    },
+    "Parameterize Variable": {
+      "overall": 250,
+      "sar": 89,
+      "sar_pct": 35.6
+    },
+    "Replace Variable With Attribute": {
+      "overall": 221,
+      "sar": 50,
+      "sar_pct": 22.624434389140273
+    },
+    "Remove Thrown Exception Type": {
+      "overall": 220,
+      "sar": 22,
+      "sar_pct": 10.0
+    },
+    "Change Type Declaration Kind": {
+      "overall": 212,
+      "sar": 85,
+      "sar_pct": 40.09433962264151
+    },
+    "Add Method Modifier": {
+      "overall": 203,
+      "sar": 46,
+      "sar_pct": 22.660098522167488
+    },
+    "Invert Condition": {
+      "overall": 193,
+      "sar": 29,
+      "sar_pct": 15.025906735751295
+    },
+    "Change Class Access Modifier": {
+      "overall": 191,
+      "sar": 74,
+      "sar_pct": 38.7434554973822
+    },
+    "Push Down Method": {
+      "overall": 185,
+      "sar": 130,
+      "sar_pct": 70.27027027027027
+    },
+    "Move And Rename Method": {
+      "overall": 182,
+      "sar": 79,
+      "sar_pct": 43.40659340659341
+    },
+    "Merge Conditional": {
+      "overall": 182,
+      "sar": 82,
+      "sar_pct": 45.05494505494506
+    },
+    "Remove Parameter Annotation": {
+      "overall": 175,
+      "sar": 13,
+      "sar_pct": 7.428571428571429
+    },
+    "Pull Up Attribute": {
+      "overall": 171,
+      "sar": 71,
+      "sar_pct": 41.52046783625731
+    },
+    "Extract Attribute": {
+      "overall": 168,
+      "sar": 25,
+      "sar_pct": 14.880952380952381
+    },
+    "Pull Up Method": {
+      "overall": 163,
+      "sar": 60,
+      "sar_pct": 36.809815950920246
+    },
+    "Move And Rename Class": {
+      "overall": 150,
+      "sar": 41,
+      "sar_pct": 27.333333333333332
+    },
+    "Try With Resources": {
+      "overall": 146,
+      "sar": 22,
+      "sar_pct": 15.068493150684931
+    },
+    "Modify Parameter Annotation": {
+      "overall": 143,
+      "sar": 3,
+      "sar_pct": 2.097902097902098
+    },
+    "Split Conditional": {
+      "overall": 140,
+      "sar": 21,
+      "sar_pct": 15.0
+    },
+    "Inline Method": {
+      "overall": 140,
+      "sar": 21,
+      "sar_pct": 15.0
+    },
+    "Remove Method Modifier": {
+      "overall": 136,
+      "sar": 46,
+      "sar_pct": 33.82352941176471
+    },
+    "Move Code": {
+      "overall": 130,
+      "sar": 9,
+      "sar_pct": 6.923076923076923
+    },
+    "Move Source Folder": {
+      "overall": 106,
+      "sar": 28,
+      "sar_pct": 26.41509433962264
+    },
+    "Assert Throws": {
+      "overall": 104,
+      "sar": 2,
+      "sar_pct": 1.9230769230769231
+    },
+    "Localize Parameter": {
+      "overall": 101,
+      "sar": 25,
+      "sar_pct": 24.752475247524753
+    },
+    "Add Variable Modifier": {
+      "overall": 98,
+      "sar": 2,
+      "sar_pct": 2.0408163265306123
+    },
+    "Replace Generic With Diamond": {
+      "overall": 95,
+      "sar": 26,
+      "sar_pct": 27.368421052631582
+    },
+    "Add Class Modifier": {
+      "overall": 90,
+      "sar": 4,
+      "sar_pct": 4.444444444444445
+    },
+    "Push Down Attribute": {
+      "overall": 86,
+      "sar": 60,
+      "sar_pct": 69.76744186046511
+    },
+    "Replace Conditional With Ternary": {
+      "overall": 84,
+      "sar": 10,
+      "sar_pct": 11.904761904761903
+    },
+    "Remove Variable Modifier": {
+      "overall": 65,
+      "sar": 22,
+      "sar_pct": 33.84615384615385
+    },
+    "Extract Superclass": {
+      "overall": 64,
+      "sar": 18,
+      "sar_pct": 28.125
+    },
+    "Add Variable Annotation": {
+      "overall": 63,
+      "sar": 0,
+      "sar_pct": 0.0
+    },
+    "Add Parameter Modifier": {
+      "overall": 62,
+      "sar": 1,
+      "sar_pct": 1.6129032258064515
+    },
+    "Extract Interface": {
+      "overall": 60,
+      "sar": 16,
+      "sar_pct": 26.666666666666668
+    },
+    "Replace Anonymous With Lambda": {
+      "overall": 58,
+      "sar": 13,
+      "sar_pct": 22.413793103448278
+    },
+    "Parameterize Attribute": {
+      "overall": 49,
+      "sar": 3,
+      "sar_pct": 6.122448979591836
+    },
+    "Remove Class Modifier": {
+      "overall": 45,
+      "sar": 21,
+      "sar_pct": 46.666666666666664
+    },
+    "Change Thrown Exception Type": {
+      "overall": 42,
+      "sar": 2,
+      "sar_pct": 4.761904761904762
+    },
+    "Replace Loop With Pipeline": {
+      "overall": 41,
+      "sar": 16,
+      "sar_pct": 39.02439024390244
+    },
+    "Merge Parameter": {
+      "overall": 39,
+      "sar": 8,
+      "sar_pct": 20.51282051282051
+    },
+    "Replace Pipeline With Loop": {
+      "overall": 36,
+      "sar": 7,
+      "sar_pct": 19.444444444444446
+    },
+    "Split Method": {
+      "overall": 31,
+      "sar": 1,
+      "sar_pct": 3.225806451612903
+    },
+    "Extract Subclass": {
+      "overall": 28,
+      "sar": 20,
+      "sar_pct": 71.42857142857143
+    },
+    "Split Attribute": {
+      "overall": 26,
+      "sar": 7,
+      "sar_pct": 26.923076923076923
+    },
+    "Split Parameter": {
+      "overall": 25,
+      "sar": 8,
+      "sar_pct": 32.0
+    },
+    "Merge Variable": {
+      "overall": 21,
+      "sar": 5,
+      "sar_pct": 23.809523809523807
+    },
+    "Merge Attribute": {
+      "overall": 20,
+      "sar": 8,
+      "sar_pct": 40.0
+    },
+    "Reorder Parameter": {
+      "overall": 15,
+      "sar": 1,
+      "sar_pct": 6.666666666666667
+    },
+    "Inline Attribute": {
+      "overall": 12,
+      "sar": 1,
+      "sar_pct": 8.333333333333332
+    },
+    "Move And Rename Attribute": {
+      "overall": 12,
+      "sar": 5,
+      "sar_pct": 41.66666666666667
+    },
+    "Split Class": {
+      "overall": 11,
+      "sar": 3,
+      "sar_pct": 27.27272727272727
+    },
+    "Move Package": {
+      "overall": 11,
+      "sar": 5,
+      "sar_pct": 45.45454545454545
+    },
+    "Merge Method": {
+      "overall": 7,
+      "sar": 0,
+      "sar_pct": 0.0
+    },
+    "Parameterize Test": {
+      "overall": 7,
+      "sar": 0,
+      "sar_pct": 0.0
+    },
+    "Remove Parameter Modifier": {
+      "overall": 6,
+      "sar": 2,
+      "sar_pct": 33.33333333333333
+    },
+    "Merge Catch": {
+      "overall": 6,
+      "sar": 1,
+      "sar_pct": 16.666666666666664
+    },
+    "Split Variable": {
+      "overall": 5,
+      "sar": 2,
+      "sar_pct": 40.0
+    },
+    "Replace Anonymous With Class": {
+      "overall": 4,
+      "sar": 0,
+      "sar_pct": 0.0
+    },
+    "Rename Package": {
+      "overall": 4,
+      "sar": 1,
+      "sar_pct": 25.0
+    },
+    "Merge Class": {
+      "overall": 4,
+      "sar": 1,
+      "sar_pct": 25.0
+    },
+    "Remove Variable Annotation": {
+      "overall": 2,
+      "sar": 0,
+      "sar_pct": 0.0
+    },
+    "Replace Attribute": {
+      "overall": 2,
+      "sar": 0,
+      "sar_pct": 0.0
+    },
+    "Split Package": {
+      "overall": 1,
+      "sar": 0,
+      "sar_pct": 0.0
+    }
+  }
+}

@@ -1,0 +1,10 @@
+metric,Replace Loop With Pipeline,Merge Conditional,Replace Conditional With Ternary,Merge Parameter,Try With Resources,Split Variable
+Class-Level Metric – Depth of Inheritance Tree*,,,,,,
+Class-Level Metric – Fan-Out*,,,,,,
+Class-Level Metric – Fan-In*,,,,,,
+Class-Level Metric – Number of Methods*,,,,,,
+Class-Level Metric – Weighted Methods per Class*,,,,,,
+Class-Level Metric – Lines of Code*,,,,,,
+Method-Level Metric – Parameter Count*,0.0,0.0,0.0,100.0,0.0,0.0
+Method-Level Metric – Cyclomatic Complexity*,100.0,100.0,85.71428571428571,0.0,61.111111111111114,50.0
+Method-Level Metric – Lines of Code*,100.0,100.0,100.0,66.66666666666666,88.88888888888889,100.0
