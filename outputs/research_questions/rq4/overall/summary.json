@@ -1,16 +1,16 @@
 {
-  "total_refactoring_commits": 7859,
+  "total_refactoring_commits": 5786,
   "purpose_distribution": {
-    "maintainability": 3678,
-    "readability": 2049,
-    "logical_mismatch": 850,
-    "testability": 332,
-    "repurpose_reuse": 332,
-    "dependency": 185,
-    "legacy_code": 151,
-    "slow_performance": 107,
-    "hard_to_debug": 105,
-    "duplication": 70
+    "maintainability": 2664,
+    "readability": 1525,
+    "logical_mismatch": 615,
+    "repurpose_reuse": 247,
+    "testability": 240,
+    "dependency": 141,
+    "legacy_code": 119,
+    "slow_performance": 93,
+    "hard_to_debug": 89,
+    "duplication": 53
   },
   "examples_file": "outputs/research_questions/rq4/overall/examples.csv",
   "note": "Based on GPT motivations with confidence >= 6.",

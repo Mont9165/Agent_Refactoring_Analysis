@@ -1,109 +1,113 @@
 \begin{table}
-\caption{Refactoring type totals and percentages}
-\label{tab:rq3_refactoring_totals}
-\begin{tabular}{lccc}
+\caption{Refactoring type totals and percentages: SAR, Overall, and Human (related work) comparison}
+\label{tab:rq3_refactoring_totals_comparison}
+\begin{tabular}{llll}
 \toprule
-Refactoring Type & Overall & Non-SAR & SAR \\
+Refactoring Type & SAR & Overall & Human \\
 \midrule
-Change Variable Type & 4,352 (6.61\%) & 3,663 (6.96\%) & 689 (5.22\%) \\
-Add Method Annotation & 4,251 (6.45\%) & 4,034 (7.66\%) & 217 (1.64\%) \\
-Rename Variable & 3,907 (5.93\%) & 2,601 (4.94\%) & 1,306 (9.89\%) \\
-Extract Variable & 3,321 (5.04\%) & 3,067 (5.83\%) & 254 (1.92\%) \\
-Move Class & 3,320 (5.04\%) & 2,285 (4.34\%) & 1,035 (7.84\%) \\
-Add Parameter & 2,739 (4.16\%) & 2,522 (4.79\%) & 217 (1.64\%) \\
-Change Attribute Type & 2,705 (4.11\%) & 2,281 (4.33\%) & 424 (3.21\%) \\
-Rename Parameter & 2,577 (3.91\%) & 1,882 (3.58\%) & 695 (5.26\%) \\
-Rename Method & 2,469 (3.75\%) & 1,765 (3.35\%) & 704 (5.33\%) \\
-Change Parameter Type & 2,430 (3.69\%) & 1,909 (3.63\%) & 521 (3.95\%) \\
-Change Return Type & 2,351 (3.57\%) & 1,887 (3.58\%) & 464 (3.51\%) \\
-Modify Method Annotation & 2,293 (3.48\%) & 2,212 (4.20\%) & 81 (0.61\%) \\
-Rename Attribute & 2,262 (3.43\%) & 1,123 (2.13\%) & 1,139 (8.63\%) \\
-Add Class Annotation & 2,166 (3.29\%) & 1,972 (3.75\%) & 194 (1.47\%) \\
-Add Parameter Annotation & 1,801 (2.73\%) & 1,769 (3.36\%) & 32 (0.24\%) \\
-Extract Method & 1,665 (2.53\%) & 1,247 (2.37\%) & 418 (3.17\%) \\
-Add Attribute Annotation & 1,441 (2.19\%) & 1,290 (2.45\%) & 151 (1.14\%) \\
-Extract And Move Method & 1,203 (1.83\%) & 749 (1.42\%) & 454 (3.44\%) \\
-Add Attribute Modifier & 1,020 (1.55\%) & 675 (1.28\%) & 345 (2.61\%) \\
-Remove Attribute Annotation & 928 (1.41\%) & 793 (1.51\%) & 135 (1.02\%) \\
-Remove Class Annotation & 895 (1.36\%) & 775 (1.47\%) & 120 (0.91\%) \\
-Change Attribute Access Modifier & 882 (1.34\%) & 621 (1.18\%) & 261 (1.98\%) \\
-Encapsulate Attribute & 868 (1.32\%) & 812 (1.54\%) & 56 (0.42\%) \\
-Move Attribute & 865 (1.31\%) & 500 (0.95\%) & 365 (2.76\%) \\
-Change Method Access Modifier & 855 (1.30\%) & 585 (1.11\%) & 270 (2.05\%) \\
-Remove Method Annotation & 840 (1.28\%) & 673 (1.28\%) & 167 (1.26\%) \\
-Remove Parameter & 830 (1.26\%) & 694 (1.32\%) & 136 (1.03\%) \\
-Move Method & 790 (1.20\%) & 440 (0.84\%) & 350 (2.65\%) \\
-Inline Variable & 760 (1.15\%) & 619 (1.18\%) & 141 (1.07\%) \\
-Modify Class Annotation & 691 (1.05\%) & 638 (1.21\%) & 53 (0.40\%) \\
-Modify Attribute Annotation & 561 (0.85\%) & 544 (1.03\%) & 17 (0.13\%) \\
-Move And Inline Method & 536 (0.81\%) & 528 (1.00\%) & 8 (0.06\%) \\
-Rename Class & 524 (0.80\%) & 459 (0.87\%) & 65 (0.49\%) \\
-Remove Attribute Modifier & 457 (0.69\%) & 404 (0.77\%) & 53 (0.40\%) \\
-Extract Class & 448 (0.68\%) & 198 (0.38\%) & 250 (1.89\%) \\
-Add Thrown Exception Type & 255 (0.39\%) & 235 (0.45\%) & 20 (0.15\%) \\
-Replace Attribute With Variable & 252 (0.38\%) & 217 (0.41\%) & 35 (0.27\%) \\
-Parameterize Variable & 250 (0.38\%) & 161 (0.31\%) & 89 (0.67\%) \\
-Replace Variable With Attribute & 221 (0.34\%) & 171 (0.32\%) & 50 (0.38\%) \\
-Remove Thrown Exception Type & 220 (0.33\%) & 198 (0.38\%) & 22 (0.17\%) \\
-Change Type Declaration Kind & 212 (0.32\%) & 127 (0.24\%) & 85 (0.64\%) \\
-Add Method Modifier & 203 (0.31\%) & 157 (0.30\%) & 46 (0.35\%) \\
-Invert Condition & 193 (0.29\%) & 164 (0.31\%) & 29 (0.22\%) \\
-Change Class Access Modifier & 191 (0.29\%) & 117 (0.22\%) & 74 (0.56\%) \\
-Push Down Method & 185 (0.28\%) & 55 (0.10\%) & 130 (0.98\%) \\
-Merge Conditional & 182 (0.28\%) & 100 (0.19\%) & 82 (0.62\%) \\
-Move And Rename Method & 182 (0.28\%) & 103 (0.20\%) & 79 (0.60\%) \\
-Remove Parameter Annotation & 175 (0.27\%) & 162 (0.31\%) & 13 (0.10\%) \\
-Pull Up Attribute & 171 (0.26\%) & 100 (0.19\%) & 71 (0.54\%) \\
-Extract Attribute & 168 (0.26\%) & 143 (0.27\%) & 25 (0.19\%) \\
-Pull Up Method & 163 (0.25\%) & 103 (0.20\%) & 60 (0.45\%) \\
-Move And Rename Class & 150 (0.23\%) & 109 (0.21\%) & 41 (0.31\%) \\
-Try With Resources & 146 (0.22\%) & 124 (0.24\%) & 22 (0.17\%) \\
-Modify Parameter Annotation & 143 (0.22\%) & 140 (0.27\%) & 3 (0.02\%) \\
-Split Conditional & 140 (0.21\%) & 119 (0.23\%) & 21 (0.16\%) \\
-Inline Method & 140 (0.21\%) & 119 (0.23\%) & 21 (0.16\%) \\
-Remove Method Modifier & 136 (0.21\%) & 90 (0.17\%) & 46 (0.35\%) \\
-Move Code & 130 (0.20\%) & 121 (0.23\%) & 9 (0.07\%) \\
-Move Source Folder & 106 (0.16\%) & 78 (0.15\%) & 28 (0.21\%) \\
-Assert Throws & 104 (0.16\%) & 102 (0.19\%) & 2 (0.02\%) \\
-Localize Parameter & 101 (0.15\%) & 76 (0.14\%) & 25 (0.19\%) \\
-Add Variable Modifier & 98 (0.15\%) & 96 (0.18\%) & 0 (0.00\%) \\
-Replace Generic With Diamond & 95 (0.14\%) & 69 (0.13\%) & 26 (0.20\%) \\
-Add Class Modifier & 90 (0.14\%) & 86 (0.16\%) & 4 (0.03\%) \\
-Push Down Attribute & 86 (0.13\%) & 26 (0.05\%) & 60 (0.45\%) \\
-Replace Conditional With Ternary & 84 (0.13\%) & 74 (0.14\%) & 10 (0.08\%) \\
-Remove Variable Modifier & 65 (0.10\%) & 43 (0.08\%) & 22 (0.17\%) \\
-Extract Superclass & 64 (0.10\%) & 46 (0.09\%) & 18 (0.14\%) \\
-Add Variable Annotation & 63 (0.10\%) & 63 (0.12\%) & 0 (0.00\%) \\
-Add Parameter Modifier & 62 (0.09\%) & 61 (0.12\%) & 0 (0.00\%) \\
-Extract Interface & 60 (0.09\%) & 44 (0.08\%) & 16 (0.12\%) \\
-Replace Anonymous With Lambda & 58 (0.09\%) & 45 (0.09\%) & 13 (0.10\%) \\
-Parameterize Attribute & 49 (0.07\%) & 46 (0.09\%) & 3 (0.02\%) \\
-Remove Class Modifier & 45 (0.07\%) & 24 (0.05\%) & 21 (0.16\%) \\
-Change Thrown Exception Type & 42 (0.06\%) & 40 (0.08\%) & 2 (0.02\%) \\
-Replace Loop With Pipeline & 41 (0.06\%) & 25 (0.05\%) & 16 (0.12\%) \\
-Merge Parameter & 39 (0.06\%) & 31 (0.06\%) & 8 (0.06\%) \\
-Replace Pipeline With Loop & 36 (0.05\%) & 29 (0.06\%) & 7 (0.05\%) \\
-Split Method & 31 (0.05\%) & 30 (0.06\%) & 0 (0.00\%) \\
-Extract Subclass & 28 (0.04\%) & 8 (0.02\%) & 20 (0.15\%) \\
-Split Attribute & 26 (0.04\%) & 19 (0.04\%) & 7 (0.05\%) \\
-Split Parameter & 25 (0.04\%) & 17 (0.03\%) & 8 (0.06\%) \\
-Merge Variable & 21 (0.03\%) & 16 (0.03\%) & 5 (0.04\%) \\
-Merge Attribute & 20 (0.03\%) & 12 (0.02\%) & 8 (0.06\%) \\
-Reorder Parameter & 15 (0.02\%) & 14 (0.03\%) & 0 (0.00\%) \\
-Move And Rename Attribute & 12 (0.02\%) & 7 (0.01\%) & 5 (0.04\%) \\
-Inline Attribute & 12 (0.02\%) & 11 (0.02\%) & 0 (0.00\%) \\
-Split Class & 11 (0.02\%) & 8 (0.02\%) & 3 (0.02\%) \\
-Move Package & 11 (0.02\%) & 6 (0.01\%) & 5 (0.04\%) \\
-Parameterize Test & 7 (0.01\%) & 7 (0.01\%) & 0 (0.00\%) \\
-Merge Method & 7 (0.01\%) & 7 (0.01\%) & 0 (0.00\%) \\
-Remove Parameter Modifier & 6 (0.01\%) & 4 (0.01\%) & 0 (0.00\%) \\
-Merge Catch & 6 (0.01\%) & 5 (0.01\%) & 0 (0.00\%) \\
-Split Variable & 5 (0.01\%) & 3 (0.01\%) & 0 (0.00\%) \\
-Rename Package & 4 (0.01\%) & 3 (0.01\%) & 0 (0.00\%) \\
-Merge Class & 4 (0.01\%) & 3 (0.01\%) & 0 (0.00\%) \\
-Replace Anonymous With Class & 4 (0.01\%) & 4 (0.01\%) & 0 (0.00\%) \\
-Replace Attribute & 2 (0.00\%) & 2 (0.00\%) & 0 (0.00\%) \\
-Remove Variable Annotation & 2 (0.00\%) & 2 (0.00\%) & 0 (0.00\%) \\
+Change Variable Type & 843 (11.83\%) & 843 (11.83\%) & 516,150 (7.73\%) \\
+Rename Parameter & 742 (10.41\%) & 742 (10.41\%) & 197,551 (2.96\%) \\
+Rename Variable & 607 (8.52\%) & 607 (8.52\%) & 219,487 (3.29\%) \\
+Move And Inline Method & 511 (7.17\%) & 511 (7.17\%) & 23,278 (0.35\%) \\
+Rename Attribute & 428 (6.01\%) & 428 (6.01\%) & 125,215 (1.87\%) \\
+Change Attribute Type & 373 (5.23\%) & 373 (5.23\%) & 230,411 (3.45\%) \\
+Add Method Annotation & 292 (4.10\%) & 292 (4.10\%) & 389,062 (5.83\%) \\
+Change Method Access Modifier & 271 (3.80\%) & 271 (3.80\%) & 193,343 (2.89\%) \\
+Add Attribute Annotation & 261 (3.66\%) & 261 (3.66\%) & 57,040 (0.85\%) \\
+Rename Method & 232 (3.26\%) & 232 (3.26\%) & 292,091 (4.37\%) \\
+Add Attribute Modifier & 194 (2.72\%) & 194 (2.72\%) & 117,093 (1.75\%) \\
+Change Parameter Type & 180 (2.53\%) & 180 (2.53\%) & 413,357 (6.19\%) \\
+Remove Method Annotation & 177 (2.48\%) & 177 (2.48\%) & 150,130 (2.25\%) \\
+Extract Variable & 174 (2.44\%) & 174 (2.44\%) & 140,047 (2.10\%) \\
+Remove Attribute Annotation & 164 (2.30\%) & 164 (2.30\%) & 37,638 (0.56\%) \\
+Change Return Type & 160 (2.24\%) & 160 (2.24\%) & 313,956 (4.70\%) \\
+Rename Class & 154 (2.16\%) & 154 (2.16\%) & 57,166 (0.86\%) \\
+Extract Method & 151 (2.12\%) & 151 (2.12\%) & 174,883 (2.62\%) \\
+Change Attribute Access Modifier & 131 (1.84\%) & 131 (1.84\%) & 155,579 (2.33\%) \\
+Add Parameter & 94 (1.32\%) & 94 (1.32\%) & 286,321 (4.29\%) \\
+Change Class Access Modifier & 81 (1.14\%) & 81 (1.14\%) & 30,009 (0.45\%) \\
+Add Class Annotation & 76 (1.07\%) & 76 (1.07\%) & 77,562 (1.16\%) \\
+Modify Method Annotation & 61 (0.86\%) & 61 (0.86\%) & 56,609 (0.85\%) \\
+Move Class & 59 (0.83\%) & 59 (0.83\%) & 277,898 (4.16\%) \\
+Try With Resources & 49 (0.69\%) & 49 (0.69\%) & 0 (0.00\%) \\
+Move Method & 48 (0.67\%) & 48 (0.67\%) & 135,193 (2.02\%) \\
+Extract And Move Method & 47 (0.66\%) & 47 (0.66\%) & 49,937 (0.75\%) \\
+Change Type Declaration Kind & 43 (0.60\%) & 43 (0.60\%) & 4,833 (0.07\%) \\
+Inline Variable & 38 (0.53\%) & 38 (0.53\%) & 55,913 (0.84\%) \\
+Remove Parameter & 31 (0.43\%) & 31 (0.43\%) & 159,517 (2.39\%) \\
+Replace Variable With Attribute & 30 (0.42\%) & 30 (0.42\%) & 32,132 (0.48\%) \\
+Move Attribute & 29 (0.41\%) & 29 (0.41\%) & 85,908 (1.29\%) \\
+Add Parameter Annotation & 27 (0.38\%) & 27 (0.38\%) & 64,040 (0.96\%) \\
+Inline Method & 26 (0.36\%) & 26 (0.36\%) & 62,672 (0.94\%) \\
+Encapsulate Attribute & 24 (0.34\%) & 24 (0.34\%) & 40,031 (0.60\%) \\
+Modify Class Annotation & 23 (0.32\%) & 23 (0.32\%) & 48,077 (0.72\%) \\
+Remove Attribute Modifier & 23 (0.32\%) & 23 (0.32\%) & 70,200 (1.05\%) \\
+Remove Class Annotation & 21 (0.29\%) & 21 (0.29\%) & 44,387 (0.66\%) \\
+Invert Condition & 19 (0.27\%) & 19 (0.27\%) & 6,697 (0.10\%) \\
+Merge Conditional & 19 (0.27\%) & 19 (0.27\%) & 9,847 (0.15\%) \\
+Replace Conditional With Ternary & 18 (0.25\%) & 18 (0.25\%) & 0 (0.00\%) \\
+Parameterize Variable & 12 (0.17\%) & 12 (0.17\%) & 30,995 (0.46\%) \\
+Add Thrown Exception Type & 11 (0.15\%) & 11 (0.15\%) & 62,397 (0.93\%) \\
+Extract Class & 11 (0.15\%) & 11 (0.15\%) & 17,865 (0.27\%) \\
+Move And Rename Class & 11 (0.15\%) & 11 (0.15\%) & 25,754 (0.39\%) \\
+Pull Up Method & 11 (0.15\%) & 11 (0.15\%) & 65,313 (0.98\%) \\
+Localize Parameter & 10 (0.14\%) & 10 (0.14\%) & 14,858 (0.22\%) \\
+Remove Method Modifier & 10 (0.14\%) & 10 (0.14\%) & 46,166 (0.69\%) \\
+Add Method Modifier & 9 (0.13\%) & 9 (0.13\%) & 56,725 (0.85\%) \\
+Assert Throws & 9 (0.13\%) & 9 (0.13\%) & 5,690 (0.09\%) \\
+Remove Parameter Annotation & 7 (0.10\%) & 7 (0.10\%) & 27,480 (0.41\%) \\
+Replace Loop With Pipeline & 7 (0.10\%) & 7 (0.10\%) & 2,834 (0.04\%) \\
+Add Variable Modifier & 6 (0.08\%) & 6 (0.08\%) & 151,868 (2.27\%) \\
+Extract Attribute & 6 (0.08\%) & 6 (0.08\%) & 14,023 (0.21\%) \\
+Extract Interface & 6 (0.08\%) & 6 (0.08\%) & 5,157 (0.08\%) \\
+Push Down Attribute & 6 (0.08\%) & 6 (0.08\%) & 13,510 (0.20\%) \\
+Add Class Modifier & 5 (0.07\%) & 5 (0.07\%) & 20,544 (0.31\%) \\
+Move Code & 5 (0.07\%) & 5 (0.07\%) & 18,770 (0.28\%) \\
+Modify Attribute Annotation & 4 (0.06\%) & 4 (0.06\%) & 30,307 (0.45\%) \\
+Remove Class Modifier & 4 (0.06\%) & 4 (0.06\%) & 12,661 (0.19\%) \\
+Remove Thrown Exception Type & 4 (0.06\%) & 4 (0.06\%) & 98,395 (1.47\%) \\
+Split Conditional & 4 (0.06\%) & 4 (0.06\%) & 8,058 (0.12\%) \\
+Change Thrown Exception Type & 3 (0.04\%) & 3 (0.04\%) & 37,661 (0.56\%) \\
+Extract Superclass & 3 (0.04\%) & 3 (0.04\%) & 10,342 (0.15\%) \\
+Move And Rename Method & 3 (0.04\%) & 3 (0.04\%) & 29,926 (0.45\%) \\
+Parameterize Attribute & 3 (0.04\%) & 3 (0.04\%) & 5,739 (0.09\%) \\
+Pull Up Attribute & 3 (0.04\%) & 3 (0.04\%) & 30,697 (0.46\%) \\
+Remove Variable Modifier & 3 (0.04\%) & 3 (0.04\%) & 32,788 (0.49\%) \\
+Replace Pipeline With Loop & 3 (0.04\%) & 3 (0.04\%) & 987 (0.01\%) \\
+Extract Subclass & 2 (0.03\%) & 2 (0.03\%) & 2,782 (0.04\%) \\
+Push Down Method & 2 (0.03\%) & 2 (0.03\%) & 28,484 (0.43\%) \\
+Reorder Parameter & 2 (0.03\%) & 2 (0.03\%) & 6,610 (0.10\%) \\
+Split Attribute & 2 (0.03\%) & 2 (0.03\%) & 1,775 (0.03\%) \\
+Add Variable Annotation & 1 (0.01\%) & 1 (0.01\%) & 7,036 (0.11\%) \\
+Merge Class & 1 (0.01\%) & 1 (0.01\%) & 1,300 (0.02\%) \\
+Merge Parameter & 1 (0.01\%) & 1 (0.01\%) & 7,026 (0.11\%) \\
+Move Source Folder & 1 (0.01\%) & 1 (0.01\%) & 12,134 (0.18\%) \\
+Remove Parameter Modifier & 1 (0.01\%) & 1 (0.01\%) & 29,069 (0.44\%) \\
+Replace Generic With Diamond & 1 (0.01\%) & 1 (0.01\%) & 0 (0.00\%) \\
+Split Class & 1 (0.01\%) & 1 (0.01\%) & 921 (0.01\%) \\
+Split Method & 1 (0.01\%) & 1 (0.01\%) & 1,616 (0.02\%) \\
+Split Parameter & 1 (0.01\%) & 1 (0.01\%) & 2,928 (0.04\%) \\
+Add Parameter Modifier & 0 (0.00\%) & 0 (0.00\%) & 175,868 (2.63\%) \\
+Collapse Hierarchy & 0 (0.00\%) & 0 (0.00\%) & 1,078 (0.02\%) \\
+Inline Attribute & 0 (0.00\%) & 0 (0.00\%) & 1,814 (0.03\%) \\
+Merge Attribute & 0 (0.00\%) & 0 (0.00\%) & 3,337 (0.05\%) \\
+Merge Catch & 0 (0.00\%) & 0 (0.00\%) & 1,804 (0.03\%) \\
+Merge Method & 0 (0.00\%) & 0 (0.00\%) & 583 (0.01\%) \\
+Merge Package & 0 (0.00\%) & 0 (0.00\%) & 1,172 (0.02\%) \\
+Merge Variable & 0 (0.00\%) & 0 (0.00\%) & 2,421 (0.04\%) \\
+Modify Parameter Annotation & 0 (0.00\%) & 0 (0.00\%) & 4,395 (0.07\%) \\
+Modify Variable Annotation & 0 (0.00\%) & 0 (0.00\%) & 132 (0.00\%) \\
+Move And Rename Attribute & 0 (0.00\%) & 0 (0.00\%) & 24,422 (0.37\%) \\
+Move Package & 0 (0.00\%) & 0 (0.00\%) & 4,642 (0.07\%) \\
+Parameterize Test & 0 (0.00\%) & 0 (0.00\%) & 48 (0.00\%) \\
+Remove Variable Annotation & 0 (0.00\%) & 0 (0.00\%) & 2,880 (0.04\%) \\
+Rename Package & 0 (0.00\%) & 0 (0.00\%) & 4,878 (0.07\%) \\
+Replace Anonymous With Class & 0 (0.00\%) & 0 (0.00\%) & 3,018 (0.05\%) \\
+Replace Anonymous With Lambda & 0 (0.00\%) & 0 (0.00\%) & 43,159 (0.65\%) \\
+Replace Attribute & 0 (0.00\%) & 0 (0.00\%) & 527 (0.01\%) \\
+Replace Attribute With Variable & 0 (0.00\%) & 0 (0.00\%) & 20,256 (0.30\%) \\
+Split Package & 0 (0.00\%) & 0 (0.00\%) & 1,234 (0.02\%) \\
+Split Variable & 0 (0.00\%) & 0 (0.00\%) & 474 (0.01\%) \\
 \bottomrule
 \end{tabular}
 \end{table}

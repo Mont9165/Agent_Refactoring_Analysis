@@ -37,6 +37,7 @@ agentic_tools:
     - "ai"
 
 filtering:
-  min_commits_per_repo: 10
+  min_commits_per_repo: 1
   exclude_forks: true
-  min_contributors: 2
+  min_contributors: 1
+  min_repo_stars: 0

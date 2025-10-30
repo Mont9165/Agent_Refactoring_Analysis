@@ -1,0 +1,10 @@
+metric,Medium-level (signature + block),Low-level (code block),High-level (signature)
+Class-Level Metric – Depth of Inheritance Tree*,0.0,,0.012324691882702932
+Class-Level Metric – Fan-Out*,-0.017094017094017096,,0.0021249468763280916
+Class-Level Metric – Fan-In*,-0.008547008547008548,,0.00042498937526561835
+Class-Level Metric – Number of Methods*,-0.10256410256410256,,0.012749681257968552
+Class-Level Metric – Weighted Methods per Class*,-2.0683760683760686,,0.026774330641733957
+Class-Level Metric – Lines of Code*,-15.247863247863247,,0.10157246068848279
+Method-Level Metric – Parameter Count*,0.007383966244725738,0.0,0.11405584477046853
+Method-Level Metric – Cyclomatic Complexity*,0.01230661040787623,0.08470588235294117,0.0
+Method-Level Metric – Lines of Code*,-1.7921940928270041,-0.4235294117647059,0.11310932323710364

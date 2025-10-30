@@ -1,14 +1,13 @@
-metric,dependency,hard_to_debug,repurpose_reuse,duplication,legacy_code,logical_mismatch,maintainability,readability,slow_performance,testability
+metric,dependency,hard_to_debug,repurpose_reuse,slow_performance,duplication,legacy_code,logical_mismatch,maintainability,readability,testability
 Implementation Smell – Long Parameter List*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-Implementation Smell – Magic Number*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-Design Smell – Broken Hierarchy*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Implementation Smell – Magic Number*,0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.0,0.0,0.0
 Design Smell – Unutilized Abstraction*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Class-Level Metric – Depth of Inheritance Tree*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Class-Level Metric – Fan-Out*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Class-Level Metric – Fan-In*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-Class-Level Metric – Number of Methods*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-Class-Level Metric – Weighted Methods per Class*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-Class-Level Metric – Lines of Code*,3.0,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Class-Level Metric – Number of Methods*,0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Class-Level Metric – Weighted Methods per Class*,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Class-Level Metric – Lines of Code*,3.5,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Method-Level Metric – Parameter Count*,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Method-Level Metric – Cyclomatic Complexity*,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 Method-Level Metric – Lines of Code*,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
