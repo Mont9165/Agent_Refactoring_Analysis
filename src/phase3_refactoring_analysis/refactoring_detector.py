@@ -1,18 +1,20 @@
 """
 Refactoring detection using RefactoringMiner or pattern analysis
 """
-import pandas as pd
 import json
+import os
 import subprocess
+import sys
 from pathlib import Path
 from typing import Dict, List, Optional
-import sys
-import os
+
+import pandas as pd
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from src.phase3_refactoring_analysis.refminer_wrapper import RefactoringMinerWrapper
+from src.phase3_refactoring_analysis.self_affirmation import SELF_AFFIRMATION_PATTERN
 
 class RefactoringDetector:
     """Detects refactoring in Java commits"""
@@ -294,13 +296,11 @@ class RefactoringDetector:
         """
         print("Checking self-affirmation...")
         
-        # Self-affirmation patterns
-        self_affirmation_patterns = r'\b(refactor|restructur|reformat|reorganiz|use|make|minor|getting|deleting|format|performance|optimization|confusion|improvement|improve|revision|anti|reformat|format|reorder|improve|rework|redesign|enhanc|remov|chang|improv|simplif|modulari[sz]|fix|add|modif|polish|format|clean|merg|mov|split|introduc|decompos|extract|renam|extend|replac|rewrit|creat|inlin|reduc|encapsulat|pull)(?:e|ed|ing|s|es|ies|ied|y|ation|ment|ure)?\b|\b(cleanup|cleansing|pull\s*up|get\s*rid\s*of)\b'
-
-        # r'\b(refactor|restructur|reformat|reorganiz|use|make|minor|getting|deleting|format|performance|optimization|confusion|improvement|improve|revision|anti|reformat|format|reorder|improve|rework|redesign|enhanc|remov|chang|improv|simplif|modulari[sz]|fix|add|modif|polish|format|clean|merg|mov|split|introduc|decompos|extract|renam|extend|replac|rewrit|creat|inlin|reduc|encapsulat|pull)(?:e|ed|ing|s|es|ies|ied|y|ation|ment|ure)?\b|\b(cleanup|cleansing|pull\s*up|get\s*rid\s*of)\b'
-
-        commits_with_refactoring['is_self_affirmed'] = commits_with_refactoring['message'].str.contains(
-            self_affirmation_patterns, case=False, na=False, regex=True
+        commits_with_refactoring = commits_with_refactoring.copy()
+        commits_with_refactoring["is_self_affirmed"] = (
+            commits_with_refactoring["message"]
+            .astype(str)
+            .str.contains(SELF_AFFIRMATION_PATTERN, regex=True, na=False)
         )
         
         # Determine how to split by agent type (similar to analyze_refactoring_by_agent)
@@ -372,9 +372,120 @@ class RefactoringDetector:
             }
         }
         
+        sar_outputs = self._generate_sar_summary_outputs(commits_with_refactoring)
+        if sar_outputs:
+            sar_summary = combined_analysis.setdefault("sar_summary", {})
+            sar_summary["summary_csv"] = str(sar_outputs["summary_csv"])
+            sar_summary["summary_parquet"] = str(sar_outputs["summary_parquet"])
+            if sar_outputs["plot_path"]:
+                sar_summary["plot_path"] = str(sar_outputs["plot_path"])
+        
         with open(self.output_dir / "refactoring_analysis.json", 'w') as f:
             json.dump(combined_analysis, f, indent=2, default=str)
         
         print(f"Saved analysis to {self.output_dir}/refactoring_analysis.json")
         
         return self.output_dir
+
+    def _generate_sar_summary_outputs(self, commits_with_refactoring: pd.DataFrame) -> Optional[Dict[str, Optional[Path]]]:
+        """
+        Create SAR vs Non-SAR summary data and plot for RQ1 analysis.
+        """
+        if 'sha' not in commits_with_refactoring.columns or 'is_self_affirmed' not in commits_with_refactoring.columns:
+            print("Skipping SAR summary: required columns missing")
+            return None
+        
+        commit_level_cols = ['sha', 'is_self_affirmed', 'has_refactoring']
+        missing_cols = [col for col in commit_level_cols if col not in commits_with_refactoring.columns]
+        if missing_cols:
+            print(f"Skipping SAR summary: missing columns {missing_cols}")
+            return None
+        
+        commit_level = commits_with_refactoring[commit_level_cols].drop_duplicates('sha')
+        if commit_level.empty:
+            print("Skipping SAR summary: no commit-level data available")
+            return None
+        
+        commit_level['is_self_affirmed'] = commit_level['is_self_affirmed'].fillna(False)
+        commit_level['sar_category'] = commit_level['is_self_affirmed'].map({True: 'SAR', False: 'Non-SAR'})
+        
+        categories = ['Non-SAR', 'SAR']
+        total_commits = commit_level.groupby('sar_category')['sha'].nunique().reindex(categories, fill_value=0)
+        refactoring_commits = (
+            commit_level[commit_level['has_refactoring']]
+            .groupby('sar_category')['sha']
+            .nunique()
+            .reindex(categories, fill_value=0)
+        )
+        
+        summary_df = pd.DataFrame({
+            'category': categories,
+            'total_commits': total_commits.values.astype(int),
+            'refactoring_commits': refactoring_commits.values.astype(int),
+        })
+        summary_df['refactoring_rate'] = summary_df.apply(
+            lambda row: row['refactoring_commits'] / row['total_commits'] if row['total_commits'] else 0.0,
+            axis=1
+        )
+        summary_df['refactoring_rate_pct'] = (summary_df['refactoring_rate'] * 100).round(2)
+        
+        if self._last_refminer_results is not None and not self._last_refminer_results.empty:
+            commit_lookup = commit_level[['sha', 'sar_category']]
+            refminer_counts = (
+                self._last_refminer_results.merge(commit_lookup, left_on='commit_sha', right_on='sha', how='left')
+                .groupby('sar_category')
+                .size()
+                .reindex(categories, fill_value=0)
+            )
+            summary_df['refactoring_instances'] = refminer_counts.values.astype(int)
+        else:
+            summary_df['refactoring_instances'] = 0
+        
+        summary_dir = self.output_dir
+        summary_csv = summary_dir / "sar_commit_summary.csv"
+        summary_parquet = summary_dir / "sar_commit_summary.parquet"
+        summary_df.to_csv(summary_csv, index=False)
+        summary_df.to_parquet(summary_parquet, index=False)
+        print(f"Saved SAR vs Non-SAR summary to {summary_csv}")
+        
+        plot_dir = Path("outputs/research_questions/rq1")
+        plot_dir.mkdir(parents=True, exist_ok=True)
+        plot_path: Optional[Path] = None
+        try:
+            import matplotlib
+            matplotlib.use("Agg")
+            import matplotlib.pyplot as plt
+        except Exception as exc:  # noqa: BLE001
+            print(f"Warning: could not generate SAR plot (matplotlib unavailable: {exc})")
+        else:
+            plot_path = plot_dir / "sar_vs_non_sar_refactoring_rate.png"
+            fig, ax = plt.subplots(figsize=(6, 4))
+            bars = ax.bar(
+                summary_df['category'],
+                summary_df['refactoring_rate_pct'],
+                color=['#6baed6', '#fd8d3c']
+            )
+            ax.set_ylabel("Refactoring commits per total commits (%)")
+            ax.set_xlabel("Commit category")
+            ax.set_title("SAR vs Non-SAR Refactoring Rate\n(all Java commits)", pad=12)
+            ax.set_ylim(0, max(5, summary_df['refactoring_rate_pct'].max() * 1.2 if not summary_df.empty else 1))
+            ax.grid(axis='y', linestyle='--', alpha=0.3)
+            
+            for bar, (_, row) in zip(bars, summary_df.iterrows()):
+                height = bar.get_height()
+                label = f"{row['refactoring_rate_pct']:.1f}%\n({row['refactoring_commits']}/{row['total_commits']})"
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    height + max(0.3, height * 0.05),
+                    label,
+                    ha='center',
+                    va='bottom',
+                    fontsize=9,
+                )
+            
+            fig.tight_layout()
+            fig.savefig(plot_path, dpi=300, bbox_inches='tight')
+            plt.close(fig)
+            print(f"Saved SAR vs Non-SAR plot to {plot_path}")
+        
+        return {"summary_csv": summary_csv, "summary_parquet": summary_parquet, "plot_path": plot_path}

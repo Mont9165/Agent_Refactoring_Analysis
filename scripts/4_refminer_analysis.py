@@ -55,7 +55,7 @@ def main():
         print(f"Found {len(unique_commits_with_urls)} unique commits with GitHub URLs")
         
         # Set analysis scope (use environment variable or default)
-        max_commits = int(os.environ.get('REFMINER_MAX_COMMITS', 50))  # Default to 50 commits
+        max_commits = int(os.environ.get('REFMINER_MAX_COMMITS', 100000))  # Default to 50 commits
         print(f"\nAnalyzing {max_commits} commits (set REFMINER_MAX_COMMITS env var to change)")
         
         print(f"\n2. Running RefactoringMiner analysis on {max_commits} commits...")

@@ -19,12 +19,16 @@ class LanguageFilter:
     def __init__(self, config_path: str = "config/dataset_config.yaml"):
         self.loader = HFDatasetLoader(config_path)
         self.config = self.loader.config
+        self.filtering_config = self.config.get("filtering", {})
         
         # Java detection settings
         self.java_extensions = set(self.config["java_detection"]["java_file_extensions"])
         self.build_files = set(self.config["java_detection"]["build_file_patterns"])
         self.min_java_percentage = self.config["java_detection"]["min_java_percentage"]
         self.check_build_files = self.config["java_detection"]["check_build_files"]
+        
+        # Repository filters
+        self.min_repo_stars = int(self.filtering_config.get("min_repo_stars", 0) or 0)
     
     def load_repository_data(self) -> pd.DataFrame:
         """Load repository metadata from parquet file"""
@@ -51,7 +55,22 @@ class LanguageFilter:
             repos_df['language'].str.lower().str.contains('kotlin', na=False)
         ].copy()
         
-        print(f"Found {len(java_repos)} repositories with Java/Kotlin language tag")
+        pre_filter_count = len(java_repos)
+        
+        if self.min_repo_stars > 0:
+            if 'stars' in java_repos.columns:
+                stars_series = pd.to_numeric(java_repos['stars'], errors='coerce').fillna(0)
+                mask = stars_series >= self.min_repo_stars
+                removed = (~mask).sum()
+                java_repos = java_repos[mask].copy()
+                print(
+                    f"Applied min_repo_stars filter (>= {self.min_repo_stars} stars): "
+                    f"removed {removed:,} repositories"
+                )
+            else:
+                print("Warning: 'stars' column not found; skipping min_repo_stars filter")
+        
+        print(f"Found {len(java_repos)} repositories with Java/Kotlin language tag (from {pre_filter_count:,})")
         return java_repos
     
     def analyze_repository_languages(self, repos_df: pd.DataFrame) -> Dict:

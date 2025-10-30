@@ -288,7 +288,6 @@ def _plot_rq1_refactoring_commit_boxplot(refactoring_commits_csv: Path) -> Optio
 
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
-        from matplotlib import colors as mcolors
         import seaborn as sns
     except Exception as exc:  # noqa: BLE001
         print(f"  Skipping RQ1 refactoring commit box plot (dependency error: {exc})")
@@ -307,7 +306,7 @@ def _plot_rq1_refactoring_commit_boxplot(refactoring_commits_csv: Path) -> Optio
         print("  Skipping RQ1 box plot (required columns missing)")
         return None
 
-    agentic["category"] = agentic["is_self_affirmed"].map({True: "SAR", False: "Non-SAR"})
+    agentic["category"] = agentic["is_self_affirmed"].map({True: "Agentic Refactoring", False: "Implicit Refactoring"})
     counts = agentic["category"].value_counts()
     print(f"  Refactoring commits by category: {counts.to_dict()}")
 
@@ -319,7 +318,7 @@ def _plot_rq1_refactoring_commit_boxplot(refactoring_commits_csv: Path) -> Optio
         data=plot_data,
         x="category",
         y="refactoring_instance_count",
-        palette={"Non-SAR": "#6baed6", "SAR": "#fd8d3c"},
+        palette={"Implicit Refactoring": "#6baed6", "Agentic Refactoring": "#fd8d3c"},
         ax=ax,
     )
     sns.stripplot(
@@ -333,7 +332,7 @@ def _plot_rq1_refactoring_commit_boxplot(refactoring_commits_csv: Path) -> Optio
     )
     ax.set_xlabel("Commit category")
     ax.set_ylabel("Refactoring instances per refactoring commit")
-    ax.set_title("Refactoring instances (SAR vs Non-SAR)")
+    ax.set_title("Refactoring instances (Agentic vs Implicit)")
     ax.set_yscale("log")
     fig.tight_layout()
 
@@ -1221,45 +1220,92 @@ def _plot_rq5_smell_violin(
 
     fig, ax = plt.subplots(figsize=(6, 5))
     palette = {"Before": "#4C72B0", "After": "#DD8452"}
+    hue_order = ["Before", "After"]
     sns.violinplot(
         data=melted,
         x="category",
         y="smell_count",
         hue="phase",
+        hue_order=hue_order,
         split=True,
         inner=None,
         palette=palette,
         ax=ax,
     )
-    centers = ax.get_xticks()
-    center = centers[0] if len(centers) == 1 else 0.0
-    box_offset = 0.08
-    for phase, offset in (("Before", -box_offset), ("After", box_offset)):
-        values = melted.loc[melted["phase"] == phase, "smell_count"].to_numpy()
-        if values.size == 0:
+    existing_artists = len(ax.artists)
+    sns.boxplot(
+        data=melted,
+        x="category",
+        y="smell_count",
+        hue="phase",
+        hue_order=hue_order,
+        dodge=True,
+        width=0.28,
+        showcaps=True,
+        showfliers=False,
+        palette=palette,
+        boxprops={"linewidth": 1.0},
+        whiskerprops={"linewidth": 0.9},
+        capprops={"linewidth": 0.9},
+        medianprops={"linewidth": 1.2, "color": "black"},
+        ax=ax,
+        zorder=6,
+    )
+    box_patches = ax.artists[existing_artists:]
+    categories = list(melted["category"].unique())
+    medians = (
+        melted.groupby(["category", "phase"])["smell_count"].median().to_dict()
+    )
+    for idx, patch in enumerate(box_patches):
+        phase = hue_order[idx % len(hue_order)]
+        category = categories[idx // len(hue_order)]
+        values = melted.loc[
+            (melted["category"] == category) & (melted["phase"] == phase),
+            "smell_count",
+        ].to_numpy()
+        patch.set_facecolor("white")
+        patch.set_edgecolor("black")
+        patch.set_linewidth(1.0)
+        path = patch.get_path().vertices
+        trans = patch.get_transform()
+        coords = trans.transform(path)
+        x_pos = float(coords[:, 0].mean())
+        median_val = medians.get((category, phase))
+        if median_val is None or np.isnan(median_val):
             continue
-        base_rgb = mcolors.to_rgb(palette[phase])
-        light_rgb = tuple(min(1.0, 0.55 * c + 0.45) for c in base_rgb)
-        fill_color = (*light_rgb, 0.28)
-        ax.boxplot(
-            values,
-            positions=[center + offset],
-            widths=box_offset * 0.9,
-            patch_artist=True,
-            boxprops={
-                "facecolor": fill_color,
-                "edgecolor": palette[phase],
-                "linewidth": 1.2,
-            },
-            whiskerprops={"color": palette[phase], "linewidth": 1.0},
-            capprops={"color": palette[phase], "linewidth": 1.0},
-            medianprops={"color": palette[phase], "linewidth": 1.4},
-            vert=True,
+        ax.scatter(
+            x_pos,
+            median_val,
+            s=8,
+            c=palette[phase],
+            edgecolors="black",
+            linewidths=0.35,
+            zorder=7,
+        )
+        ax.text(
+            x_pos,
+            median_val,
+            f"{median_val:.1f}",
+            color="black",
+            fontsize=8,
+            ha="center",
+            va="bottom",
+            fontweight="bold",
         )
     ax.set_xlabel("")
     ax.set_ylabel("Smell count per commit")
     ax.set_title(f"{smell_label} Smell Count Distribution (Before vs After)")
-    ax.legend(title="Phase")
+    handles, labels = ax.get_legend_handles_labels()
+    if handles and labels:
+        seen: Dict[str, object] = {}
+        filtered_handles = []
+        filtered_labels = []
+        for handle, label in zip(handles, labels):
+            if label not in seen:
+                seen[label] = handle
+                filtered_handles.append(handle)
+                filtered_labels.append(label)
+        ax.legend(filtered_handles, filtered_labels, title="Phase")
     # ax.set_yscale("symlog", linthresh=10)
 
     output_dir = OUTPUT_DIR / "rq5"

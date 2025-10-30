@@ -9,7 +9,7 @@
     "max_java_files_per_pr": 1251
   },
   "java_percentage_stats": {
-    "avg_java_percentage": 79.37030525170378,
+    "avg_java_percentage": 79.3703052517038,
     "median_java_percentage": 100.0,
     "prs_with_high_java_percentage": 13109,
     "prs_with_100_percent_java": 9589
@@ -44,5 +44,14 @@
         "forks": 5443
       }
     }
+  },
+  "filtering_stats": {
+    "initial_prs": 17461,
+    "final_prs": 17461,
+    "min_repo_stars": null,
+    "removed_by_stars": 0,
+    "filter_skipped": false,
+    "whitelist_entries": 3259,
+    "repo_whitelist_path": "data/filtered/java_repositories/high_star_repositories.csv"
   }
 }
