@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 from typing import List
 
@@ -13,6 +14,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
+# Ensure src package is importable when running as a script.
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+
+from src.research_questions.refactoring_classification import (
+    LEVEL_DISPLAY_ORDER,
+    LEVEL_NAME_BY_KEY,
+    classification_key,
+)
 
 ANALYSIS_DIR = Path("data/analysis/designite/metric_analysis")
 SIGNIFICANT_TABLE = Path("outputs/designite/metric_distributions/significant_metrics_summary.csv")
@@ -82,6 +92,64 @@ def load_tests(path: Path, p_col: str) -> pd.DataFrame:
     return df
 
 
+def _weighted_average(series: pd.Series, weights: pd.Series) -> float:
+    weights = pd.to_numeric(weights, errors="coerce").fillna(0)
+    series = pd.to_numeric(series, errors="coerce")
+    total_weight = weights.sum()
+    if total_weight <= 0 or series.isna().all():
+        return float("nan")
+    return float(np.average(series.fillna(0), weights=weights.replace(0, 1)))
+
+
+def aggregate_refactoring_by_level(summary_df: pd.DataFrame) -> pd.DataFrame:
+    """Collapse refactoring summary rows into level-based cohorts."""
+    if summary_df.empty:
+        return summary_df.copy()
+
+    df = summary_df.copy()
+    df["level_key"] = df["group"].map(classification_key)
+    df["level_label"] = df["level_key"].map(LEVEL_NAME_BY_KEY)
+
+    aggregated_rows = []
+    for (metric_category, metric_name, level_key, level_label), group in df.groupby(
+        ["metric_category", "metric_name", "level_key", "level_label"], dropna=False
+    ):
+        if level_key is None:
+            level_key = "unclassified"
+            level_label = LEVEL_NAME_BY_KEY[level_key]
+        observation_weights = pd.to_numeric(group.get("observation_count", 0), errors="coerce").fillna(0)
+        total_obs = int(observation_weights.sum())
+        if total_obs <= 0:
+            continue
+
+        entry = {
+            "metric_category": metric_category,
+            "metric_name": metric_name,
+            "group": level_label,
+            "level_key": level_key,
+            "observation_count": total_obs,
+            "unique_commit_count": int(pd.to_numeric(group.get("unique_commit_count", 0), errors="coerce").fillna(0).sum()),
+        }
+        for value_col in ["median_delta", "improvement_rate", "mean_delta", "q1_delta", "q3_delta"]:
+            if value_col in group.columns:
+                entry[value_col] = _weighted_average(group[value_col], observation_weights)
+        aggregated_rows.append(entry)
+
+    aggregated = pd.DataFrame.from_records(aggregated_rows)
+    if aggregated.empty:
+        return aggregated
+
+    level_priority = ("low", "medium", "high", "unclassified")
+    level_order = [
+        LEVEL_NAME_BY_KEY[key]
+        for key in level_priority
+        if key in LEVEL_NAME_BY_KEY
+    ]
+    aggregated["group"] = pd.Categorical(aggregated["group"], categories=level_order, ordered=True)
+    aggregated = aggregated.sort_values(["metric_category", "metric_name", "group"]).reset_index(drop=True)
+    return aggregated
+
+
 def format_heatmap(
     data: pd.DataFrame,
     metric_keys: List[tuple[str, str]],
@@ -96,6 +164,7 @@ def format_heatmap(
     title: str,
     group_limit: int | None = None,
     csv_path: Path | None = None,
+    latex_path: Path | None = None,
 ) -> None:
     if not metric_keys:
         return
@@ -133,6 +202,31 @@ def format_heatmap(
     if csv_path is not None:
         csv_path.parent.mkdir(parents=True, exist_ok=True)
         pivot.reset_index().rename(columns={"index": "metric"}).to_csv(csv_path, index=False)
+    if latex_path is not None:
+        latex_path.parent.mkdir(parents=True, exist_ok=True)
+        latex_df = pivot.copy()
+        latex_df.insert(0, "Metric", pivot.index)
+
+        def _format_value(val) -> str:
+            try:
+                if pd.isna(val):
+                    return ""
+            except TypeError:
+                pass
+            try:
+                numeric_val = float(val)
+            except (TypeError, ValueError):
+                return str(val)
+            formatted = format(numeric_val, value_formatter)
+            if value_col == "improvement_rate":
+                formatted += " %"
+            return formatted
+
+        numeric_cols = [col for col in latex_df.columns if col != "Metric"]
+        latex_formatted = latex_df.copy()
+        latex_formatted[numeric_cols] = latex_formatted[numeric_cols].applymap(_format_value)
+        latex_formatted["Metric"] = latex_df["Metric"]
+        latex_formatted.to_latex(latex_path, index=False, escape=False)
 
     plt.figure(figsize=(max(6, pivot.shape[1] * 1.1), max(4, pivot.shape[0] * 0.6)))
     sns.heatmap(
@@ -268,6 +362,7 @@ def main() -> None:
     else:
         print("SAR-specific motivation summaries not found; skipping SAR motivation heatmap.")
 
+    ref_summary_full = refactoring_summary.copy()
     top_ref_types = (
         refactoring_summary.groupby("group")["observation_count"]
         .sum()
@@ -303,6 +398,30 @@ def main() -> None:
     else:
         print("No refactoring types showed significant differences; skipping refactoring heatmap.")
 
+    refactoring_level_summary = aggregate_refactoring_by_level(ref_summary_full)
+    if not refactoring_level_summary.empty and refactoring_metrics:
+        refactoring_level_pdf = OUTPUT_DIR / f"refactoring_level_heatmap_{args.value}.pdf"
+        format_heatmap(
+            refactoring_level_summary,
+            refactoring_metrics,
+            args.value,
+            cmap=cmap,
+            value_formatter=value_formatter,
+            center=center,
+            vmin=vmin,
+            vmax=vmax,
+            significant_keys=refactoring_sig,
+            output_path=refactoring_level_pdf,
+            title=(
+                f"Refactoring level impact for {len(refactoring_metrics)} significant metrics ({args.value})"
+            ),
+            group_limit=None,
+            csv_path=refactoring_level_pdf.with_suffix(".csv"),
+            latex_path=refactoring_level_pdf.with_suffix(".tex"),
+        )
+    else:
+        print("Skipping refactoring level heatmap (insufficient data or no significant metrics).")
+
     if refactoring_summary_sar is not None and refactoring_tests_sar is not None:
         refactoring_sar_sig = {
             (row.metric_category, row.metric_name)
@@ -327,6 +446,30 @@ def main() -> None:
                 group_limit=args.refactoring_groups,
                 csv_path=refactoring_sar_pdf.with_suffix(".csv"),
             )
+
+            sar_ref_level_summary = aggregate_refactoring_by_level(refactoring_summary_sar)
+            if not sar_ref_level_summary.empty:
+                refactoring_level_sar_pdf = OUTPUT_DIR / f"refactoring_level_heatmap_sar_{args.value}.pdf"
+                format_heatmap(
+                    sar_ref_level_summary,
+                    sar_ref_metrics,
+                    args.value,
+                    cmap=cmap,
+                    value_formatter=value_formatter,
+                    center=center,
+                    vmin=vmin,
+                    vmax=vmax,
+                    significant_keys=refactoring_sar_sig,
+                    output_path=refactoring_level_sar_pdf,
+                    title=(
+                        f"Refactoring level impact for {len(sar_ref_metrics)} SAR metrics ({args.value})"
+                    ),
+                    group_limit=None,
+                    csv_path=refactoring_level_sar_pdf.with_suffix(".csv"),
+                    latex_path=refactoring_level_sar_pdf.with_suffix(".tex"),
+                )
+            else:
+                print("No SAR refactoring level data available; skipping SAR level heatmap.")
         else:
             print("No SAR refactoring cohorts met the significance criteria; skipping SAR refactoring heatmap.")
     else:

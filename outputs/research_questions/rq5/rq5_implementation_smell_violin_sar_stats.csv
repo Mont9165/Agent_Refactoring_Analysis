@@ -1,0 +1,2 @@
+smell_label,commit_count,before_median,after_median,mean_difference,median_difference,cohens_d,improvement_rate_mean_pct,improvement_rate_median_pct,wilcoxon_statistic,wilcoxon_pvalue,wilcoxon_rank_biserial,wilcoxon_fdr_pvalue,wilcoxon_null_hypothesis
+Implementation Smell (SAR),1404,355.5,356.0,-32.846866096866094,0.0,-0.026437523705016727,-5.536532569151264,0.0,154671.5,6.749030240899533e-56,0.42503652267007663,1.3498060481799065e-55,Median delta = 0 (Wilcoxon H0)

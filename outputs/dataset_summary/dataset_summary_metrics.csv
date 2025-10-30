@@ -1,46 +1,46 @@
 category,metric,value
-commit,total_commits,20589
-commit,files_changed_mean,6.53
+commit,total_commits,14998
+commit,files_changed_mean,6.38
 commit,files_changed_median,3
-commit,java_files_changed_mean,4.32
+commit,java_files_changed_mean,4.28
 commit,java_files_changed_median,2
-commit,additions_mean,1440.47
-commit,additions_median,45
-commit,deletions_mean,236.32
+commit,additions_mean,1053.59
+commit,additions_median,42
+commit,deletions_mean,229.62
 commit,deletions_median,8
-commit,changes_mean,1602.88
-commit,changes_median,60
+commit,changes_mean,1216.91
+commit,changes_median,56
 commit,agent_share_pct,100
-commit,pr_state_closed_commits,18071.00
-commit,pr_state_open_commits,2518.00
-commit,merged_commits_in_closed_prs,16183.00
-commit,unmerged_commits_in_closed_prs,1888.00
-pull_request,total_prs,17049
-pull_request,closed_prs,15504
-pull_request,open_prs,1545
-pull_request,merged_prs,14261
-repositories,unique_repositories,3224.00
-coverage_processed,refactoring:designite,7607.00
-coverage_missing,refactoring:designite,258.00
-coverage_pct,refactoring:designite,96.72
+commit,pr_state_closed_commits,13582.00
+commit,pr_state_open_commits,1416.00
+commit,merged_commits_in_closed_prs,12241.00
+commit,unmerged_commits_in_closed_prs,1341.00
+pull_request,total_prs,12256
+pull_request,closed_prs,11504
+pull_request,open_prs,752
+pull_request,merged_prs,10645
+repositories,unique_repositories,1613.00
+coverage_processed,refactoring:designite,5551.00
+coverage_missing,refactoring:designite,238.00
+coverage_pct,refactoring:designite,95.89
 coverage_missing_samples,refactoring:designite,"000fe5f11b929473298fd0047b1df8d72ae4c1a7, 001338699c0f8a8281d0d58786725579f83513a2, 001b506c6310d7e92323807f74b7cc20c4729ae5, 01bdaf7fd1ebca2de37cc7da5ae223c70d4f9aa9, 026708898d593efdbbde2e50665431bf0ad051c5"
 coverage_processed,refactoring:readability,0.00
-coverage_missing,refactoring:readability,7865.00
+coverage_missing,refactoring:readability,5789.00
 coverage_pct,refactoring:readability,0
-coverage_missing_samples,refactoring:readability,"00064d29676a180ebaf2b70333326f29717ecf2c, 00075734bbfa4c4173a4236db30755eef0ccaee0, 00091d733a4978f2b795b5ab9690f7af77d82ffe, 000fe5f11b929473298fd0047b1df8d72ae4c1a7, 001338699c0f8a8281d0d58786725579f83513a2"
-coverage_processed,sar:designite,861.00
-coverage_missing,sar:designite,26.00
-coverage_pct,sar:designite,97.07
-coverage_missing_samples,sar:designite,"0564e7b9598ac7d848228de4fcad01500d3505ae, 05c89536f7a84fe73e898a33096d747631fe7826, 0c11ab52a4f2de561361695a979314b6b34000f3, 0c1e29bd21b13c2cc5dff113c48981595b0095b2, 152b4e4a2254d141c4f8fbc0f5157bca4e0e1c04"
+coverage_missing_samples,refactoring:readability,"00075734bbfa4c4173a4236db30755eef0ccaee0, 00091d733a4978f2b795b5ab9690f7af77d82ffe, 000fe5f11b929473298fd0047b1df8d72ae4c1a7, 001338699c0f8a8281d0d58786725579f83513a2, 001b506c6310d7e92323807f74b7cc20c4729ae5"
+coverage_processed,sar:designite,3751.00
+coverage_missing,sar:designite,156.00
+coverage_pct,sar:designite,96.01
+coverage_missing_samples,sar:designite,"000fe5f11b929473298fd0047b1df8d72ae4c1a7, 001338699c0f8a8281d0d58786725579f83513a2, 01bdaf7fd1ebca2de37cc7da5ae223c70d4f9aa9, 032263c13a3ae6136c13e38dd158ec51573b1ecb, 0429b3cff10972b370b2ab7f444c64b4aad2dad0"
 coverage_processed,sar:readability,0.00
-coverage_missing,sar:readability,887.00
+coverage_missing,sar:readability,3907.00
 coverage_pct,sar:readability,0
-coverage_missing_samples,sar:readability,"004355b9eb334af996f9855a8e96c1ed2f5c1071, 0155b680c8cf17bebf775806bf7c60ecf1e841ed, 01929b3fab4f1e2f35d8c85073b9498249908c02, 01b5ea155f8d9e0d32686bd34124321a2117c1a3, 021ff5539e9f485f1f5df3f833873a836429942a"
-agent_commit_share,Claude_Code,107 (0.52%)
-agent_pr_share,Claude_Code,38 (0.22%)
-agent_commit_share,Cursor,1051 (5.10%)
-agent_pr_share,Cursor,583 (3.42%)
-agent_commit_share,Devin,1052 (5.11%)
-agent_pr_share,Devin,453 (2.66%)
-agent_commit_share,OpenAI_Codex,18379 (89.27%)
-agent_pr_share,OpenAI_Codex,15975 (93.70%)
+coverage_missing_samples,sar:readability,"00075734bbfa4c4173a4236db30755eef0ccaee0, 00091d733a4978f2b795b5ab9690f7af77d82ffe, 000fe5f11b929473298fd0047b1df8d72ae4c1a7, 001338699c0f8a8281d0d58786725579f83513a2, 001bcf08c34fd8d61ff53cac354e9f8d74016e3f"
+agent_commit_share,Claude_Code,86 (0.57%)
+agent_pr_share,Claude_Code,27 (0.22%)
+agent_commit_share,Cursor,663 (4.42%)
+agent_pr_share,Cursor,337 (2.75%)
+agent_commit_share,Devin,860 (5.73%)
+agent_pr_share,Devin,335 (2.73%)
+agent_commit_share,OpenAI_Codex,13389 (89.27%)
+agent_pr_share,OpenAI_Codex,11557 (94.30%)

@@ -38,13 +38,9 @@ def main():
     """Run RefactoringMiner on Java commits and save results"""
 
     print("=" * 60)
-    print("       PHASE 3: REFACTORING DETECTION (DEPRECATED)")
+    print("       PHASE 3: REFACTORING DETECTION")
     print("=" * 60)
-    print("This entry point has been split into two steps:")
-    print("  - scripts/3_apply_refactoringminer.py (run RefactoringMiner + save raw/parsed)")
-    print("  - scripts/4_analyze_refactoring_instance_and_type.py (commit-level analysis)")
-    print("Please use those scripts. Exiting.")
-    return
+    print("Tip: for large-scale runs, prefer scripts/3_apply_refactoringminer.py + scripts/4_analyze_refactoring_instance_and_type.py.")
 
     start_time = time.time()
 

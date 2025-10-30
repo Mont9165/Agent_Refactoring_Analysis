@@ -208,43 +208,71 @@ def figure_rq3(motivations: pd.DataFrame, commits: pd.DataFrame) -> None:
         how="left",
     )
     data = data.dropna(subset=["motivation_label"])
-    data["group"] = np.where(data["is_self_affirmed"], "SAR", "Non-SAR")
+    data = data[data["is_self_affirmed"]]
 
     counts = (
-        data.groupby(["group", "motivation_label"])["commit_sha"]
+        data.groupby("motivation_label")["commit_sha"]
         .nunique()
         .reset_index(name="commit_count")
     )
-    totals = counts.groupby("group")["commit_count"].sum().rename("total").reset_index()
-    counts = counts.merge(totals, on="group")
-    counts["percentage"] = counts["commit_count"] / counts["total"] * 100
+    if counts.empty:
+        print("  No SAR motivation labels available.")
+        table_path = TABLE_DIR / "table_rq3_refactoring_purposes.tex"
+        table_path.write_text(
+            "\\begin{table}[h]\n\\centering\n\\caption{Distribution of refactoring purposes across SAR commits.}\n"
+            "\\label{tab:rq3-purpose-comparison}\n\\begin{tabular}{lr}\n\\toprule\n"
+            "\\textbf{Purpose Category} & \\textbf{SAR} \\\\\n\\midrule\n\\bottomrule\n\\end{tabular}\n\\end{table}\n",
+            encoding="utf-8",
+        )
+        return
 
-    pivot = counts.pivot(index="motivation_label", columns="group", values="percentage").fillna(0)
-    order = pivot.sum(axis=1).sort_values(ascending=False).index.tolist()
-    counts["motivation_label"] = pd.Categorical(counts["motivation_label"], categories=order, ordered=True)
+    counts = counts.sort_values("commit_count", ascending=False)
+    total_commits = int(counts["commit_count"].sum())
+    counts["percentage"] = counts["commit_count"] / total_commits * 100.0 if total_commits else 0.0
+    labels_display = counts["motivation_label"].str.replace("_", " ").str.title().str.replace(" To ", " to ")
 
-    plt.figure(figsize=(10, max(5, len(order) * 0.4)))
-    sns.barplot(
-        data=counts,
-        x="percentage",
-        y="motivation_label",
-        hue="group",
-        palette=[NON_SAR_COLOR, SAR_COLOR],
-    )
-    plt.xlabel("Percentage of commits")
-    plt.ylabel("Motivation category")
-    plt.legend(title="")
-    plt.title("Developer motivations for refactoring (Non-SAR vs SAR)")
+    plt.figure(figsize=(10, max(5, len(counts) * 0.45)))
+    ax = plt.gca()
+    ax.barh(labels_display.iloc[::-1], counts["percentage"].iloc[::-1], color="#E4572E")
+    ax.set_xlabel("Share of SAR commits (%)")
+    ax.set_ylabel("Motivation category")
+    ax.set_title("Developer motivations for refactoring (SAR only)")
+    ax.set_xlim(0, counts["percentage"].max() * 1.15 if not counts["percentage"].empty else 1)
+    for y, (label, pct) in enumerate(zip(labels_display.iloc[::-1], counts["percentage"].iloc[::-1])):
+        ax.text(pct + 0.5, y, f"{pct:.1f}%", va="center", ha="left", fontsize=11)
     plt.tight_layout()
     plt.savefig(FIGURE_DIR / "figure_rq3_refactoring_purposes.pdf", dpi=900)
     plt.close()
 
-    pivot.loc[:, ["Non-SAR", "SAR"]].fillna(0).to_latex(
-        TABLE_DIR / "table_rq3_refactoring_purposes.tex",
-        float_format="%.2f",
-        caption="Distribution of refactoring motivations across Non-SAR and SAR commits.",
-        label="tab:rq3_purposes",
+    def _fmt(count: int, pct: float) -> str:
+        return f"{count:,} ({pct:.1f}\\%)"
+
+    table_lines = [
+        "\\begin{table}[h]",
+        "\\centering",
+        "\\caption{Distribution of refactoring purposes across SAR commits.}",
+        "\\label{tab:rq3-purpose-comparison}",
+        "\\begin{tabular}{lr}",
+        "\\toprule",
+        "\\textbf{Purpose Category} & \\textbf{SAR} \\\\",
+        "\\midrule",
+    ]
+
+    for label, row in zip(labels_display, counts.itertuples()):
+        table_lines.append(f"{label} & {_fmt(row.commit_count, row.percentage)} \\\\")
+
+    table_lines.extend(
+        [
+            "\\midrule",
+            f"\\textbf{{Total Commits}} & \\textbf{{{total_commits:,}}} \\\\",
+            "\\bottomrule",
+            "\\end{tabular}",
+            "\\end{table}",
+        ]
     )
+
+    table_path = TABLE_DIR / "table_rq3_refactoring_purposes.tex"
+    table_path.write_text("\n".join(table_lines) + "\n", encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------

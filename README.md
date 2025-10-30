@@ -105,18 +105,54 @@ Each numbered script builds on the previous outputs. Run them from the repositor
 
 | Step | Command | Description | Key Outputs |
 |------|---------|-------------|-------------|
-| 0 | `python scripts/0_download_dataset.py` | Download & cache the source dataset | `data/huggingface/...` |
-| 1 | `python scripts/1_simple_java_extraction.py` | Filter Java PRs and keep metadata | `data/filtered/java_repositories/simple_java_prs.parquet` |
-| 2 | `python scripts/2_extract_commits.py` | Expand PRs into commit-level rows; filter out merges | `data/filtered/java_repositories/java_file_commits_for_refactoring.parquet` |
-| 3 | `python scripts/3_detect_refactoring.py` | Pattern-based hints + (optional) RefactoringMiner pass | `data/analysis/refactoring_instances/commits_with_refactoring.parquet` |
-| 4 | `python scripts/4_refminer_analysis.py` | Batch run RefactoringMiner & aggregate results; saves raw JSON | `data/analysis/refactoring_instances/refminer_refactorings.parquet` + `refminer_raw/` |
-| 5 | `python scripts/5_designite_impact_analysis.py` | Aggregate Designite commit-level metrics; compare refactoring vs non-refactoring commits | `data/analysis/designite/commit_designite_metrics.*`, `designite_impact_summary.json`, `designite_boxplot_data.json` |
-| 6a | `python scripts/6a_prepare_designite_projects.py` | Generate `tools/DesigniteRunner/projects.txt` listing repos to analyse with Designite | `tools/DesigniteRunner/projects.txt` |
-| 6 | `python scripts/6_quality_analysis.py` | High-level quality deltas (Designite+readability) for sampled commits | `data/analysis/quality/quality_deltas.*`, `quality_summary.json` |
-| 6b | `python scripts/6b_compute_designite_deltas.py [--workers N]` | Auto-fetch repos/commits, run Designite for missing snapshots in parallel, and emit per-entity deltas | `data/analysis/designite/deltas/*.csv|parquet` |
-| 6c | `python scripts/6c_readability_impact.py [--workers N] [--timeout S]` | Compute readability deltas (per repo worker pool) for files touched by refactorings | `data/analysis/readability/readability_deltas.*`, `_summary.*` |
+| 0 | `python scripts/0_download_dataset.py` | Download & cache the source dataset snapshot from HuggingFace | `data/huggingface/...` |
+| 1 | `python scripts/1_simple_java_extraction.py` | Filter to Java pull requests and persist metadata for downstream phases | `data/filtered/java_repositories/simple_java_prs.*` |
+| 2 | `python scripts/2_extract_commits.py` | Expand PRs into commit-level rows and drop merge commits | `data/filtered/java_repositories/java_file_commits_for_refactoring.*` |
+| 3a | `python scripts/3_detect_refactoring.py` | Heuristic refactoring signals based on PR metadata and file changes | `data/analysis/refactoring_instances/commits_with_refactoring.parquet` |
+| 3b | `python scripts/3_apply_refactoringminer.py` | Run RefactoringMiner on candidate commits (saves raw JSON + parquet) | `data/analysis/refactoring_instances/refminer_refactorings.parquet`, `refminer_raw/` |
+| 4 | `python scripts/4_analyze_refactoring_instance_and_type.py` | Merge heuristics + RefactoringMiner output into commit/type summaries | `data/analysis/refactoring_instances/refactoring_commits.parquet`, `refactoring_analysis.json` |
+| 6 | `python scripts/6_designite_impact_analysis.py` | Compare Designite metrics for refactoring vs. control commits | `data/analysis/designite/commit_designite_metrics.*`, `designite_impact_summary.json` |
+| 6a | `python scripts/6a_prepare_designite_projects.py` | Emit Designite project list for bulk analysis | `tools/DesigniteRunner/projects.txt` |
+| 6b | `python scripts/6b_compute_designite_deltas.py [--workers N]` | Fetch parent/child snapshots, run Designite, emit per-entity deltas | `data/analysis/designite/deltas/*.parquet` |
+| 6c | `python scripts/6c_readability_impact.py [--workers N]` | Compute CoRed readability deltas for files touched by refactorings | `data/analysis/readability/readability_deltas.*` |
+| 6d | `python scripts/6_quality_analysis.py` | Combine Designite + readability metrics into a quality-impact bundle | `data/analysis/quality/*.parquet`, `quality_summary.json` |
+| 7 | `python scripts/7b_label_repositories_by_chatgpt.py` | Tag repositories (production vs. toy) via GPT prompts using README excerpts | `data/filtered/java_repositories/gpt_repository_labels.csv` |
+| 10 | `python scripts/10_research_questions.py` | Generate the RQ1–RQ5 tables, plots, and CSV artefacts | `outputs/research_questions/**` |
 
-> **Tip:** Most scripts accept environment variables (e.g., `REFMINER_MAX_COMMITS`, `REFMINER_SAVE_JSON`) to control sample size and caching. Check the script source or `--help` for details.
+> **Tip:** Most scripts accept environment variables (e.g., `REFMINER_MAX_COMMITS`, `REFMINER_SAVE_JSON`, `DESIGNITE_WORKERS`) to control sample size and caching. Check the script source or run `--help` for details.
+
+### Additional analysis & visualisation helpers
+
+The pipeline ships with focused scripts that build on the core outputs:
+
+- `python scripts/7_manual_inspection_by_chatgpt.py` – export structured prompts for manual GPT review of specific commits.
+- `python scripts/10a_compute_rq3_totals_summary.py` – derive SAR vs. human refactoring totals for the RQ3 plots and tables.
+- `python scripts/11_analyze_designite_smells.py` – deep dive into Designite smell deltas (per-type aggregations and CSV summaries).
+- `python scripts/12_visualize_designite_metrics.py` – render per-metric before/after charts from the Designite delta outputs.
+- `python scripts/13_visualize_rq_findings.py` – collect the headline RQ plots into a single PDF bundle.
+- `python scripts/14_metric_distribution_analysis.py` – histogram/ECDF views for selected Designite metrics.
+- `python scripts/15_visualize_metric_groups.py` – grouped radar/heatmap views for metric families.
+- `python scripts/calculate_cohen_kappa.py` – compute inter-rater reliability and classification metrics for the GPT motivation labels (`--summary` and `--confusion-dir` flags control exports).
+
+Utility scripts such as `dataset_summary.py`, `plot_dataset.py`, `render_table.py`, and `sample_refactoring_motivations.py` are living notebooks in script form—run them ad-hoc to explore subsets of the data without touching the main pipeline artefacts.
+
+### Recomputing Filtered Java Dataset
+
+- Adjust `config/dataset_config.yaml` if needed; `filtering.min_repo_stars` now defaults to `5`, so PRs from repositories with fewer than five stars are excluded from downstream phases.
+- Re-run the pipeline scripts in order to refresh all derived artifacts:
+  ```bash
+  python scripts/0_download_dataset.py         # optional if parquet cache already up-to-date
+  python scripts/1_simple_java_extraction.py   # regenerates simple_java_prs.* with star filter applied
+  python scripts/2_extract_commits.py
+  python scripts/3_detect_refactoring.py       # or scripts/3_apply_refactoringminer.py if you use the batch runner
+  python scripts/4_refminer_analysis.py
+  python scripts/7b_label_repositories_by_chatgpt.py --max-workers 3  # classify repositories (resume-safe)
+  ```
+- Existing outputs in `data/filtered/` and `data/analysis/` will be overwritten with the filtered results; archive or relocate historical snapshots beforehand if you need to keep them.
+- Generate an explicit whitelist of qualifying repositories with `python scripts/export_high_star_projects.py`; this emits both CSV and parquet files under `data/filtered/java_repositories/`.
+- To retrofit previously generated artifacts, run `python scripts/filter_outputs_by_repo_list.py <files...>` (accepts CSV or parquet) so only the whitelisted repositories remain. The script automatically merges repository metadata from `simple_java_prs.parquet` (override with `--pr-stats`) and, if needed, from the commit table (`--commit-stats`) so even commit-only outputs can be filtered in place.
+
+> **Note:** Step 7 pulls README excerpts via the GitHub API—set `GITHUB_TOKEN` (or populate `github-oauth.properties`) before running to avoid stringent anonymous rate limits. Pass `--extra-context` if you want the prompt to include stars/forks and sample PR titles in addition to the README text.
 
 ---
 

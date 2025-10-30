@@ -19,10 +19,15 @@ class SimpleJavaFilter:
     def __init__(self, config_path: str = "config/dataset_config.yaml"):
         self.loader = HFDatasetLoader(config_path)
         self.config = self.loader.config
+        self.filtering_config = self.config.get("filtering", {})
         
         # Java file extensions from config
         self.java_extensions = self.config["java_detection"]["java_file_extensions"]
         print(f"Looking for files with extensions: {self.java_extensions}")
+        
+        # Repository filters
+        self.min_repo_stars = int(self.filtering_config.get("min_repo_stars", 0) or 0)
+        self._last_filter_stats = {}
     
     def filter_java_prs(self) -> pd.DataFrame:
         """
@@ -72,6 +77,26 @@ class SimpleJavaFilter:
         # Add PR status information
         print("Adding PR status information...")
         pr_stats_with_status = self._add_pr_status(pr_stats, pr_id_col)
+        
+        # Report repository filter summary
+        if self._last_filter_stats.get("min_repo_stars") is not None:
+            threshold = self._last_filter_stats["min_repo_stars"]
+            kept = self._last_filter_stats.get("final_prs", len(pr_stats_with_status))
+            if self._last_filter_stats.get("filter_skipped"):
+                print(
+                    f"Repository star filter (>= {threshold} stars) was skipped because repo_stars data was unavailable"
+                )
+            else:
+                removed = self._last_filter_stats.get("removed_by_stars", 0) or 0
+                if removed:
+                    print(f"Repository star filter (>= {threshold} stars) removed {removed:,} PRs; {kept:,} remain")
+                else:
+                    print(f"Repository star filter (>= {threshold} stars) retained all {kept:,} PRs")
+        elif self.min_repo_stars:
+            print(
+                f"Warning: Repository star filter configured (>= {self.min_repo_stars} stars) "
+                "but could not be applied due to missing repository data"
+            )
         
         return pr_stats_with_status
     
@@ -212,11 +237,49 @@ class SimpleJavaFilter:
                 merged_df['repo_language'] = merged_df['language']
             
             print(f"Added repository information for {len(merged_df)} PRs")
-            return merged_df
+            return self._apply_repository_filters(merged_df)
             
         except Exception as e:
             print(f"Warning: Could not load repository information: {e}")
+            self._last_filter_stats = {
+                "initial_prs": len(pr_stats),
+                "final_prs": len(pr_stats),
+                "min_repo_stars": None,
+                "removed_by_stars": 0
+            }
             return pr_stats
+
+    def _apply_repository_filters(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Apply repository-level filters such as minimum star threshold"""
+        filter_stats = {
+            "initial_prs": len(df),
+            "final_prs": len(df),
+            "min_repo_stars": None,
+            "removed_by_stars": 0,
+            "filter_skipped": False
+        }
+        
+        # Apply minimum star filter if configured
+        if self.min_repo_stars > 0:
+            filter_stats["min_repo_stars"] = self.min_repo_stars
+            
+            if 'repo_stars' not in df.columns:
+                print("Warning: repo_stars column missing; skipping star-based repository filter")
+                filter_stats["filter_skipped"] = True
+                self._last_filter_stats = filter_stats
+                return df
+            
+            before_count = len(df)
+            filtered_df = df[df['repo_stars'] >= self.min_repo_stars].copy()
+            removed = before_count - len(filtered_df)
+            
+            filter_stats["removed_by_stars"] = removed
+            filter_stats["final_prs"] = len(filtered_df)
+            self._last_filter_stats = filter_stats
+            return filtered_df
+        
+        self._last_filter_stats = filter_stats
+        return df
     
     def get_summary_stats(self, pr_stats: pd.DataFrame) -> Dict:
         """Get summary statistics"""
@@ -288,12 +351,20 @@ class SimpleJavaFilter:
                     for _, row in top_repos.iterrows()
                 }
         
+        if self._last_filter_stats:
+            summary["filtering_stats"] = self._last_filter_stats
+        
         return summary
     
     def save_java_prs(self, pr_stats: pd.DataFrame, summary: Dict):
         """Save Java PR results"""
         output_dir = Path("data/filtered/java_repositories")
         output_dir.mkdir(parents=True, exist_ok=True)
+        
+        whitelist_path = self._save_repo_whitelist(pr_stats, output_dir)
+        if whitelist_path:
+            summary.setdefault("filtering_stats", self._last_filter_stats)
+            summary["filtering_stats"]["repo_whitelist_path"] = str(whitelist_path)
         
         # Save main results
         pr_stats.to_parquet(output_dir / "simple_java_prs.parquet", index=False)
@@ -320,6 +391,29 @@ class SimpleJavaFilter:
         print(f"- simple_java_summary.json: Summary statistics")
         
         return output_dir / "simple_java_prs.parquet"
+
+    def _save_repo_whitelist(self, pr_stats: pd.DataFrame, output_dir: Path) -> Path | None:
+        """Persist unique repositories that passed filtering criteria"""
+        if 'repo_id' not in pr_stats.columns:
+            print("Warning: Cannot create repository whitelist because repo_id column is missing")
+            return None
+        
+        repo_columns = ['repo_id']
+        optional_columns = ['repo_name', 'repo_stars', 'repo_forks', 'repo_language']
+        repo_columns.extend([col for col in optional_columns if col in pr_stats.columns])
+        
+        repo_df = pr_stats[repo_columns].drop_duplicates('repo_id').sort_values('repo_id').reset_index(drop=True)
+        if repo_df.empty:
+            print("Warning: Repository whitelist would be empty; skipping save")
+            return None
+        
+        whitelist_path = output_dir / "high_star_repositories.csv"
+        repo_df.to_csv(whitelist_path, index=False)
+        repo_df.to_parquet(whitelist_path.with_suffix(".parquet"), index=False)
+        whitelist_count = len(repo_df)
+        print(f"Saved repository whitelist with {whitelist_count} entries to {whitelist_path}")
+        self._last_filter_stats["whitelist_entries"] = whitelist_count
+        return whitelist_path
     
     def get_java_pr_ids(self) -> List[str]:
         """Get list of Java PR IDs for further analysis"""

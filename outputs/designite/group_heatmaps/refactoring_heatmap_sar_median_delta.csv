@@ -1,10 +1,10 @@
-metric,Merge Class,Merge Conditional,Add Class Modifier,Try With Resources,Change Return Type,Remove Variable Modifier
-Class-Level Metric – Depth of Inheritance Tree*,0.0,,0.0,,0.0,
-Class-Level Metric – Fan-Out*,0.0,,1.0,,0.0,
-Class-Level Metric – Fan-In*,1.0,,1.0,,3.0,
-Class-Level Metric – Number of Methods*,15.0,,7.0,,5.0,
-Class-Level Metric – Weighted Methods per Class*,8.0,,7.0,,5.0,
-Class-Level Metric – Lines of Code*,119.0,,35.0,,20.0,
-Method-Level Metric – Parameter Count*,,0.0,,0.0,0.0,1.5
-Method-Level Metric – Cyclomatic Complexity*,,-9.5,,-1.0,0.0,-1.0
-Method-Level Metric – Lines of Code*,,-44.0,,-12.0,0.0,-6.5
+metric,Merge Class,Extract Subclass,Merge Variable,Split Class,Split Conditional,Replace Loop With Pipeline,Add Class Modifier,Change Return Type,Extract Class,Replace Anonymous With Lambda,Replace Conditional With Ternary,Move And Inline Method,Remove Variable Modifier,Replace Pipeline With Loop,Split Method,Extract Method,Split Parameter,Merge Conditional,Merge Parameter,Remove Parameter,Try With Resources,Split Variable,Add Parameter,Extract And Move Method,Remove Class Modifier,Inline Method,Move Code,Assert Throws,Change Type Declaration Kind,Extract Interface,Rename Class,Replace Generic With Diamond,Remove Variable Annotation,Remove Thrown Exception Type,Remove Parameter Modifier,Remove Class Annotation,Remove Parameter Annotation,Rename Method,Remove Method Modifier,Remove Method Annotation,Reorder Parameter,Add Class Annotation,Push Down Method,Change Thrown Exception Type,Add Method Annotation,Add Method Modifier,Add Parameter Annotation,Add Parameter Modifier,Add Thrown Exception Type,Add Variable Annotation,Add Variable Modifier,Change Class Access Modifier,Change Method Access Modifier,Extract Superclass,Pull Up Method,Invert Condition,Modify Class Annotation,Modify Method Annotation,Modify Parameter Annotation,Move And Rename Method,Move Class,Move Method,Move Package,Move Source Folder,Move And Rename Class
+Class-Level Metric – Depth of Inheritance Tree*,0.0,0.0,,0.0,,,0.0,0.0,0.0,,,,,,,,,,,,,,,,0.0,,,,0.0,1.0,0.0,,,,,0.0,,,,,,0.0,,,,,,,,,,0.0,,0.0,,,0.0,,,,0.0,,0.0,0.0,0.0
+Class-Level Metric – Fan-Out*,0.5,-1.0,,0.0,,,0.5,0.0,0.0,,,,,,,,,,,,,,,,0.0,,,,0.0,0.0,0.0,,,,,0.0,,,,,,0.0,,,,,,,,,,0.0,,0.0,,,0.0,,,,0.0,,0.0,0.0,0.0
+Class-Level Metric – Fan-In*,0.5,-0.5,,0.0,,,0.0,0.0,0.0,,,,,,,,,,,,,,,,0.0,,,,0.0,0.0,0.0,,,,,0.0,,,,,,0.0,,,,,,,,,,0.0,,0.0,,,0.0,,,,0.0,,0.0,0.0,0.0
+Class-Level Metric – Number of Methods*,11.0,-4.5,,-2.0,,,1.0,1.0,0.0,,,,,,,,,,,,,,,,0.0,,,,0.0,0.0,0.0,,,,,0.0,,,,,,0.0,,,,,,,,,,0.0,,0.0,,,0.0,,,,0.0,,0.0,0.0,0.0
+Class-Level Metric – Weighted Methods per Class*,25.5,-11.5,,-4.0,,,1.5,1.0,-2.0,,,,,,,,,,,,,,,,0.0,,,,0.0,0.0,0.0,,,,,0.0,,,,,,0.0,,,,,,,,,,0.0,,0.0,,,0.0,,,,0.0,,0.0,0.0,0.0
+Class-Level Metric – Lines of Code*,46.5,-87.5,,-16.0,,,10.0,17.0,-16.0,,,,,,,,,,,,,,,,3.0,,,,2.0,0.0,0.0,,,,,0.0,,,,,,0.0,,,,,,,,,,0.0,,0.0,,,0.0,,,,0.0,,0.0,0.0,0.0
+Method-Level Metric – Parameter Count*,,0.0,0.0,,0.0,0.0,,0.0,0.0,0.0,0.0,1.5,0.0,0.0,0.0,0.0,1.5,0.0,-1.0,-1.0,0.0,0.0,1.0,0.0,,0.0,0.0,0.0,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.0,,0.0,0.0,,0.0,0.0,0.0,,0.0,,,
+Method-Level Metric – Cyclomatic Complexity*,,0.0,0.0,,2.0,-2.0,,0.0,0.0,0.0,-1.0,2.5,0.0,1.0,0.0,0.0,0.0,-1.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.0,,0.0,0.0,,0.0,0.0,0.0,,0.0,,,
+Method-Level Metric – Lines of Code*,,0.0,-11.0,,7.0,-5.0,,0.0,0.0,-5.5,-4.0,-0.5,-4.0,3.0,-3.0,-3.0,1.0,-1.5,-1.0,-1.0,-2.0,-2.0,1.0,-2.0,,1.0,1.0,-1.0,,,,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,,0.0,,0.0,0.0,,0.0,0.0,0.0,,0.0,,,

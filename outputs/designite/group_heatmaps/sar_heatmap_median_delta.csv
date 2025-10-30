@@ -1,14 +1,4 @@
 metric,Non-SAR,Self-Affirmed
-Implementation Smell – Long Parameter List*,0.0,0.0
-Implementation Smell – Complex Method*,0.0,0.0
-Implementation Smell – Magic Number*,0.0,0.0
-Implementation Smell – Complex Conditional*,0.0,0.0
-Implementation Smell – Long Statement*,0.0,0.0
-Design Smell – Broken Hierarchy*,0.0,0.0
 Class-Level Metric – Fan-Out*,0.0,0.0
-Class-Level Metric – Number of Methods*,0.0,0.0
-Class-Level Metric – Weighted Methods per Class*,0.0,0.0
-Class-Level Metric – Lines of Code*,0.0,0.0
-Method-Level Metric – Parameter Count*,0.0,0.0
 Method-Level Metric – Cyclomatic Complexity*,0.0,0.0
 Method-Level Metric – Lines of Code*,0.0,0.0

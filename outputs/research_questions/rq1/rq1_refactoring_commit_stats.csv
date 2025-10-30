@@ -1,0 +1,2 @@
+sar_count,non_sar_count,sar_median,non_sar_median,sar_mean,non_sar_mean,mannwhitney_u,p_value,cliffs_delta,cliffs_magnitude
+3907,1882,3.0,2.0,8.348861018684413,9.990435706695004,3837092.5,0.0058947348538731835,0.04368450099238757,negligible

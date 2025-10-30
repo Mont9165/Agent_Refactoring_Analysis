@@ -21,7 +21,7 @@ def load_phase3_outputs(
     """Load Phase 3 parquet outputs needed by RQ scripts."""
     commits_path = commits_path or ANALYSIS_DIR / "commits_with_refactoring.parquet"
     refminer_path = refminer_path or ANALYSIS_DIR / "refminer_refactorings.parquet"
-
+    
     commits = pd.read_parquet(commits_path) if commits_path.exists() else None
     refminer = pd.read_parquet(refminer_path) if refminer_path.exists() else None
 

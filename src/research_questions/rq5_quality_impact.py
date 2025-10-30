@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
+import numpy as np
 import pandas as pd
 
 from .rq_common import OUTPUT_DIR, write_json
@@ -82,6 +83,13 @@ def _summarize_designite(designite_df: pd.DataFrame) -> Dict[str, object]:
 
     designite_df = designite_df.copy()
     designite_df["delta"] = pd.to_numeric(designite_df["delta"], errors="coerce")
+    designite_df["before_value"] = pd.to_numeric(designite_df.get("before_value"), errors="coerce")
+    designite_df["after_value"] = pd.to_numeric(designite_df.get("after_value"), errors="coerce")
+    designite_df["improvement_rate_pct"] = np.where(
+        designite_df["before_value"] > 0,
+        (designite_df["before_value"] - designite_df["after_value"]) / designite_df["before_value"] * 100.0,
+        np.nan,
+    )
     designite_df = designite_df.dropna(subset=["delta"])
     if designite_df.empty:
         return {"status": "empty"}
@@ -102,26 +110,49 @@ def _summarize_designite(designite_df: pd.DataFrame) -> Dict[str, object]:
             stats = _describe(group["delta"])
             if not stats:
                 continue
+            improvement_stats = _describe(group["improvement_rate_pct"])
             metric_entry["by_refactoring_type"][ref_type] = {
                 "stats": stats,
                 "entity_kind_counts": group["entity_kind"].value_counts().to_dict(),
                 "violin_sample": _sample_values(group["delta"]),
             }
+            if improvement_stats:
+                metric_entry["by_refactoring_type"][ref_type]["improvement_rate"] = {
+                    "stats": improvement_stats,
+                    "violin_sample": _sample_values(group["improvement_rate_pct"]),
+                }
 
         # Commit-level aggregation (sum of deltas per commit & ref type)
         commit_df = (
             metric_df
-            .groupby(["commit_sha", "refactoring_type"], as_index=False)["delta"]
-            .sum()
+            .groupby(["commit_sha", "refactoring_type"], as_index=False)
+            .agg(
+                delta=("delta", "sum"),
+                before_total=("before_value", "sum"),
+                after_total=("after_value", "sum"),
+            )
+        )
+        commit_df["improvement_rate_pct"] = np.where(
+            commit_df["before_total"] > 0,
+            (commit_df["before_total"] - commit_df["after_total"]) / commit_df["before_total"] * 100.0,
+            np.nan,
         )
         for ref_type, group in commit_df.groupby("refactoring_type"):
-            stats = _describe(group["delta"])
-            if not stats:
+            delta_stats = _describe(group["delta"])
+            improvement_stats = _describe(group["improvement_rate_pct"])
+            if not delta_stats and not improvement_stats:
                 continue
-            metric_entry["by_commit"][ref_type] = {
-                "stats": stats,
-                "violin_sample": _sample_values(group["delta"]),
-            }
+            entry: Dict[str, object] = {}
+            if delta_stats:
+                entry["stats"] = delta_stats
+                entry["violin_sample"] = _sample_values(group["delta"])
+            if improvement_stats:
+                entry["improvement_rate"] = {
+                    "stats": improvement_stats,
+                    "violin_sample": _sample_values(group["improvement_rate_pct"]),
+                }
+            if entry:
+                metric_entry["by_commit"][ref_type] = entry
 
         summary["metrics"][metric] = metric_entry
 
