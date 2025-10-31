@@ -2,6 +2,16 @@
 
 Research infrastructure for studying how AI-assisted commits refactor Java code. The pipeline starts from the AIDev dataset, filters Java pull requests, detects refactorings (pattern-based + RefactoringMiner), and quantifies quality impacts with Designite metrics.
 
+## Overview
+
+- **Dataset ingestion** – Scripts `0`–`2` pull the HuggingFace snapshot, keep Java PRs, and expand them into commit-level tables.
+- **Refactoring detection** – Scripts `3a`/`3b` combine heuristic signals with RefactoringMiner to build `refactoring_commits.parquet` and raw JSON traces.
+- **Quality analysis** – Scripts `6a`–`6d` run DesigniteJava and CoRed to emit commit/entity deltas for structural and readability metrics.
+- **Research questions** – `scripts/10_research_questions.py` aggregates the outputs to answer RQ1–RQ5 (counts, SAR vs human comparisons, smell deltas) with plots and CSVs under `outputs/research_questions/`.
+- **Auxiliary tooling** – Extra scripts (10a, 11–15, `calculate_cohen_kappa.py`) generate level-based breakdowns, visualisations, and inter-rater metrics for GPT motivation labels.
+
+All derived artefacts live in `data/analysis/` (parquet/CSV) and `outputs/` (publication-ready plots). Environment variables such as `DESIGNITE_JAVA_PATH`, `REPOS_BASE`, `READABILITY_TOOL_CMD`, and `REFMINER_MAX_COMMITS` control the tooling without modifying code.
+
 ---
 
 ## 1. Repository Tour
@@ -186,7 +196,7 @@ Prerequisites:
 
 Run:
 ```bash
-python scripts/5_designite_impact_analysis.py
+python scripts/6_designite_impact_analysis.py
 ```
 
 Outputs:
@@ -284,9 +294,9 @@ All JSON/CSV artifacts land in `outputs/research_questions/`. For custom analyse
   - Existing child Designite outputs live under `data/designite/outputs/...`; the script creates parent snapshots automatically when possible.
 - **Large parquet reads fail**: install optional dependencies like `pyarrow==15.x` (already listed in `requirements.txt`).
 
----
+<!-- --- -->
 
-## 9. Contributing & Workflow Tips
+<!-- ## 9. Contributing & Workflow Tips
 
 1. Keep outputs under `data/` (already gitignored). Do not commit large binaries.
 2. Follow PEP 8 (4-space indent) and use type hints + short docstrings for new modules.
@@ -298,4 +308,4 @@ For substantial contributions, consider adding pytest cases under `tests/` (name
 
 ---
 
-Happy analysing! If you uncover new refactoring insights, extend the pipeline with additional research questions under `src/research_questions/` and expose them via new scripts in `scripts/`.
+Happy analysing! If you uncover new refactoring insights, extend the pipeline with additional research questions under `src/research_questions/` and expose them via new scripts in `scripts/`. -->
