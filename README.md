@@ -6,8 +6,8 @@ Research infrastructure for studying how AI-assisted commits refactor Java code.
 
 - **Dataset ingestion** – Scripts `0`–`2` pull the HuggingFace snapshot, keep Java PRs, and expand them into commit-level tables.
 - **Refactoring detection** – Scripts `3a`/`3b` combine heuristic signals with RefactoringMiner to build `refactoring_commits.parquet` and raw JSON traces.
-- **Quality analysis** – Scripts `6a`–`6d` run DesigniteJava and CoRed to emit commit/entity deltas for structural and readability metrics.
-- **Research questions** – `scripts/10_research_questions.py` aggregates the outputs to answer RQ1–RQ5 (counts, SAR vs human comparisons, smell deltas) with plots and CSVs under `outputs/research_questions/`.
+- **Quality analysis** – Scripts `6a`–`6d` run DesigniteJava to emit commit/entity deltas for structural and readability metrics.
+- **Research questions** – `scripts/10_research_questions.py` aggregates the outputs to answer RQ1–RQ5 (counts, Agentic vs human comparisons, smell deltas) with plots and CSVs under `outputs/research_questions/`.
 - **Auxiliary tooling** – Extra scripts (10a, 11–15, `calculate_cohen_kappa.py`) generate level-based breakdowns, visualisations, and inter-rater metrics for GPT motivation labels.
 
 All derived artefacts live in `data/analysis/` (parquet/CSV) and `outputs/` (publication-ready plots). Environment variables such as `DESIGNITE_JAVA_PATH`, `REPOS_BASE`, `READABILITY_TOOL_CMD`, and `REFMINER_MAX_COMMITS` control the tooling without modifying code.
@@ -124,7 +124,7 @@ Each numbered script builds on the previous outputs. Run them from the repositor
 | 6 | `python scripts/6_designite_impact_analysis.py` | Compare Designite metrics for refactoring vs. control commits | `data/analysis/designite/commit_designite_metrics.*`, `designite_impact_summary.json` |
 | 6a | `python scripts/6a_prepare_designite_projects.py` | Emit Designite project list for bulk analysis | `tools/DesigniteRunner/projects.txt` |
 | 6b | `python scripts/6b_compute_designite_deltas.py [--workers N]` | Fetch parent/child snapshots, run Designite, emit per-entity deltas | `data/analysis/designite/deltas/*.parquet` |
-| 6c | `python scripts/6c_readability_impact.py [--workers N]` | Compute CoRed readability deltas for files touched by refactorings | `data/analysis/readability/readability_deltas.*` |
+<!-- | 6c | `python scripts/6c_readability_impact.py [--workers N]` | Compute CoRed readability deltas for files touched by refactorings | `data/analysis/readability/readability_deltas.*` | -->
 | 6d | `python scripts/6_quality_analysis.py` | Combine Designite + readability metrics into a quality-impact bundle | `data/analysis/quality/*.parquet`, `quality_summary.json` |
 | 7 | `python scripts/7b_label_repositories_by_chatgpt.py` | Tag repositories (production vs. toy) via GPT prompts using README excerpts | `data/filtered/java_repositories/gpt_repository_labels.csv` |
 | 10 | `python scripts/10_research_questions.py` | Generate the RQ1–RQ5 tables, plots, and CSV artefacts | `outputs/research_questions/**` |
@@ -136,7 +136,8 @@ Each numbered script builds on the previous outputs. Run them from the repositor
 The pipeline ships with focused scripts that build on the core outputs:
 
 - `python scripts/7_manual_inspection_by_chatgpt.py` – export structured prompts for manual GPT review of specific commits.
-- `python scripts/10a_compute_rq3_totals_summary.py` – derive SAR vs. human refactoring totals for the RQ3 plots and tables.
+- `python scripts/10_research_questions.py` – end-to-end RQ1–RQ5 bundle (tables, stats, violin plots, CSVs under `outputs/research_questions/`).
+- `python scripts/10a_compute_rq3_totals_summary.py` – derive Agentic vs. human refactoring totals for the RQ3 plots and tables.
 - `python scripts/11_analyze_designite_smells.py` – deep dive into Designite smell deltas (per-type aggregations and CSV summaries).
 - `python scripts/12_visualize_designite_metrics.py` – render per-metric before/after charts from the Designite delta outputs.
 - `python scripts/13_visualize_rq_findings.py` – collect the headline RQ plots into a single PDF bundle.
@@ -146,7 +147,7 @@ The pipeline ships with focused scripts that build on the core outputs:
 
 Utility scripts such as `dataset_summary.py`, `plot_dataset.py`, `render_table.py`, and `sample_refactoring_motivations.py` are living notebooks in script form—run them ad-hoc to explore subsets of the data without touching the main pipeline artefacts.
 
-### Recomputing Filtered Java Dataset
+<!-- ### Filtered Java Dataset
 
 - Adjust `config/dataset_config.yaml` if needed; `filtering.min_repo_stars` now defaults to `5`, so PRs from repositories with fewer than five stars are excluded from downstream phases.
 - Re-run the pipeline scripts in order to refresh all derived artifacts:
@@ -162,7 +163,7 @@ Utility scripts such as `dataset_summary.py`, `plot_dataset.py`, `render_table.p
 - Generate an explicit whitelist of qualifying repositories with `python scripts/export_high_star_projects.py`; this emits both CSV and parquet files under `data/filtered/java_repositories/`.
 - To retrofit previously generated artifacts, run `python scripts/filter_outputs_by_repo_list.py <files...>` (accepts CSV or parquet) so only the whitelisted repositories remain. The script automatically merges repository metadata from `simple_java_prs.parquet` (override with `--pr-stats`) and, if needed, from the commit table (`--commit-stats`) so even commit-only outputs can be filtered in place.
 
-> **Note:** Step 7 pulls README excerpts via the GitHub API—set `GITHUB_TOKEN` (or populate `github-oauth.properties`) before running to avoid stringent anonymous rate limits. Pass `--extra-context` if you want the prompt to include stars/forks and sample PR titles in addition to the README text.
+> **Note:** Step 7 pulls README excerpts via the GitHub API—set `GITHUB_TOKEN` (or populate `github-oauth.properties`) before running to avoid stringent anonymous rate limits. Pass `--extra-context` if you want the prompt to include stars/forks and sample PR titles in addition to the README text. -->
 
 ---
 
@@ -170,7 +171,10 @@ Utility scripts such as `dataset_summary.py`, `plot_dataset.py`, `render_table.p
 
 1. Build or drop the RefactoringMiner jar inside `tools/RefactoringMiner`:
    ```bash
-   cd tools/RefactoringMiner
+   mkdir -p tools
+   cd tools
+   git clone https://github.com/tsantalis/RefactoringMiner.git
+   cd RefactoringMiner
    ./gradlew shadowJar   # produces build/libs/RM-fat.jar
    ```
 
@@ -187,9 +191,20 @@ Outputs include:
 ---
 
 ## 5. Designite Quality Metrics
+1. Clone DesigniteRunner `tools/DesigniteRunner`:
+   ```bash
+   cd tools
+   git clone https://github.com/Mont9165/DesigniteRunner.git
+   cd DesigniteRunner
+   ```
+
+2. Prepare designite projects (come back project directory):
+  ```bash
+  python scripts/6a_prepare_designite_projects.py
+  ```
+
 
 ### 5.1 Generating commit-level metrics
-
 Prerequisites:
 - Designite command-line jar (`DESIGNITE_JAVA_PATH`).
 - Designite output directories populated under `data/designite/outputs/<owner>/<repo>/<sha>/`. You can populate them by running Designite manually or by invoking the helper in `scripts/tools/`.
@@ -269,10 +284,10 @@ Troubleshooting:
 
 | RQ | Output | Location |
 |----|--------|----------|
-| RQ1 / RQ2 | Counts of refactoring commits & self-affirmation | `data/analysis/refactoring_instances/refactoring_analysis.json`, `refactoring_commits.parquet` |
-| RQ3 | Refactoring type distributions | `data/analysis/refactoring_instances/refactoring_type_counts_*.{csv,json}` |
-| RQ4 | Qualitative summaries / prompts (if generated) | `outputs/` or `notebooks/` (see repo history) |
-| RQ5 | Quality metrics before/after refactorings | `data/analysis/designite/*`, `data/analysis/quality/*`, `outputs/research_questions/rq5_quality/*` |
+| RQ1 / RQ2 (Frequency) | Counts of refactoring commits/instances & self-affirmation | `data/analysis/refactoring_instances/refactoring_analysis.json`, `refactoring_commits.parquet` |
+| RQ3 (Type) | Refactoring type distributions | `data/analysis/refactoring_instances/refactoring_type_counts_*.{csv,json}` |
+| RQ4 (Purpose) | Qualitative summaries / prompts (if generated) | `outputs/` or `notebooks/` (see repo history) |
+| RQ5 (Impact) | Quality metrics before/after refactorings | `data/analysis/designite/*`, `data/analysis/quality/*`, `outputs/research_questions/rq5_quality/*` |
 
 After running the numbered scripts you can generate the RQ summary bundle (including the new RQ5 quality impact report) with:
 

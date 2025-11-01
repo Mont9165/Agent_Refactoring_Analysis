@@ -7,10 +7,21 @@ import math
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
+import pandas as pd
+
+from scipy.stats import mannwhitneyu, wilcoxon as wilcoxon_signed_rank
+from cliffs_delta import cliffs_delta as cliffs_delta_fn
+
 try:  # Optional dependency used for statistical testing
-    from scipy.stats import wilcoxon as wilcoxon_signed_rank
+    from scipy.stats import mannwhitneyu, wilcoxon as wilcoxon_signed_rank
 except Exception:  # pragma: no cover - scipy might be unavailable
     wilcoxon_signed_rank = None
+    mannwhitneyu = None
+
+try:  # Optional dependency for effect size
+    from cliffs_delta import cliffs_delta as cliffs_delta_fn
+except Exception:  # pragma: no cover - optional
+    cliffs_delta_fn = None
 
 _RAW_RQ4_HUMAN_PURPOSE_PERCENTAGES: Dict[str, float] = {
     "maintainability": 11.2,
@@ -76,6 +87,7 @@ def _plot_rq3_distribution(
 
     try:
         import os
+        import numpy as np
         import pandas as pd
 
         # Ensure matplotlib can build its cache inside the workspace sandbox
@@ -270,8 +282,11 @@ def _plot_rq1_sar_summary(summary_csv: Path) -> Optional[Path]:
     return output_path
 
 
-def _plot_rq1_refactoring_commit_boxplot(refactoring_commits_csv: Path) -> Optional[Path]:
-    """Box plot comparing refactoring instances per commit for SAR vs Non-SAR agentic commits."""
+def _plot_rq1_refactoring_commit_boxplot(
+    refactoring_commits_csv: Path,
+    agentic_shas: Optional["pd.Index"] = None,
+) -> Optional[Path]:
+    """Violin plot comparing refactoring instances per commit for SAR vs overall agentic commits."""
     if not refactoring_commits_csv.exists():
         return None
 
@@ -290,58 +305,190 @@ def _plot_rq1_refactoring_commit_boxplot(refactoring_commits_csv: Path) -> Optio
         import matplotlib.pyplot as plt
         import seaborn as sns
     except Exception as exc:  # noqa: BLE001
-        print(f"  Skipping RQ1 refactoring commit box plot (dependency error: {exc})")
+        print(f"  Skipping RQ1 refactoring commit violin plot (dependency error: {exc})")
         return None
 
-    df = pd.read_csv(refactoring_commits_csv)
-    if df.empty:
+    ref_df = pd.read_csv(refactoring_commits_csv)
+    if ref_df.empty:
+        return None
+    ref_df["sha"] = ref_df["sha"].astype(str)
+
+    agentic_ref = ref_df[ref_df.get("agent").notna()].copy()
+    if agentic_ref.empty:
+        print("  Skipping RQ1 violin plot (no agentic commits in refactoring table)")
         return None
 
-    agentic = df[df.get("agent").notna()].copy()
-    if agentic.empty:
-        print("  Skipping RQ1 box plot (no agentic refactoring commits)")
+    required = {"is_self_affirmed", "refactoring_instance_count", "sha"}
+    if not required.issubset(agentic_ref.columns):
+        print("  Skipping RQ1 violin plot (required columns missing)")
         return None
 
-    if "is_self_affirmed" not in agentic.columns or "refactoring_instance_count" not in agentic.columns:
-        print("  Skipping RQ1 box plot (required columns missing)")
+    if agentic_shas is None:
+        agentic_index = pd.Index(agentic_ref["sha"].unique())
+    else:
+        agentic_index = pd.Index(str(sha) for sha in agentic_shas)
+
+    if agentic_index.empty:
+        print("  Skipping RQ1 violin plot (no agentic commits provided)")
         return None
 
-    agentic["category"] = agentic["is_self_affirmed"].map({True: "Agentic Refactoring", False: "Implicit Refactoring"})
-    counts = agentic["category"].value_counts()
-    print(f"  Refactoring commits by category: {counts.to_dict()}")
+    per_commit_counts = (
+        agentic_ref.groupby("sha")["refactoring_instance_count"].sum().astype(int)
+    )
 
-    plot_data = agentic[["category", "refactoring_instance_count"]].copy()
+    all_counts = pd.Series(0, index=agentic_index, dtype=int)
+    overlap = per_commit_counts.index.intersection(all_counts.index)
+    all_counts.loc[overlap] = per_commit_counts.loc[overlap]
+
+    sar_shas = pd.Index(
+        agentic_ref.loc[agentic_ref["is_self_affirmed"] == True, "sha"].astype(str)  # noqa: E712
+    ).unique()
+    sar_counts = all_counts.loc[all_counts.index.intersection(sar_shas)]
+
+    others_counts = all_counts.drop(sar_counts.index, errors="ignore")
+
+    sar_plot = pd.DataFrame(
+        {
+            "category": "Agentic Refactoring",
+            "refactoring_instance_count": sar_counts.values,
+        }
+    )
+    agentic_plot = pd.DataFrame(
+        {
+            "category": "All",
+            "refactoring_instance_count": all_counts.values,
+        }
+    )
+    others_plot = pd.DataFrame(
+        {
+            "category": "Others",
+            "refactoring_instance_count": others_counts.values,
+        }
+    )
+
+    plot_data = pd.concat([sar_plot, others_plot], ignore_index=True)
+    # plot_data = pd.concat([sar_plot, agentic_plot], ignore_index=True)
+    if plot_data.empty:
+        print("  Skipping RQ1 violin plot (no data after combining Agentic/Others agentic)")
+        return None
+
     plot_data["refactoring_instance_count"] = plot_data["refactoring_instance_count"].astype(int)
+    counts = plot_data["category"].value_counts()
+    print(f"  Data points by category (RQ1 violin): {counts.to_dict()}")
+
+    sar_values = sar_counts.to_numpy()
+    all_values = all_counts.to_numpy()
+    if sar_values.size and all_values.size:
+        import numpy as np
+
+        sar_mean = float(np.mean(sar_values))
+        sar_median = float(np.median(sar_values))
+        all_mean = float(np.mean(all_values))
+        all_median = float(np.median(all_values))
+        others_values = others_counts.to_numpy()
+        others_mean = float(np.mean(others_values)) if others_values.size else float("nan")
+        others_median = float(np.median(others_values)) if others_values.size else float("nan")
+        print(
+            "  Agentic refactoring (SAR) per-commit instances: mean = {:.2f}, median = {:.2f} (n={})".format(
+                sar_mean, sar_median, sar_values.size
+            )
+        )
+        print(
+            "  Agentic commits overall per-commit instances: mean = {:.2f}, median = {:.2f} (n={})".format(
+                all_mean, all_median, all_values.size
+            )
+        )
+        if others_values.size:
+            print(
+                "    └ Others (non-SAR) per-commit instances: mean = {:.2f}, median = {:.2f} (n={})".format(
+                    others_mean, others_median, others_values.size
+                )
+            )
+
+    if sar_values.size and all_values.size and mannwhitneyu is not None:
+        try:
+            u_stat, p_value = mannwhitneyu(sar_values, all_values, alternative="two-sided")
+            stats_msg = (
+                f"  Mann–Whitney U (Agent vs All) = {u_stat:.1f}, "
+                f"p-value ≈ {p_value:.6f}"
+            )
+            if cliffs_delta_fn is not None:
+                delta, magnitude = cliffs_delta_fn(sar_values.tolist(), all_values.tolist())
+                stats_msg += f"; Cliff's δ = {delta:.3f} ({magnitude})"
+            print(stats_msg)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  Warning: could not compute Mann–Whitney/Cliff's delta for RQ1 ({exc})")
+
+    if sar_values.size and others_counts.size and mannwhitneyu is not None:
+        try:
+            others_values = others_counts.to_numpy()
+            u_stat, p_value = mannwhitneyu(sar_values, others_values, alternative="two-sided")
+            stats_msg = (
+                f"  Mann–Whitney U (Agent vs Others) = {u_stat:.1f}, "
+                f"p-value ≈ {p_value:.6f}"
+            )
+            if cliffs_delta_fn is not None:
+                delta, magnitude = cliffs_delta_fn(sar_values.tolist(), others_values.tolist())
+                stats_msg += f"; Cliff's δ = {delta:.3f} ({magnitude})"
+            print(stats_msg)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  Warning: could not compute Mann–Whitney/Cliff's delta for SAR vs Others ({exc})")
 
     fig, ax = plt.subplots(figsize=(6, 5))
-    sns.boxplot(
+    order = [cat for cat in ["Agentic Refactoring", "Others"] if cat in counts.index]
+    palette = {"Agentic Refactoring": "#fd8d3c", "Others": "#6baed6"}
+    sns.violinplot(
         data=plot_data,
         x="category",
         y="refactoring_instance_count",
-        palette={"Implicit Refactoring": "#6baed6", "Agentic Refactoring": "#fd8d3c"},
+        order=order,
+        palette=palette,
+        cut=0,
+        scale="width",
+        inner="quartile",
+        bw_adjust=4.5,
+        linewidth=1.0,
         ax=ax,
     )
+    # sns.boxplot(
+    #     data=plot_data,
+    #     x="category",
+    #     y="refactoring_instance_count",
+    #     order=order,
+    #     palette=palette,
+    #     showfliers=True,
+    #     ax=ax,
+    # ) 
     sns.stripplot(
         data=plot_data,
         x="category",
         y="refactoring_instance_count",
+        order=order,
         color="black",
-        size=3,
-        alpha=0.35,
+        size=2.2,
+        alpha=0.2,
+        jitter=True,
         ax=ax,
     )
-    ax.set_xlabel("Commit category")
-    ax.set_ylabel("Refactoring instances per refactoring commit")
-    ax.set_title("Refactoring instances (Agentic vs Implicit)")
+    # ax.set_xlabel("Commit category")
+    ax.set_ylabel("Refactoring instances per commit")
     ax.set_yscale("log")
+    ax.yaxis.grid(True, linestyle="--", alpha=0.3)
+    # ax.set_title("Refactoring instances (Agentic vs All)")
+    if (plot_data["refactoring_instance_count"] > 0).any():
+        ax.set_yscale("symlog", linthresh=1)
+        ax.set_ylim(bottom=0)
+    else:
+        ax.set_ylim(bottom=-0.1, top=1)
     fig.tight_layout()
 
     output_dir = OUTPUT_DIR / "rq1"
     output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / "rq1_refactoring_commit_boxplot.png"
-    fig.savefig(output_path, dpi=300, bbox_inches="tight")
+    output_path = output_dir / "rq1_refactoring_commit_boxplot.pdf"
+    fig.savefig(output_path, dpi=600, bbox_inches="tight")
     plt.close(fig)
     return output_path
+
 
 
 def _plot_rq2_refactoring_type_butterflies(
@@ -1798,6 +1945,7 @@ def _plot_rq4_purposes(
 
 
 def main() -> None:
+    import pandas as pd
     print("=" * 60)
     print("         RESEARCH QUESTIONS (RQ1–RQ5)")
     print("=" * 60)
@@ -1839,13 +1987,18 @@ def main() -> None:
     ]
     refactoring_commits_path = next((p for p in refactoring_commits_candidates if p.exists()), None)
     if refactoring_commits_path:
-        boxplot_path = _plot_rq1_refactoring_commit_boxplot(refactoring_commits_path)
+        agentic_commit_shas: Optional[pd.Index] = None
+        if "agent" in commits.columns and "sha" in commits.columns:
+            agentic_commit_shas = pd.Index(
+                commits.loc[commits["agent"].notna(), "sha"].astype(str).unique()
+            )
+        boxplot_path = _plot_rq1_refactoring_commit_boxplot(refactoring_commits_path, agentic_commit_shas)
         if boxplot_path:
-            print(f"  Saved refactoring commit box plot: {boxplot_path}")
+            print(f"  Saved refactoring commit violin plot: {boxplot_path}")
         else:
-            print(f"  Skipped refactoring commit box plot (could not render from {refactoring_commits_path})")
+            print(f"  Skipped refactoring commit violin plot (could not render from {refactoring_commits_path})")
     else:
-        print("  Refactoring commit CSV not found; skipping RQ1 box plot.")
+        print("  Refactoring commit CSV not found; skipping RQ1 violin plot.")
 
     print("\nRQ2: Self-affirmed refactoring percentage in agentic commits...")
     rq2 = rq2_self_affirmed_percentage(commits)
