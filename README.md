@@ -6,7 +6,8 @@ Research infrastructure for studying how AI-assisted commits refactor Java code.
 
 - **Dataset ingestion** – Scripts `0`–`2` pull the HuggingFace snapshot, keep Java PRs, and expand them into commit-level tables.
 - **Refactoring detection** – Scripts `3a`/`3b` combine heuristic signals with RefactoringMiner to build `refactoring_commits.parquet` and raw JSON traces.
-- **Quality analysis** – Scripts `6a`–`6d` run DesigniteJava to emit commit/entity deltas for structural and readability metrics.
+- **Quality analysis** – Scripts `6a`–`6b` run DesigniteJava to emit commit/entity deltas for structural
+ <!-- and readability metrics. -->
 - **Research questions** – `scripts/10_research_questions.py` aggregates the outputs to answer RQ1–RQ5 (counts, Agentic vs human comparisons, smell deltas) with plots and CSVs under `outputs/research_questions/`.
 - **Auxiliary tooling** – Extra scripts (10a, 11–15, `calculate_cohen_kappa.py`) generate level-based breakdowns, visualisations, and inter-rater metrics for GPT motivation labels.
 
