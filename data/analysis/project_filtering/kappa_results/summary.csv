@@ -1,0 +1,17 @@
+pair,metric,value
+Inter-rater reliability (Annotator1 vs Annotator2),samples,314.0
+Inter-rater reliability (Annotator1 vs Annotator2),observed_agreement,0.8439490445859873
+Inter-rater reliability (Annotator1 vs Annotator2),expected_agreement,0.287455880563106
+Inter-rater reliability (Annotator1 vs Annotator2),kappa,0.7809946764597034
+Inter-rater reliability (Annotator1 vs Annotator2),accuracy,0.8439490445859873
+Inter-rater reliability (Annotator1 vs Annotator2),macro_precision,0.7999388553075188
+Inter-rater reliability (Annotator1 vs Annotator2),macro_recall,0.8118562916725777
+Inter-rater reliability (Annotator1 vs Annotator2),macro_f1,0.8008898356511706
+Human consensus vs GPT classification,samples,319.0
+Human consensus vs GPT classification,observed_agreement,0.8025078369905956
+Human consensus vs GPT classification,expected_agreement,0.3044388321655644
+Human consensus vs GPT classification,kappa,0.7160678713213998
+Human consensus vs GPT classification,accuracy,0.8025078369905956
+Human consensus vs GPT classification,macro_precision,0.772629674618311
+Human consensus vs GPT classification,macro_recall,0.7674948001697591
+Human consensus vs GPT classification,macro_f1,0.7389480782011902
