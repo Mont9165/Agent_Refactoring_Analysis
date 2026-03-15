@@ -39,6 +39,7 @@ Key output folders:
 - `data/filtered/java_repositories/*` – filtered PRs and commit tables.
 - `data/analysis/refactoring_instances/*` – refactoring commits, type counts, summaries.
 - `data/analysis/designite/*` – commit-level metrics, box-plot stats, entity deltas.
+- `data/analysis/project_filtering/*` – manual validation samples and Cohen's Kappa results.
 
 ---
 
@@ -145,8 +146,14 @@ The pipeline ships with focused scripts that build on the core outputs:
 - `python scripts/14_metric_distribution_analysis.py` – histogram/ECDF views for selected Designite metrics.
 - `python scripts/15_visualize_metric_groups.py` – grouped radar/heatmap views for metric families.
 - `python scripts/calculate_cohen_kappa.py` – compute inter-rater reliability and classification metrics for the GPT motivation labels (`--summary` and `--confusion-dir` flags control exports).
+- `python scripts/sample_repos_for_validation.py` – stratified proportional sampling from GPT-labeled repositories for manual validation (95% CI, 5% margin of error).
+- `python scripts/calculate_project_filtering_kappa.py` – compute Cohen's Kappa for project filtering validation (annotator-vs-annotator and human-vs-GPT).
 
 Utility scripts such as `dataset_summary.py`, `plot_dataset.py`, `render_table.py`, and `sample_refactoring_motivations.py` are living notebooks in script form—run them ad-hoc to explore subsets of the data without touching the main pipeline artefacts.
+
+### LLM prompt documentation
+
+`PROMPTS.md` documents all LLM prompts used in this study (project filtering and RQ3 purpose classification), including system prompts, user message construction, JSON schemas, API parameters, and the prompt development process.
 
 <!-- ### Filtered Java Dataset
 
