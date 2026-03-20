@@ -162,5 +162,5 @@ For both classification tasks, prompts were developed through the following iter
 
 1. **Pilot classification**: Two authors independently classified a small sample of items manually to establish ground-truth labels and refine category definitions.
 2. **Initial prompt design**: A baseline prompt was drafted incorporating category definitions from prior literature (Kim et al., 2014 for RQ3; standard software engineering criteria for project filtering).
-3. **Iterative refinement**: The prompt was tested on the pilot sample, misclassifications were analyzed, and the prompt was refined to address ambiguous cases. This cycle was repeated until stable performance was achieved.
+3. **Verification**: The prompt output was verified on examples and adjusted where necessary to address ambiguous cases.
 4. **Validation**: The final prompt was applied to a statistically significant random sample (n=344 for project filtering, n=100 for RQ3), and inter-rater agreement was measured using Cohen's Kappa between human annotators and between human consensus and LLM output.
