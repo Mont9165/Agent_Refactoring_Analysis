@@ -1,18 +1,7 @@
 {
-  "total_refactoring_commits": 3905,
-  "purpose_distribution": {
-    "maintainability": 1816,
-    "readability": 973,
-    "logical_mismatch": 446,
-    "testability": 179,
-    "repurpose_reuse": 159,
-    "dependency": 111,
-    "legacy_code": 68,
-    "hard_to_debug": 67,
-    "slow_performance": 49,
-    "duplication": 37
-  },
-  "examples_file": "outputs/research_questions/rq4/sar/examples.csv",
-  "note": "Based on GPT motivations with confidence >= 6.",
+  "total_refactoring_commits": 0,
+  "purpose_distribution": {},
+  "examples_file": null,
+  "note": "No GPT motivation data available or all confidence scores below threshold.",
   "output_dir": "outputs/research_questions/rq4/sar"
 }

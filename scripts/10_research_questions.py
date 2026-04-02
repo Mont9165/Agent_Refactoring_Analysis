@@ -349,7 +349,7 @@ def _plot_rq1_refactoring_commit_boxplot(
 
     sar_plot = pd.DataFrame(
         {
-            "category": "Agentic Refactoring",
+            "category": "Agentic Refactoring Commits",
             "refactoring_instance_count": sar_counts.values,
         }
     )
@@ -361,7 +361,7 @@ def _plot_rq1_refactoring_commit_boxplot(
     )
     others_plot = pd.DataFrame(
         {
-            "category": "Others",
+            "category": "Other Agentic Commits",
             "refactoring_instance_count": others_counts.values,
         }
     )
@@ -435,8 +435,8 @@ def _plot_rq1_refactoring_commit_boxplot(
             print(f"  Warning: could not compute Mann–Whitney/Cliff's delta for SAR vs Others ({exc})")
 
     fig, ax = plt.subplots(figsize=(6, 5))
-    order = [cat for cat in ["Agentic Refactoring", "Others"] if cat in counts.index]
-    palette = {"Agentic Refactoring": "#fd8d3c", "Others": "#6baed6"}
+    order = [cat for cat in ["Agentic Refactoring Commits", "Other Agentic Commits"] if cat in counts.index]
+    palette = {"Agentic Refactoring Commits": "#fd8d3c", "Other Agentic Commits": "#6baed6"}
     sns.violinplot(
         data=plot_data,
         x="category",

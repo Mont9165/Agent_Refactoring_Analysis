@@ -1,5 +1,3 @@
-annotator1_label,production_grade,specialized_project,toy_or_example,uncertain
-production_grade,97,6,3,0
-specialized_project,6,19,5,5
-toy_or_example,7,6,90,11
-uncertain,0,0,0,59
+annotator1_label,non_toy,toy
+non_toy,128,13
+toy,13,160
