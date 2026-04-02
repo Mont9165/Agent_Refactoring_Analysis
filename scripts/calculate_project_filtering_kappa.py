@@ -112,6 +112,22 @@ def main() -> int:
 
     df = pd.read_csv(args.input, dtype=str)
 
+    # Migrate legacy 4-category labels to binary scheme
+    _LEGACY_LABEL_MAP = {
+        "production_grade": "non_toy",
+        "specialized_project": "non_toy",
+        "toy_or_example": "toy",
+        "uncertain": "toy",
+    }
+    _label_cols = ["gpt_label", "annotator1_label", "annotator2_label", "final_human_label"]
+    for col in _label_cols:
+        if col in df.columns:
+            migrated = df[col].map(_LEGACY_LABEL_MAP)
+            changed = migrated.notna() & (migrated != df[col])
+            if changed.any():
+                df[col] = migrated.fillna(df[col])
+                print(f"Migrated {changed.sum()} legacy labels in '{col}' to binary scheme (non_toy/toy).")
+
     pairs = [
         ("annotator1_label", "annotator2_label", "human_vs_human",
          "Inter-rater reliability (Annotator1 vs Annotator2)"),

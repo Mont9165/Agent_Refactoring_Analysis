@@ -42,7 +42,7 @@ def parse_args() -> argparse.Namespace:
         nargs="*",
         default=None,
         help=(
-            "Labels to keep from --labels-file. Defaults to production_grade and specialized_project "
+            "Labels to keep from --labels-file. Defaults to non_toy "
             "when --labels-file is provided."
         ),
     )
@@ -286,7 +286,7 @@ def main():
 
     allowed_labels = set(args.allowed_labels) if args.allowed_labels else None
     if labels_file and allowed_labels is None:
-        allowed_labels = {"production_grade", "specialized_project"}
+        allowed_labels = {"non_toy"}
     exclude_labels = set(args.exclude_labels) if args.exclude_labels else None
 
     _labels_df, label_repo_ids, label_repo_names, original_label_count, filtered_label_count = load_repo_labels(

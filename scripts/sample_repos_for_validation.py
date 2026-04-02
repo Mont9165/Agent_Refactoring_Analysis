@@ -99,6 +99,21 @@ def main() -> int:
         raise FileNotFoundError(f"Input file not found: {args.input}")
 
     df = pd.read_csv(args.input)
+
+    # Migrate legacy 4-category labels to binary scheme
+    _LEGACY_LABEL_MAP = {
+        "production_grade": "non_toy",
+        "specialized_project": "non_toy",
+        "toy_or_example": "toy",
+        "uncertain": "toy",
+    }
+    if "label" in df.columns:
+        migrated = df["label"].map(_LEGACY_LABEL_MAP)
+        changed = migrated.notna() & (migrated != df["label"])
+        if changed.any():
+            df["label"] = migrated.fillna(df["label"])
+            print(f"Migrated {changed.sum()} legacy labels to binary scheme (non_toy/toy).")
+
     population = len(df)
 
     confidence_z = {0.90: 1.645, 0.95: 1.96, 0.99: 2.576}.get(args.confidence, 1.96)

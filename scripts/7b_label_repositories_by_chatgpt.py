@@ -28,10 +28,8 @@ MODEL = "gpt-4.1-mini"
 ENC = tiktoken.encoding_for_model("gpt-4")
 
 REPO_LABELS: Dict[str, str] = {
-    "production_grade": "Actively developed or widely used software (applications, libraries, tooling) that appears suitable for real-world use.",
-    "specialized_project": "Niche, experimental, academic, or research prototype projects that still represent substantive software (not a toy).",
-    "toy_or_example": "Toy applications, tutorials, coursework, tests, evaluation harnesses, or otherwise trivial/example repositories.",
-    "uncertain": "Insufficient evidence to decide.",
+    "non_toy": "Software developed for practical use: production applications, libraries, frameworks, tools, or substantive research/experimental projects.",
+    "toy": "Toy applications, hello-world programs, tutorials, coursework, coding exercises, demo/sample repositories, or otherwise trivial projects. Also use this label when there is insufficient evidence to determine the project's nature.",
 }
 
 KEYWORD_HINTS = [
@@ -61,7 +59,7 @@ JSON_SCHEMA = {
             "label": {
                 "type": "string",
                 "enum": list(REPO_LABELS.keys()),
-                "description": "Chosen project category (toy_or_example, production_grade, etc.)",
+                "description": "Chosen project category (non_toy or toy).",
             },
             "reason": {
                 "type": "string",
@@ -256,10 +254,10 @@ def classify_repository(summary: str) -> Tuple[str, str, int]:
         "role": "system",
         "content": (
             "You are an expert software engineering researcher evaluating GitHub repositories.\n"
-            "Classify each repository into one of the predefined categories based on the provided summary.\n"
+            "Classify each repository as either non_toy or toy based on the provided summary.\n"
             "Categories:\n"
             f"{descriptions}\n"
-            "Focus on whether the project appears to be a toy/example versus substantive software.\n"
+            "If the evidence is ambiguous or insufficient, default to 'toy'.\n"
             "Respond strictly in JSON following the requested schema."
         ),
     }
