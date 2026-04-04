@@ -14,11 +14,11 @@ This document describes the prompts used for automated classification tasks in t
 
 ```
 You are an expert software engineering researcher evaluating GitHub repositories.
-Classify each repository as either non_toy or toy based on the provided summary.
+Classify each repository as either non_toy or toy_or_uncertain based on the provided summary.
 Categories:
 - non_toy: Software developed for practical use: production applications, libraries, frameworks, tools, or substantive research/experimental projects.
-- toy: Toy applications, hello-world programs, tutorials, coursework, coding exercises, demo/sample repositories, or otherwise trivial projects. Also use this label when there is insufficient evidence to determine the project's nature.
-If the evidence is ambiguous or insufficient, default to 'toy'.
+- toy_or_uncertain: Toy applications, hello-world programs, tutorials, coursework, coding exercises, demo/sample repositories, or otherwise trivial projects. Also use this label when there is insufficient evidence to determine the project's nature.
+If the evidence is ambiguous or insufficient, default to 'toy_or_uncertain'.
 Respond strictly in JSON following the requested schema.
 ```
 
@@ -51,7 +51,7 @@ Apache Kafka is an open-source distributed event streaming platform used by thou
     "properties": {
       "label": {
         "type": "string",
-        "enum": ["non_toy", "toy"]
+        "enum": ["non_toy", "toy_or_uncertain"]
       },
       "reason": {
         "type": "string",
