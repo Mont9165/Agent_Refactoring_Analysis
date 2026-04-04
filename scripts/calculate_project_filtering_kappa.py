@@ -116,8 +116,8 @@ def main() -> int:
     _LEGACY_LABEL_MAP = {
         "production_grade": "non_toy",
         "specialized_project": "non_toy",
-        "toy_or_example": "toy_or_uncertain",
-        "uncertain": "toy_or_uncertain",
+        "toy_or_example": "toy",
+        "uncertain": "uncertain",
     }
     _label_cols = ["gpt_label", "annotator1_label", "annotator2_label", "final_human_label"]
     for col in _label_cols:
@@ -126,7 +126,7 @@ def main() -> int:
             changed = migrated.notna() & (migrated != df[col])
             if changed.any():
                 df[col] = migrated.fillna(df[col])
-                print(f"Migrated {changed.sum()} legacy labels in '{col}' to binary scheme (non_toy/toy_or_uncertain).")
+                print(f"Migrated {changed.sum()} legacy labels in '{col}' to ternary scheme (non_toy/toy/uncertain).")
 
     pairs = [
         ("annotator1_label", "annotator2_label", "human_vs_human",

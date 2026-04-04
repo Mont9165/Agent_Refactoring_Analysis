@@ -29,7 +29,8 @@ ENC = tiktoken.encoding_for_model("gpt-4")
 
 REPO_LABELS: Dict[str, str] = {
     "non_toy": "Software developed for practical use: production applications, libraries, frameworks, tools, or substantive research/experimental projects.",
-    "toy_or_uncertain": "Toy applications, hello-world programs, tutorials, coursework, coding exercises, demo/sample repositories, or otherwise trivial projects. Also use this label when there is insufficient evidence to determine the project's nature.",
+    "toy": "Toy applications, hello-world programs, tutorials, coursework, coding exercises, demo/sample repositories, or otherwise trivial projects.",
+    "uncertain": "There is insufficient evidence to determine the project's nature.",
 }
 
 KEYWORD_HINTS = [
@@ -59,7 +60,7 @@ JSON_SCHEMA = {
             "label": {
                 "type": "string",
                 "enum": list(REPO_LABELS.keys()),
-                "description": "Chosen project category (non_toy or toy_or_uncertain).",
+                "description": "Chosen project category (non_toy, toy, or uncertain).",
             },
             "reason": {
                 "type": "string",
@@ -254,10 +255,10 @@ def classify_repository(summary: str) -> Tuple[str, str, int]:
         "role": "system",
         "content": (
             "You are an expert software engineering researcher evaluating GitHub repositories.\n"
-            "Classify each repository as either non_toy or toy_or_uncertain based on the provided summary.\n"
+            "Classify each repository as non_toy, toy, or uncertain based on the provided summary.\n"
             "Categories:\n"
             f"{descriptions}\n"
-            "If the evidence is ambiguous or insufficient, default to 'toy_or_uncertain'.\n"
+            "If the evidence is ambiguous or insufficient, default to 'uncertain'.\n"
             "Respond strictly in JSON following the requested schema."
         ),
     }
